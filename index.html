@@ -509,6 +509,426 @@ html.dark .search-box button{
 
 }
 
+
+/* ============================================================
+   🎮 GLOBAL RELATION QUIZ
+   PICKER ORANG PERTAMA
+   POSISI SAMA DENGAN MOBILE QUIZ
+   HEADER → AREA AKTIF → FOOTER
+   ============================================================ */
+
+/* ============================================================
+   🎮 GLOBAL RELATION QUIZ
+   PICKER ORANG PERTAMA
+   POSISI SAMA DENGAN MOBILE QUIZ
+   ============================================================ */
+
+#globalRelationQuizModal {
+
+  position: fixed;
+
+  inset: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  z-index: var(--z-floating);
+
+  pointer-events: auto;
+
+}
+
+
+/* ============================================================
+   OVERLAY
+   ============================================================ */
+
+#globalRelationQuizModal
+.mobile-quiz-overlay {
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    rgba(0, 0, 0, 0.45);
+
+}
+
+
+/* ============================================================
+   POPUP
+   HEADER → FOOTER
+   ============================================================ */
+
+#globalRelationQuizModal
+.mobile-quiz-popup {
+
+  position: absolute;
+
+  top:
+    calc(
+      var(--mobile-header-height)
+      +
+      (
+        100vh
+        -
+        var(--mobile-header-height)
+        -
+        var(--footer-height)
+      ) / 2
+    );
+
+  left: 50%;
+
+  transform:
+    translate(-50%, -50%);
+
+  width: 360px;
+
+  max-width:
+    calc(100vw - 32px);
+
+  max-height:
+    calc(
+      100vh
+      -
+      var(--mobile-header-height)
+      -
+      var(--footer-height)
+      -
+      32px
+    );
+
+  overflow-y: auto;
+
+  box-sizing: border-box;
+
+  padding: 24px;
+
+  background:
+    var(--bg);
+
+  color:
+    var(--text);
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    var(--radius-card);
+
+  box-shadow:
+    var(--shadow-lg);
+
+  font-family:
+    inherit;
+
+}
+
+
+/* ============================================================
+   CLOSE
+   ============================================================ */
+
+#globalRelationQuizModal
+.mobile-quiz-close {
+
+  position: absolute;
+
+  top: 10px;
+  right: 10px;
+
+  width: 32px;
+  height: 32px;
+
+  border: 0;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: var(--text-soft);
+
+  font-size: 24px;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+}
+
+
+/* ============================================================
+   TITLE
+   ============================================================ */
+
+#globalRelationQuizModal
+.mobile-quiz-picker-title {
+
+  padding-right: 30px;
+
+  font-size: 20px;
+
+  font-weight: 800;
+
+  margin-bottom: 6px;
+
+}
+
+
+/* ============================================================
+   SUBTITLE
+   ============================================================ */
+
+#globalRelationQuizModal
+.mobile-quiz-picker-from {
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  color: var(--text-soft);
+
+  margin-bottom: 18px;
+
+}
+
+
+/* ============================================================
+   SEARCH
+   ============================================================ */
+
+#globalRelationQuizModal
+.mobile-quiz-search-wrap {
+
+  margin-bottom: 12px;
+
+}
+
+
+#globalRelationQuizModal
+.mobile-quiz-search {
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 13px 14px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 12px;
+
+  background:
+    var(--bg);
+
+  color:
+    var(--text);
+
+  font-family:
+    inherit;
+
+  font-size: 15px;
+
+  outline: none;
+
+}
+
+
+#globalRelationQuizModal
+.mobile-quiz-search:focus {
+
+  border-color:
+    var(--primary);
+
+}
+
+
+/* ============================================================
+   LIST
+   ============================================================ */
+
+#globalRelationQuizModal
+.mobile-quiz-picker-list {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+
+}
+
+
+/* ============================================================
+   PERSON
+   ============================================================ */
+
+#globalRelationQuizModal
+.global-quiz-person {
+
+  width: 100%;
+
+  padding: 11px 14px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 10px;
+
+  background:
+    var(--bg);
+
+  color:
+    var(--text);
+
+  font-family:
+    inherit;
+
+  font-size: 15px;
+
+  text-align: left;
+
+  cursor: pointer;
+
+}
+
+
+#globalRelationQuizModal
+.global-quiz-person:hover {
+
+  background:
+    var(--suggestion-hover);
+
+  border-color:
+    var(--primary);
+
+}
+
+
+#globalRelationQuizModal
+.global-quiz-person:active {
+
+  background:
+    var(--primary);
+
+  color:
+    #FFFFFF;
+
+}
+
+
+/* ============================================================
+   NO RESULT
+   ============================================================ */
+
+#globalRelationQuizModal
+.mobile-quiz-no-result {
+
+  padding: 14px;
+
+  text-align: center;
+
+  color:
+    var(--text-soft);
+
+  font-size: 14px;
+
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+  #globalRelationQuizModal
+  .mobile-quiz-popup {
+
+    width:
+      calc(100vw - 24px);
+
+    max-width:
+      calc(100vw - 24px);
+
+    max-height:
+      calc(100vh - 24px);
+
+    padding:
+      20px;
+
+  }
+
+}
+
+
+
+/* ============================================================
+   🎮 RELATION QUIZ BUTTON
+   Tombol bulat di sebelah kiri Ask Me
+   ============================================================ */
+
+#create-relation-quiz-button {
+
+  position: fixed;
+
+  right: 70px;
+
+  bottom: calc(var(--footer-height) + 22px);
+
+  width: 42px;
+  height: 42px;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: var(--card);
+
+  color: #FFFFFF;
+
+  font-size: 18px;
+
+  display: none; /*agar hide saat diawal*/
+
+  align-items: center;
+
+  justify-content: center;
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, .25);
+
+  cursor: pointer;
+
+  z-index: var(--z-floating);
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+
+#create-relation-quiz-button:active {
+
+  transform: scale(0.92);
+
+}
+
+
+#create-relation-quiz-button:hover {
+
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, .30);
+
+}
+
+
+
 /* ============================================================
    🎮 MOBILE QUIZ KEYBOARD SELECTION
    ============================================================ */
@@ -2121,8 +2541,8 @@ window.UI.createAskMeButton
   border: none;
   border-radius: 20px;
 
-  background: #222;
-  color: white;
+  background: var(--card); /* #222;*/
+  color: var(--text); /*white;*/
 
   font-size: 12px;
   font-weight: 600;
@@ -6402,23 +6822,34 @@ Halaman ini digunakan untuk mengelola data anggota keluarga. Mohon luangkan wakt
  <details class="admin-toggle-detail">
  <summary>📝 Aturan Nama</summary>
   <ol>
-<li>Pastikan  <b>input nama lengkap</b> untuk mencegah duplikasi nama</li>
+<li>Pastikan  <b>input nama lengkap</b> untuk mencegah duplikasi nama</li><br>
+
     <li>Jika <b>nama lengkap tidak diketahui</b>, gunakan format:</li>
     <ul style="margin-top:4px; margin-left:0; padding-left:16px;">
     <li>✅ Untuk <b>laki laki</b>: <b>Saudara</b> (nama) <b>bin</b> (nama ayah)</li>
     <li>✅ Untuk <b>perempuan</b>: <b>Saudari</b> (nama) <b>binti</b> (nama ayah)</li>
     <li><b>Contoh</b>: diketahui nama Ditty. Maka tuliskan: <b>Saudari</b> Ditty <b>binti</b> Thompson</li>
-</ul>
+</ul><br>
+
     <li>Jika <b>nama lengkap pasangan tidak diketahui</b>, gunakan format:</li>
     <ul style="margin-top:4px; margin-left:0; padding-left:16px;">
-    <li>✅ (nama pasangan) <b>pasangan</b> (nama utama)</li>
-    <li><b>Contoh</b>: diketahui nama Ditty, pasangan dari Cade. Maka tuliskan: Ditty <b>pasangan</b> Cade</li>
+    <li>✅ (nama pasangan) <b>partner</b> (nama utama)</li>
+    <li><b>Contoh</b>: diketahui nama Ditty, pasangan dari Cade. Maka tuliskan: Ditty <b>partner</b> Cade</li>
+</ul><br>
+
 </ul>
+    <li>Jika <b>nama pasangan tidak diketahui</b>, gunakan format:</li>
+    <ul style="margin-top:4px; margin-left:0; padding-left:16px;">
+    <li>✅ <b>Partner</b> (nama utama)</li>
+    <li><b>Contoh</b>: Cade menikah tanpa diketahui nama pasangannya. Maka tuliskan: <b>Partner</b> Cade</li>
+</ul><br>
+
     <li>Penulisan nama dengan format:</li>
     <ul style="margin-top:4px; margin-left:0; padding-left:16px;">
     <li>✅ <b>Saudara</b> (nama) <b>bin</b> (nama ayah)</li>
     <li>✅ <b>Saudari</b> (nama) <b>binti</b> (nama ayah)</li>
-    <li>✅ (nama pasangan) <b>pasangan</b> (nama utama)</li>
+    <li>✅ (nama pasangan) <b>partner</b> (nama utama)</li>
+    <li>✅ <b>Partner</b> (nama utama)</li>
     <li>bertujuan agar <b>tidak terjadi duplikasi nama</b> dan <b>family tree dapat dipakai hingga > 100 generasi</b></li>
 </ul>
   </ol>
@@ -6427,18 +6858,19 @@ Halaman ini digunakan untuk mengelola data anggota keluarga. Mohon luangkan wakt
  <details class="admin-toggle-detail">
  <summary>💍 Aturan Pasangan</summary>
   <ol>
-<li>Jika seseorang memiliki <b>lebih dari 1 pasangan</b>, tambahkan kode urutan pada nama pasangan:</li>
+<li>Jika seseorang memiliki <b>lebih dari 1 pasangan</b>, tambahkan kode urutan pada nama pasangan <b>sesuai urutan pernikahan</b>:</li>
     <ul style="margin-top:4px; margin-left:0; padding-left:16px;">
-    <li>✅ (nama pasangan) <b>P1</b> → <b>pasangan pertama</b></li>
-    <li>✅ (nama pasangan) <b>P2</b> → <b>pasangan kedua</b></li>
-    <li>✅ (nama pasangan) <b>P3</b> → <b>pasangan ketiga</b></li>
+    <li>✅ (nama pasangan) <b>P1</b> → <b>pernikahan ke-1</b></li>
+    <li>✅ (nama pasangan) <b>P2</b> → <b>pernikahan ke-2</b></li>
+    <li>✅ (nama pasangan) <b>P3</b> → <b>pernikahan ke-3</b></li>
     <li>✅ dan <b>seterusnya</b></li>
-    <li>Penggunaan kode P bertujuan agar urutan pasangan tetap terbaca karena <b>sistem hanya mampu membentuk 2 pernikahan yang berurutan</b> 
-</ul>
-    <li><b>Contoh</b>: diketahui Cade memiliki pasangan Ditty(nama panggilan), Ditta(nama panggilan), Dita Karang(nama lengkap). Maka tuliskan: 
+    <li>Penggunaan kode <b>P / Partner</b> bertujuan agar <b>urutan pasangan pernikahan tetap terbaca sistematis</b> karena <b>sistem hanya mampu membentuk 2 pernikahan yang berurutan</b> 
+</ul><br>
+
+    <li><b>Contoh</b>: diketahui Cade memiliki pasangan dengan pernikahan ke-1 tidak diketahui namanya, pernikahan ke-2 bersama Ditta (nama panggilan), dan pernikahan ke-3 Dita Karang(nama lengkap). Maka tuliskan: 
     <ul style="margin-top:4px; margin-left:0; padding-left:16px;">
-    <li>✅ nama di ID untuk Ditty: Ditty <b>P1</b> pasangan Cade;</li>
-    <li>✅ nama di ID untuk Ditty: Ditta <b>P2</b> pasangan Cade;</li>
+    <li>✅ nama di ID untuk pernikahan ke-1 Cade: <b>Partner</b> Cade <b>P1</b>;</li>
+    <li>✅ nama di ID untuk Ditta: Ditta <b>Partner</b> Cade <b>P1</b>;</li>
     <li>✅ nama di ID untuk Dita Karang: Dita Karang <b>P3</b></li> 
 </ul>
   </ol>
@@ -6448,7 +6880,7 @@ Halaman ini digunakan untuk mengelola data anggota keluarga. Mohon luangkan wakt
  <summary>🌳 Aturan Relasi</summary>
    <ol style="list-style:none; padding-left:24px;">
 <li>1. Father ID dan Mother ID harus sesuai dengan ID orang tua.</li>
-<li>2. Setiap anak harus memiliki relasi orang tua yang benar agar sistem mengenali saudara kandung.</li>
+<li>2. Sistem akan mengenali saudara kandung jika memiliki relasi Father ID dan Mother ID yang sama.</li>
 <li>3. <b>Urutan saudara</b> akan terbentuk <b>sesuai urutan input admin</b> berdasarkan <b>urutan kelahiran</b>.</li>
 <li>4. Partner ID harus saling terhubung antara pasangan.</li>
 <li>5. <b>Urutan pernikahan lebih dari 1</b> akan terbentuk <b>sesuai urutan input admin</b> berdasarkan <b>urutan pernikahan</b>.</li>
@@ -6544,10 +6976,10 @@ Halaman ini digunakan untuk mengelola data anggota keluarga. Mohon luangkan wakt
       <li>✅ <b>Relasi Pasangan lebih dari 1</b>: Pastikan input data sesuai <b>urutan pernikahan</b> agar urutan keluarga ditampilkan dengan benar pada Family Tree.</li>
       <li>✅ <b>Relasi Anak → Orang Tua</b>: Pastikan ID terhubung dengan Father ID dan Mother ID dengan data ID orang tua yang benar.</li>
       <li>✅ <b>Relasi Orang Tua → Anak</b>: Pastikan Father ID dan Mother ID terhubung dengan ID anak.</li>
-      <li>✅ <b>Relasi saudara kandung</b>: Pastikan ID antar saudara memiliki Father ID dan Mother ID yang sama agar sistem mengenali mereka sebagai saudara kandung.</li>
-      <li>✅ <b>Urutan saudara</b>: Pastikan input data sesuai <b>urutan kelahiran</b> agar urutan pada Family Tree ditampilkan dengan benar.</li>
+      <li>✅ <b>Relasi saudara kandung</b>: Pastikan <b>Father ID dan Mother ID yang sama</b> agar sistem mengenali antar ID sebagai saudara kandung.</li>
+      <li>✅ <b>Urutan saudara</b>: Pastikan input data <b>sesuai urutan kelahiran</b> agar urutan pada Family Tree ditampilkan dengan benar.</li>
       <li>✅ <b>Relasi saudara beda ayah/ibu</b>: Pastikan input data sesuai Father ID dan Mother ID sesuai dengan data ID orang tua yang benar.</li>
-      <li>✅ <b>Urutan saudara beda ayah/ibu</b>: Urutan akan mengikuti urutan pernikahan orang tua secara otomatis.</li>
+      <li>✅ <b>Urutan saudara beda ayah/ibu</b>: Urutan akan <b>mengikuti urutan pernikahan orang tua</b> secara <b>otomatis</b>.</li>
     </ul>
   </li>
 </ol>
@@ -6661,6 +7093,15 @@ Halaman ini digunakan untuk mengelola data anggota keluarga. Mohon luangkan wakt
 
 </div> <!-- dragGameResult end -->
 
+<!-- 🎮 RELATION QUIZ BUTTON -->
+<button
+  id="create-relation-quiz-button"
+  type="button"
+  aria-label="Relation Quiz"
+  title="Relation Quiz"
+>
+  🎮
+</button>
 
 
 <script>
@@ -7476,25 +7917,14 @@ async function handleEmailLoginLink() {
 
 
   // =================================
-  // AMBIL EMAIL
+  // AMBIL EMAIL UNTUK FIREBASE AUTH
+  // EMAIL HARUS DIKETIK ULANG
   // =================================
+  // familyLoginEmail tidak dipakai untuk auto-fill email ketika Magic Link dibuka
+  // localStorage cocok untuk state UI / state sementara, tetapi jangan dijadikan dasar keputusan bahwa seseorang berhak masuk
 
   let email =
-    localStorage.getItem(
-      "familyLoginEmail"
-    );
-
-
-  console.log(
-    "📧 EMAIL TERSIMPAN:",
-    email
-  );
-
-
-  if (!email) {
-
-    email =
-      window.prompt(
+    window.prompt(
         "Masukkan kembali email yang menerima link login:"
       );
 
@@ -7514,7 +7944,11 @@ async function handleEmailLoginLink() {
         .trim()
         .toLowerCase();
 
-  }
+
+  console.log(
+    "📧 EMAIL YANG DIMASUKKAN:",
+    email
+  );
 
 
   try {
@@ -7528,7 +7962,6 @@ async function handleEmailLoginLink() {
         "pendingLoginBaniRoot"
       );
 
-
     if (!pendingBaniRoot) {
 
       pendingBaniRoot =
@@ -7538,7 +7971,6 @@ async function handleEmailLoginLink() {
 
     }
 
-
     console.log(
       "🌳 PENDING BANI:",
       pendingBaniRoot
@@ -7546,13 +7978,12 @@ async function handleEmailLoginLink() {
 
 
     // =================================
-    // 🔥 FIREBASE AUTHENTICATION
+    // FIREBASE AUTHENTICATION
     // =================================
 
     console.log(
       "🔥🔥🔥 MEMANGGIL signInWithEmailLink()"
     );
-
 
     const result =
       await signInWithEmailLink(
@@ -7570,32 +8001,19 @@ async function handleEmailLoginLink() {
       "✅✅✅ FIREBASE AUTH BERHASIL"
     );
 
-
     console.log(
       "👤 USER:",
       result.user
     );
-
 
     console.log(
       "📧 EMAIL:",
       result.user.email
     );
 
-
     console.log(
       "🆔 UID:",
       result.user.uid
-    );
-
-
-    // =================================
-    // PASTIKAN CURRENT USER
-    // =================================
-
-    console.log(
-      "🔥 auth.currentUser:",
-      auth.currentUser
     );
 
 
@@ -7659,21 +8077,9 @@ async function handleEmailLoginLink() {
     );
 
 
-    // =================================
-    // BERSIHKAN URL
-    // =================================
-
-    window.history.replaceState(
-      {},
-      document.title,
-      window.location.pathname
-    );
-
-
     console.log(
       "🎯 FIREBASE AUTH SELESAI."
     );
-
 
     console.log(
       "➡️ SEKARANG BOLEH LANJUT KE DOM BOOTSTRAP."
@@ -7690,12 +8096,10 @@ async function handleEmailLoginLink() {
       error
     );
 
-
     console.error(
       "CODE:",
       error?.code
     );
-
 
     console.error(
       "MESSAGE:",
@@ -7713,9 +8117,31 @@ async function handleEmailLoginLink() {
 
 
     return false;
+
+
+  } finally {
+
+    // =================================
+    // BERSIHKAN URL MAGIC LINK
+    // =================================
+    // Firebase sudah selesai memproses
+    // Magic Link, baik BERHASIL maupun GAGAL.
+    // =================================
+
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.pathname
+    );
+
+
+    console.log(
+      "🧹 URL MAGIC LINK DIBERSIHKAN"
+    );
+
   }
 
-}
+} // <-- PENTING: tutup fungsi handleEmailLoginLink
 //---------------------------------------------------------------------
 
 
@@ -7749,6 +8175,10 @@ async function handleMagicLinkFlow() {
         );
 
 
+    // =============================================
+    // SEMBUNYIKAN LANDING SEMENTARA
+    // =============================================
+
     if (cover) {
 
         cover.style.display =
@@ -7769,7 +8199,7 @@ async function handleMagicLinkFlow() {
 
 
     // =============================================
-    // FIREBASE AUTHENTICATION DULU
+    // FIREBASE AUTHENTICATION
     // =============================================
 
     console.log(
@@ -7787,6 +8217,10 @@ async function handleMagicLinkFlow() {
     );
 
 
+    // =============================================
+    // ❌ FIREBASE AUTH GAGAL
+    // =============================================
+
     if (!authenticated) {
 
         console.error(
@@ -7794,9 +8228,54 @@ async function handleMagicLinkFlow() {
         );
 
 
+    // =============================================
+    // BERSIHKAN STATE MAGIC LINK
+    // =============================================
+
+    clearLoginLinkState();
+
+
+    // =====================================================
+    // KEMBALIKAN KE LANDING UTAMA
+    // =====================================================
+
+    try {
+
+        // Firebase gagal sebelum initApp(),
+        // jadi pastikan data publik tersedia
+        // sebelum render daftar Bani.
+
+        await initApp();
+
+    } catch (error) {
+
+        console.error(
+            "❌ Gagal menyiapkan data Landing:",
+            error
+        );
+
+    }
+
+
+    // =====================================================
+    // KEMBALI KE HALAMAN UTAMA
+    // =====================================================
+
+
+        // ⭐ INI YANG KURANG
+        backToLanding();
+
+    console.log(
+        "↩️ FIREBASE GAGAL — KEMBALI KE HALAMAN UTAMA"
+    );
+
         return;
     }
 
+
+    // =============================================
+    // ✅ FIREBASE AUTH BERHASIL
+    // =============================================
 
     console.log(
         "✅ FIREBASE USER SETELAH AUTH:",
@@ -8544,6 +9023,11 @@ window.verifyFamilyIdentity = async function () {
     hideVerifyLoginInteractionBlocker();
 
 
+    // 🔓 CLEAR STATE Login Link SETELAH VERIFIKASI GAGAL
+
+    clearLoginLinkState();
+
+
     // ===================================================
     // KOSONGKAN INPUT
     // =====================================================
@@ -9257,7 +9741,7 @@ window.hideBaniBackBtn = function () {
     btn.style.display = "none";
   }
 };
-//---------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // ============================================================
 // ASK ME BUTTON VISIBILITY
@@ -9278,7 +9762,31 @@ function hideAskMeButton(hide){
     hide ? "none" : "block";
 
 }
-//---------------------------------------------------------------------------
+//---------------------------------------------------------------------
+
+
+// ============================================================
+// GLOBAL RELATION QUIZ BUTTON VISIBILITY
+// true  = hide
+// false = show
+// ============================================================
+
+function hideGlobalRelationshipQuiz(hide) {
+
+  const button =
+    document.getElementById(
+      "create-relation-quiz-button"
+    );
+
+  if (!button) {
+    return;
+  }
+
+  button.style.display =
+    hide ? "none" : "block";
+
+}
+//---------------------------------------------------------------------
 
 // ==================================================================================================== 
     // THEME MODE
@@ -9314,7 +9822,7 @@ themeModeBtn.addEventListener("click",()=>{
   applyBalkanSubTreeTheme();
 
 });
-//---------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 //agar balkan bisa light/dark theme
 function applyBalkanTheme(){
@@ -9358,12 +9866,12 @@ FamilyTree.templates.tommy.node = `
   </text>`;
 
 }
-//---------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // setelah script Balkan FamilyTree sudah load
 FamilyTree.templates.subtreeTommy =
 JSON.parse(JSON.stringify(FamilyTree.templates.tommy));
-//---------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 //applyBalkanSubTreeTheme() = warna isi node
 //bft-dark = background dan style bawaan Balkan
@@ -9404,7 +9912,7 @@ function applyBalkanSubTreeTheme(){
   </text>`;
 
 }
-//---------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
  // ==================================================================================================== 
     //1. CORE UTILITIES
@@ -9536,7 +10044,7 @@ window.SSOT_SCHEMA = {
 function isSSOTReady() {
   return FamilyRepository.getAllPersons().length > 0;
 }
-//----------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 //(start)SSOTGUARD
 function ssotGuard(raw, source = "unknown") {
@@ -9608,7 +10116,7 @@ setInterval(() => {
   const keyword = document.getElementById("inspectId")?.value?.trim();
   if (keyword) window.inspectPerson();
 }, 1500);
-//----------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 
 // ==================================================================================================== 
@@ -9915,7 +10423,7 @@ function normalizePartnerOrder(node) {
 
   return copy;
 }
-//-----------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 //(start)AUTO WIFE ORDER (BUAT TAMPILIN DATA)
 function assignWifeOrder(ssot) {
@@ -9938,7 +10446,7 @@ function assignWifeOrder(ssot) {
 
   return byId;
 }
-//-------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 //PAKAI FUNGSI INI BUAT MARRIAGE! BUKAN YANG LAIN : MARRIAGE INDEXT
 //(start)SINGLE TRUTH SOURCE MARRIAGE_INDEX
@@ -9956,7 +10464,7 @@ window.buildMarriageIndex = function(byId) {
 
   return index;
 };
-//-----------------------------------------------------------------------
+//---------------------------------------------------------------------
 //info inisialisasi saat load window.MARRIAGE_INDEX = window.buildMarriageIndex(window.SSOT.byId);
 
  // ==================================================================================================== 
@@ -10019,7 +10527,7 @@ function buildChildrenMap(byId) {
 
   return map;
 }
-//---------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 //CHILDREN ENGINE
 window.ChildrenEngine = {
@@ -10296,7 +10804,7 @@ window.ChildrenEngine = {
 } // <-- end getSiblings 
 
 }; // <-- end ChildrenEngine
-//---------------------------------------------------------------------------
+//---------------------------------------------------------------------
 //cek console: console.log(window.ChildrenEngine);
 
 // =========================================================================================
@@ -10315,8 +10823,7 @@ window.CACHE = {
 };
 
 window.__descCache = {};
-//---------------------------------------------------------------------------
-
+//---------------------------------------------------------------------
 //reset family cache
 window.resetFamilyCache = function () {
   window.CACHE.children = {};
@@ -10326,7 +10833,7 @@ window.resetFamilyCache = function () {
   window.CACHE.siblings = {};
   window.__descCache = {};
 };
-//---------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 
 // =========================================================================================
@@ -10339,11 +10846,11 @@ window.resetFamilyCache = function () {
 //buka ui yang ingin dicek
 //Jalankan di console: showDebugCounter();
 //Setelah selesai audit, kembalikan: window.DEBUG = false;
-//-----------------------------------------------------------------------
+//---------------------------------------------------------------------
 //double cek console work atau nggak : harus sesuai tabel console
 //Object.keys(window.CACHE.childrenMarriage).length
 //Object.keys(window.CACHE.childrenPair).length
-//----------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 //INI BUAT AUTO CONSOLE NYALA
 
@@ -10373,7 +10880,7 @@ window.DEBUG_COUNTER = {
   getChildrenByMarriage: 0,
   getChildrenByPair: 0
 };
-//----------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 window.resetDebugCounter = function () {
 
@@ -10383,14 +10890,14 @@ window.resetDebugCounter = function () {
 
   console.log("🔄 DEBUG COUNTER RESET");
 };
-//----------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 window.showDebugCounter = function () {
 
   console.table(window.DEBUG_COUNTER);
 
 };
-//-----------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 window.debugCount = function(name, ...info){
 
@@ -10406,7 +10913,7 @@ window.debugCount = function(name, ...info){
   }
 
 };
-//------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
  // ==================================================================================================== 
     //4. INITIALIZATION FLOW
@@ -10488,7 +10995,7 @@ async function initApp() {
   return window.RAW_DOCS;
 
 }
-//----------------------------------------------------------------------
+//---------------------------------------------------------------------
 //NOTE-->docId = Firestore doc.id -->id = family id
 //Saat nanti kamu selesai menambah 200 data:
 //Buka console: sessionStorage.removeItem("family_cache");
@@ -10545,7 +11052,7 @@ function buildSSOT(rawDocs) {
 
   return window.SSOT.byId;
 }
-//----------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 //Membuat index hubungan keluarga tambahan dari SSOT.
 function buildFamilyIndexes(byId){
@@ -10573,7 +11080,7 @@ function buildFamilyIndexes(byId){
   window.log("STEP 4 - CHILDREN MAP DONE", performance.now());
 
 }
-//-------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 //Mengubah data SSOT menjadi format node yang dinamakan tree engine.
 function buildTreeNodes(){
@@ -10632,7 +11139,7 @@ function buildTreeNodes(){
 
   return nodes;
 }
-//---------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 //======================================================
 // UI PROJECTION
@@ -10731,7 +11238,7 @@ function projectTreeForBalkan(nodes, rootId) {
 
   return result;
 }
-//---------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 
 //orchestration / pengatur urutan proses
@@ -10823,7 +11330,7 @@ console.log("TOTAL FINAL BALKAN:", finalNodes.length);
 
   window.timeEnd("loadInitialTree TOTAL");
 }
-//------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 //TREE_READY tidak benar-benar “event system” lagi, tapi cuma: log + timer selesai
 //(start)initTree PURE (CUMA urus UI + event) 
@@ -10886,7 +11393,7 @@ setTimeout(() => {
       
     attachTreeEvents();
   }
-//----------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 
  // ====================================================================================================  
@@ -10903,7 +11410,7 @@ function attachTreeEvents() {
   // pakai function yang sudah ada di Engine
   window.family.on("click", window.Engine.onNodeClick);
 }
-//----------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 
 //ini buat FUNGSI klik custom right panel
@@ -10939,7 +11446,7 @@ window.Engine.onNodeClick = function(sender, args) {
 
   return false;
 };
-//-------------------------------------------------------------------------
+//---------------------------------------------------------------------
 //CEK FUNGSI DI SISTEM KLIK di CONSOLE: window.Engine.onNodeClick.toString()
 
 //(start) close click rightpanel 
@@ -10983,7 +11490,7 @@ if (isNotice) return;
     //panel.style.display = "none"; //optional sementara buat gantiin versi atas// 
   }
 });
-//--------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 
 //ISI CUSTOM RIGHT PANEL, PART OF CACHE DESCENDANT
@@ -11022,6 +11529,9 @@ window.UI.renderRightPanel = function(person) {
 
  // 🔥 HIDE ASKME
  hideAskMeButton(true);   // hide Ask Me
+
+ // 🔥 HIDE GlobalRelationshipQuiz
+ hideGlobalRelationshipQuiz(true);   
 
  // 🔴 UI STATE
   panel.style.display = "flex"; //agar pengaturan css jalan
@@ -11121,11 +11631,11 @@ console.log("✅ panel rendered");
     console.groupEnd();
   });
 };
-//---------------------------------------------------------------------------
+//---------------------------------------------------------------------
 //CEK FUNGSI DI SISTEM KLIK di CONSOLE: window.UI.renderRightPanel.toString()
 
 // CLOSE PANEL ONLY, bukan mode UI
-// tidak panggil uiRouter karena panel adalah overlay,-------------------------//
+// tidak panggil uiRouter karena panel adalah overlay
 window.UI.closeRightPanel = function(){
 
 console.trace("🔥 CLOSE RIGHT PANEL DIPANGGIL DARI SINI");
@@ -11157,6 +11667,9 @@ console.trace("🔥 CLOSE RIGHT PANEL DIPANGGIL DARI SINI");
 
   // show askme button
   hideAskMeButton(false);
+
+  // show GlobalRelationshipQuiz button
+ hideGlobalRelationshipQuiz(false);
 
   console.log(
     "after close:",
@@ -11422,6 +11935,9 @@ window.selectBani = async function(rootId) {
 
   hideAskMeButton(false);  // show Ask Me
 
+  hideGlobalRelationshipQuiz(false);  // show GlobalRelationshipQuiz
+
+
   //usai ada modal jadi pakai landing modal
   document.getElementById("landingModal").style.display = "none";  document.getElementById("app").style.display = "block";
 
@@ -11676,6 +12192,10 @@ window.backToLanding = function () {
 
   // sembunyikan Ask Me saat kembali ke Landing
   hideAskMeButton(true);
+
+  // sembunyikan GlobalRelationshipQuiz saat kembali ke Landing
+  hideGlobalRelationshipQuiz(true);
+
 
   // ==========================================================
   // 4. TAMPILKAN KEMBALI SUBTITLE
@@ -21040,7 +21560,7 @@ window.UI.openOriginFamily = function(personId, returnId) {
     //ASK WHO TO WHOM
 // ====================================================================================================
 
-// aturan: Jika WhoToWhom tidak menemukan hubungan, tetapi findWhoRelationPath() menemukan jalur, maka ASKME tetap dianggap valid dan tombol SHOW tetap muncul.
+// aturan: Jika window.WhoToWhom = { tidak menemukan hubungan, tetapi findWhoRelationPath() menemukan jalur, maka ASKME tetap dianggap valid dan tombol SHOW tetap muncul.
 // window.WhoSiblingReader.getSiblingAge SINGLE TRTH SOURCE sumber penentuan older/younger berdasarkan childorder parent bukan age
 // window.WhoToWhom CENTRAL RELATIONSHIP READER tahu nama/jenis hubungannya atau tidak
 // window.WhoRelationLabel = { untuk nama label relasi termasuk younger /older
@@ -33239,6 +33759,7 @@ if (document.readyState === "loading") {
   window.UI.createAskMeButton();
 
 }
+
 //-----------------------------------------------------------------------
 
 // ==========================================================
@@ -38457,7 +38978,7 @@ window.DragRelationshipGame.continueDragGameAfterCorrect =
         "🎮 [GAME] Q2 → Q3"
       );
 
-      startWhoAmIQuestion3();
+      startWhoAmIDragGame();
 
       return;
     }
@@ -39099,7 +39620,7 @@ function startRelationQuestion2(gameQuestion1) {
 //
 // ============================================================
 
-function startWhoAmIQuestion3() {
+function startWhoAmIDragGame() {
 
   console.group(
     "🕵️ ================= Q3 START ================="
@@ -39720,7 +40241,7 @@ function startWhoAmIQuestion3() {
     );
 
 
-  const mystery =
+  const mysteryStartWhoAmIDragGame =
     relationships[randomIndex];
 
 
@@ -39735,38 +40256,38 @@ function startWhoAmIQuestion3() {
   );
 
   console.log(
-    "MYSTERY:",
-    mystery
+    "MYSTERY StartWhoAmIDragGame:",
+    mysteryStartWhoAmIDragGame
   );
 
   console.log(
-    "MYSTERY PERSON ID:",
-    mystery.personId
+    "MYSTERY StartWhoAmIDragGame PERSON ID:",
+    mysteryStartWhoAmIDragGame.personId
   );
 
   console.log(
-    "MYSTERY PERSON NAME:",
-    mystery.personName
+    "MYSTERY StartWhoAmIDragGame PERSON NAME:",
+    mysteryStartWhoAmIDragGame.personName
   );
 
   console.log(
-    "MYSTERY RELATION:",
-    mystery.relation
+    "MYSTERY StartWhoAmIDragGame RELATION:",
+    mysteryStartWhoAmIDragGame.relation
   );
 
   console.log(
-    "MYSTERY LABEL:",
-    mystery.label
+    "MYSTERY StartWhoAmIDragGame LABEL:",
+    mysteryStartWhoAmIDragGame.label
   );
 
   console.log(
-    "MYSTERY RESULT:",
-    mystery.result
+    "MYSTERY StartWhoAmIDragGame RESULT:",
+    mysteryStartWhoAmIDragGame.result
   );
 
   console.log(
-    "MYSTERY DIRECTION:",
-    `${mystery.personName} → ${rootName}`
+    "MYSTERY StartWhoAmIDragGame DIRECTION:",
+    `${mysteryStartWhoAmIDragGame.personName} → ${rootName}`
   );
 
   console.groupEnd();
@@ -39777,13 +40298,13 @@ function startWhoAmIQuestion3() {
   // ==========================================================
 
   relationQuizState.q3PersonId =
-    mystery.personId;
+    mysteryStartWhoAmIDragGame.personId;
 
   relationQuizState.q3PersonName =
-    mystery.personName;
+    mysteryStartWhoAmIDragGame.personName;
 
   relationQuizState.q3Relation =
-    mystery.relation;
+    mysteryStartWhoAmIDragGame.relation;
 
 
   console.group(
@@ -39827,7 +40348,7 @@ function startWhoAmIQuestion3() {
   );
 
   console.log(
-    `Aku adalah ${mystery.label} dari ${rootName}.`
+    `Aku adalah ${mysteryStartWhoAmIDragGame.label} dari ${rootName}.`
   );
 
   console.log(
@@ -39841,18 +40362,18 @@ function startWhoAmIQuestion3() {
   );
 
   console.log(
-    "RELATION LABEL:",
-    mystery.label
+    "RELATION StartWhoAmIDragGame LABEL:",
+    mysteryStartWhoAmIDragGame.label
   );
 
   console.log(
     "CORRECT PERSON:",
-    mystery.personName
+    mysteryStartWhoAmIDragGame.personName
   );
 
   console.log(
     "RELATION DIRECTION:",
-    `${mystery.personName} → ${rootName}`
+    `${mysteryStartWhoAmIDragGame.personName} → ${rootName}`
   );
 
 
@@ -39864,13 +40385,13 @@ function startWhoAmIQuestion3() {
   // ==========================================================
 
   console.log(
-    "🕵️ [Q3-11] MEMANGGIL showWhoAmIQuestion()"
+    "🕵️ [Q3-11] MEMANGGIL showWhoAmIDragGameQuestion()"
   );
 
 
-  showWhoAmIQuestion(
+  showWhoAmIDragGameQuestion(
     rootName,
-    mystery
+    mysteryStartWhoAmIDragGame
   );
 
 
@@ -39892,9 +40413,9 @@ function startWhoAmIQuestion3() {
 // 🕵️ SHOW WHO AM I QUESTION
 // ============================================================
 
-function showWhoAmIQuestion(
+function showWhoAmIDragGameQuestion(
   rootName,
-  mystery
+  mysteryStartWhoAmIDragGame
 ) {
 
   const modal =
@@ -39918,7 +40439,7 @@ function showWhoAmIQuestion(
   // ----------------------------------------------------------
 
   const relationLabel =
-    mystery.label;
+    mysteryStartWhoAmIDragGame.label;
 
 
   // ----------------------------------------------------------
@@ -39934,7 +40455,7 @@ function showWhoAmIQuestion(
     allPeople.find(
       person =>
         String(person.id) ===
-        String(mystery.personId)
+        String(mysteryStartWhoAmIDragGame.personId)
     );
 
 
@@ -39942,7 +40463,7 @@ function showWhoAmIQuestion(
 
     console.warn(
       "🕵️ [Q3] Orang jawaban tidak ditemukan:",
-      mystery.personId
+      mysteryStartWhoAmIDragGame.personId
     );
 
     closeDragRelationshipGame();
@@ -39956,7 +40477,7 @@ function showWhoAmIQuestion(
       .filter(
         person =>
           String(person.id) !==
-          String(mystery.personId) &&
+          String(mysteryStartWhoAmIDragGame.personId) &&
           String(person.id) !==
           String(relationQuizState.rootId)
       )
@@ -40135,7 +40656,7 @@ function showWhoAmIQuestion(
 
         if (
           String(selectedPersonId) ===
-          String(mystery.personId)
+          String(mysteryStartWhoAmIDragGame.personId)
         ) {
 
           console.log(
@@ -40150,9 +40671,9 @@ function showWhoAmIQuestion(
     relationQuizState.correctAnswers
   );
 
-          showWhoAmIResult(
+          showWhoAmIDragGameResult(
             rootName,
-            mystery.personName
+            mysteryStartWhoAmIDragGame.personName
           );
 
 
@@ -40165,8 +40686,8 @@ function showWhoAmIQuestion(
         );
 
 
-        showWhoAmIWrongResult(
-          mystery.personName
+        showWhoAmIDragGameWrongResult(
+          mysteryStartWhoAmIDragGame.personName
         );
 
       }
@@ -40180,7 +40701,7 @@ function showWhoAmIQuestion(
 // 🕵️ Q3 - HASIL BENAR
 // ============================================================
 
-function showWhoAmIResult(
+function showWhoAmIDragGameResult(
   rootName,
   personName
 ) {
@@ -40262,7 +40783,7 @@ function showWhoAmIResult(
 // 🕵️ Q3 - HASIL SALAH
 // ============================================================
 
-function showWhoAmIWrongResult(
+function showWhoAmIDragGameWrongResult(
   correctPersonName
 ) {
 
@@ -41247,7 +41768,7 @@ window.DragRelationshipGame.initDragGameKeyboard =
 
 
 // ==================================================================================================== 
-    // DragRelationshipGame.openMobileQuiz
+    // DragRelationshipGame.openDragGameInRightPanel
 //==================================================================================================== 
 
 // ============================================================
@@ -42288,6 +42809,5458 @@ window.DragRelationshipGame.initMobileQuizKeyboard =
 
   };
 //---------------------------------------------------------------------
+
+
+// ==================================================================================================== 
+    //🎮 GLOBAL RELATION QUIZ BUTTON
+//==================================================================================================== 
+
+// ============================================================
+// 🎮 GLOBAL RELATION QUIZ BUTTON
+// Tombol global untuk membuka Relation Quiz
+// Tombol bulat di sebelah kiri Ask Me
+// Tidak bergantung pada node Balkan Tree
+// ============================================================
+
+window.UI = window.UI || {};
+
+window.UI.createGlobalRelationshipQuizButton = function () {
+
+  // Jangan membuat tombol dua kali
+  if (
+    document.getElementById(
+      "create-relation-quiz-button"
+    )
+  ) {
+    return;
+  }
+
+  const button =
+    document.createElement("button");
+
+  button.id =
+    "create-relation-quiz-button";
+
+  button.type = "button";
+
+  // ==========================================================
+  // AGAR TIDAK MUNCUL DI AWAL
+  // ==========================================================
+
+  button.style.display = "none";
+
+  button.textContent =
+    "Relation Quiz";
+
+  button.setAttribute(
+    "aria-label",
+    "Global Relation Quiz"
+  );
+
+  document.body.appendChild(button);
+};
+
+
+// ============================================================
+// DOM READY
+// ============================================================
+
+if (document.readyState === "loading") {
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+      window.UI
+        .createGlobalRelationshipQuizButton();
+
+    }
+  );
+
+} else {
+
+  window.UI
+    .createGlobalRelationshipQuizButton();
+
+}
+
+
+// ============================================================
+// 🎮 GLOBAL RELATION QUIZ CLICK
+// ============================================================
+
+document.addEventListener(
+  "click",
+  function(e) {
+
+    const button =
+      e.target.closest(
+        "#create-relation-quiz-button"
+      );
+
+    if (!button) {
+      return;
+    }
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    console.log(
+      "🎮 [BUTTON] GLOBAL RELATION QUIZ DIKLIK"
+    );
+
+    // ========================================================
+    // CEK GAME OBJECT
+    // ========================================================
+
+    if (
+      !window.DragRelationshipGame
+    ) {
+
+      console.error(
+        "❌ [BUTTON] DragRelationshipGame TIDAK ADA"
+      );
+
+      return;
+    }
+
+    // ========================================================
+    // CEK FUNCTION
+    // ========================================================
+
+    if (
+      typeof
+        window.DragRelationshipGame
+          .openGlobalRelationQuiz !== "function"
+    ) {
+
+      console.error(
+        "❌ [BUTTON] openGlobalRelationQuiz() TIDAK ADA"
+      );
+
+      console.log(
+        "🎮 [BUTTON] DragRelationshipGame:",
+        window.DragRelationshipGame
+      );
+
+      return;
+    }
+
+    // ========================================================
+    // OPEN GLOBAL QUIZ
+    // ========================================================
+
+    console.log(
+      "🎮 [BUTTON] MEMANGGIL openGlobalRelationQuiz()"
+    );
+
+    window.DragRelationshipGame
+      .openGlobalRelationQuiz();
+
+  }
+);
+
+
+
+// ============================================================
+// 🎮 GLOBAL RELATION QUIZ
+// PILIH ORANG PERTAMA
+// ============================================================
+
+window.DragRelationshipGame.openGlobalRelationQuiz =
+  function() {
+
+    console.log(
+      "🎮 [GLOBAL QUIZ] MEMBUKA PILIH ORANG PERTAMA"
+    );
+
+
+    // ========================================================
+    // AMBIL DATA ORANG
+    // ========================================================
+
+    const people =
+      window.DragRelationshipGame
+        .getMobileQuizPeople();
+
+
+    console.log(
+      "🎮 [GLOBAL QUIZ] TOTAL DATA:",
+      people.length
+    );
+
+
+    if (!people.length) {
+
+      console.error(
+        "❌ [GLOBAL QUIZ] Data keluarga kosong"
+      );
+
+
+      console.log(
+        "FamilyRepository:",
+        window.FamilyRepository
+      );
+
+
+      return;
+
+    }
+
+
+    // ========================================================
+    // HAPUS MODAL LAMA
+    // ========================================================
+
+    const old =
+      document.getElementById(
+        "globalRelationQuizModal"
+      );
+
+
+    if (old) {
+
+      old.remove();
+
+    }
+
+
+    // ========================================================
+    // BUAT MODAL
+    // ========================================================
+
+    const modal =
+      document.createElement("div");
+
+
+    modal.id =
+      "globalRelationQuizModal";
+
+
+    modal.innerHTML = `
+
+      <div class="mobile-quiz-overlay"></div>
+
+      <div class="mobile-quiz-popup">
+
+        <button
+          type="button"
+          class="mobile-quiz-close"
+          aria-label="Tutup"
+        >
+          ×
+        </button>
+
+        <div class="mobile-quiz-picker-title">
+          🎮 RELATION QUIZ
+        </div>
+
+        <div class="mobile-quiz-picker-from">
+          Pilih orang pertama
+        </div>
+
+        <div class="mobile-quiz-search-wrap">
+
+          <input
+            type="search"
+            class="mobile-quiz-search"
+            placeholder="🔍 Cari anggota keluarga..."
+            autocomplete="off"
+          >
+
+        </div>
+
+        <div class="mobile-quiz-picker-list"></div>
+
+      </div>
+
+    `;
+
+
+    document.body.appendChild(
+      modal
+    );
+
+
+    // ========================================================
+    // AMBIL ELEMENT
+    // ========================================================
+
+    const search =
+      modal.querySelector(
+        ".mobile-quiz-search"
+      );
+
+
+    const list =
+      modal.querySelector(
+        ".mobile-quiz-picker-list"
+      );
+
+
+    const popup =
+      modal.querySelector(
+        ".mobile-quiz-popup"
+      );
+
+
+    const close =
+      modal.querySelector(
+        ".mobile-quiz-close"
+      );
+
+
+    const overlay =
+      modal.querySelector(
+        ".mobile-quiz-overlay"
+      );
+
+
+    if (
+      !search ||
+      !list ||
+      !popup
+    ) {
+
+      console.error(
+        "❌ [GLOBAL QUIZ] Element modal tidak lengkap"
+      );
+
+
+      modal.remove();
+
+
+      return;
+
+    }
+
+
+    // ========================================================
+    // 🎮 AKTIFKAN KEYBOARD PICKER
+    //
+    // Mulai dari sini keyboard dikontrol oleh:
+    // initMobileQuizKeyboard()
+    // ========================================================
+
+    window.DragRelationshipGame
+      .initMobileQuizKeyboard(
+        modal
+      );
+
+
+    // ========================================================
+    // SEARCH
+    // ========================================================
+
+    search.addEventListener(
+      "input",
+      function() {
+
+        const keyword =
+          search.value
+            .trim()
+            .toLowerCase();
+
+
+        if (!keyword) {
+
+          list.innerHTML = "";
+
+          return;
+
+        }
+
+
+        // ====================================================
+        // FILTER DATA
+        // ====================================================
+
+        const matches =
+          people
+            .filter(
+              function(person) {
+
+                const name =
+                  String(
+                    person.name ||
+                    person.fullName ||
+                    person.nama ||
+                    ""
+                  ).toLowerCase();
+
+
+                return name.includes(
+                  keyword
+                );
+
+              }
+            )
+            .slice(0, 8);
+
+
+        // ====================================================
+        // TIDAK DITEMUKAN
+        // ====================================================
+
+        if (!matches.length) {
+
+          list.innerHTML = `
+
+            <div class="mobile-quiz-no-result">
+              Tidak ditemukan.
+            </div>
+
+          `;
+
+
+          return;
+
+        }
+
+
+        // ====================================================
+        // RENDER PERSON
+        // ====================================================
+
+        list.innerHTML =
+          matches
+            .map(
+              function(person) {
+
+                const name =
+                  person.name ||
+                  person.fullName ||
+                  person.nama ||
+                  person.id;
+
+
+                return `
+
+                  <button
+                    type="button"
+                    class="mobile-quiz-person global-quiz-person"
+                    data-person-id="${escapeHtml(
+                      person.id
+                    )}"
+                  >
+                    ${escapeHtml(
+                      name
+                    )}
+                  </button>
+
+                `;
+
+              }
+            )
+            .join("");
+
+
+        // ====================================================
+        // CLICK PERSON
+        // ====================================================
+
+        list
+          .querySelectorAll(
+            ".global-quiz-person"
+          )
+          .forEach(
+            function(button) {
+
+              button.addEventListener(
+                "click",
+                function(e) {
+
+                  e.preventDefault();
+                  e.stopPropagation();
+
+
+                  const fromId =
+                    button.getAttribute(
+                      "data-person-id"
+                    );
+
+
+                  console.log(
+                    "🎮 [GLOBAL QUIZ] ORANG PERTAMA:",
+                    fromId
+                  );
+
+
+                  // ------------------------------------------
+                  // TUTUP PICKER
+                  // ------------------------------------------
+
+                  modal.remove();
+
+
+                  // ------------------------------------------
+                  // LANJUT KE QUESTION
+                  // ------------------------------------------
+
+                  window.DragRelationshipGame
+                    .startGlobalRelationshipFlow(
+                      fromId
+                    );
+
+                }
+              );
+
+            }
+          );
+
+      }
+    );
+
+
+    // ========================================================
+    // CLOSE BUTTON
+    // ========================================================
+
+    close?.addEventListener(
+      "click",
+      function(e) {
+
+        e.preventDefault();
+        e.stopPropagation();
+
+
+        modal.remove();
+
+      }
+    );
+
+
+    // ========================================================
+    // OVERLAY
+    // ========================================================
+
+    overlay?.addEventListener(
+      "click",
+      function() {
+
+        modal.remove();
+
+      }
+    );
+
+
+    // ========================================================
+    // POPUP
+    // ========================================================
+
+    popup.addEventListener(
+      "click",
+      function(e) {
+
+        e.stopPropagation();
+
+      }
+    );
+
+
+    // ========================================================
+    // FOCUS SEARCH
+    // ========================================================
+
+    requestAnimationFrame(
+      function() {
+
+        search.focus();
+
+      }
+    );
+
+
+    console.log(
+      "🎮 [GLOBAL QUIZ] PICKER ORANG PERTAMA SIAP"
+    );
+
+
+  }; // ← TUTUP openGlobalRelationQuiz
+
+
+// ============================================================
+// 1. GLOBAL STATE
+// ============================================================
+
+window.DragRelationshipGame.globalRelationQuizState = {
+
+  anchorId: null,
+  anchorName: null,
+
+  q1PersonId: null,
+  q1PersonName: null,
+  q1Relation: null,
+
+  q2PersonId: null,
+  q2PersonName: null,
+  q2Relation: null,
+
+  secondId: null,
+  secondName: null,
+
+  thirdId: null,
+  thirdName: null,
+
+  step: 0,
+
+  correctAnswers: 0
+
+};
+
+
+// ============================================================
+// 2. RESET GLOBAL STATE
+// ============================================================
+
+window.DragRelationshipGame.resetGlobalRelationQuizState =
+  function() {
+
+    window.DragRelationshipGame.globalRelationQuizState = {
+
+      anchorId: null,
+      anchorName: null,
+
+      q1PersonId: null,
+      q1PersonName: null,
+      q1Relation: null,
+
+      q2PersonId: null,
+      q2PersonName: null,
+      q2Relation: null,
+
+      secondId: null,
+      secondName: null,
+
+      thirdId: null,
+      thirdName: null,
+
+      step: 0,
+
+      correctAnswers: 0
+
+    };
+
+    console.log(
+      "🎮 [GLOBAL] STATE RESET:",
+      window.DragRelationshipGame
+        .globalRelationQuizState
+    );
+
+  }; // ← TUTUP resetGlobalRelationQuizState
+
+
+// ============================================================
+// 3. START GLOBAL FLOW
+// ============================================================
+
+window.DragRelationshipGame.startGlobalRelationshipFlow =
+  function(anchorId) {
+
+    console.log(
+      "🎮 [GLOBAL] START:",
+      anchorId
+    );
+
+    const anchor =
+      window.FamilyRepository?.getPerson(
+        anchorId
+      );
+
+    if (!anchor) {
+
+      console.warn(
+        "❌ [GLOBAL] Anchor tidak ditemukan:",
+        anchorId
+      );
+
+      return;
+    }
+
+    window.DragRelationshipGame
+      .resetGlobalRelationQuizState();
+
+    const state =
+      window.DragRelationshipGame
+        .globalRelationQuizState;
+
+    state.anchorId =
+      String(anchor.id);
+
+    state.anchorName =
+      anchor.name ||
+      anchor.fullName ||
+      anchor.nama ||
+      anchor.id;
+
+    state.step = 1;
+
+    console.log(
+      "🎯 [GLOBAL] ANCHOR:",
+      {
+        id: state.anchorId,
+        name: state.anchorName
+      }
+    );
+
+    window.DragRelationshipGame
+      .startGlobalAnchorQuestion(
+        1
+      );
+
+  }; // ← TUTUP startGlobalRelationshipFlow
+
+
+// ============================================================
+// 4. GET GLOBAL ANCHOR RELATIONSHIPS
+// ============================================================
+
+// ============================================================
+// 🎮 GLOBAL
+// GET RELATIONSHIP TERHADAP ANCHOR
+// ============================================================
+//
+// Q1:
+// - parent
+// - child
+// - sibling
+//
+// Q2:
+// - aunt / uncle
+// - cousin
+// - niece / nephew
+// - seluruh extended genealogy
+//
+// Relationship TIDAK dibuat di sini.
+// WhoToWhom + getDragGameLabel tetap menjadi SSOT.
+// ============================================================
+
+window.DragRelationshipGame
+  .getGlobalAnchorRelationships =
+  function() {
+
+    const state =
+      window.DragRelationshipGame
+        .globalRelationQuizState;
+
+
+    if (
+      !state ||
+      !state.anchorId
+    ) {
+
+      return [];
+
+    }
+
+
+    const anchorId =
+      String(state.anchorId);
+
+
+    const people =
+      window.DragRelationshipGame
+        .getMobileQuizPeople();
+
+
+    if (
+      !Array.isArray(people) ||
+      !people.length
+    ) {
+
+      return [];
+
+    }
+
+
+    const anchor =
+      people.find(
+        person =>
+          String(person.id) ===
+          anchorId
+      );
+
+
+    if (!anchor) {
+
+      return [];
+
+    }
+
+
+    // ========================================================
+    // HELPER
+    // Resolve relationship memakai engine existing
+    // ========================================================
+
+    function resolvePersonGlobalRelationQuiz(
+      person
+    ) {
+
+      const personId =
+        String(person.id);
+
+
+      if (
+        personId === anchorId
+      ) {
+
+        return null;
+
+      }
+
+
+      let resolved = null;
+
+
+      try {
+
+        resolved =
+          window.WhoToWhom?.get(
+            anchorId,
+            personId
+          );
+
+      }
+      catch(error) {
+
+        console.warn(
+          "⚠️ [GLOBAL] WhoToWhom error:",
+          error
+        );
+
+        return null;
+
+      }
+
+
+      if (!resolved) {
+
+        return null;
+
+      }
+
+
+      const result =
+        resolved.result ||
+        resolved;
+
+
+      if (!result) {
+
+        return null;
+
+      }
+
+
+      let label = null;
+
+
+      try {
+
+        label =
+          window.DragRelationshipGame
+            .getDragGameLabel(
+              result,
+              anchor,
+              person
+            );
+
+      }
+      catch(error) {
+
+        console.warn(
+          "⚠️ [GLOBAL] getDragGameLabel error:",
+          error
+        );
+
+        return null;
+
+      }
+
+
+      if (!label) {
+
+        return null;
+
+      }
+
+
+      return {
+
+        personId,
+
+        personName:
+          person.name ||
+          person.fullName ||
+          person.nama ||
+          personId,
+
+        relation:
+          result.relation ||
+          result.type ||
+          null,
+
+        label,
+
+        result
+
+      };
+
+    }
+
+
+    // ========================================================
+    // SEMUA ORANG
+    //
+    // Relationship engine tetap menentukan hasil.
+    // ========================================================
+
+    const relationships = [];
+
+
+    people.forEach(
+      person => {
+
+        const resolved =
+          resolvePersonGlobalRelationQuiz(
+            person
+          );
+
+
+        if (!resolved) {
+
+          return;
+
+        }
+
+
+        relationships.push(
+          resolved
+        );
+
+      }
+    );
+
+
+    console.log(
+      "🎮 [GLOBAL] ALL ANCHOR RELATIONSHIPS:",
+      relationships
+    );
+
+
+    return relationships;
+
+  }; // ← TUTUP getGlobalAnchorRelationships
+
+
+// ============================================================
+// 5. RANDOM RELATIONSHIP
+// ============================================================
+
+window.DragRelationshipGame
+  .getRandomGlobalAnchorRelationship =
+  function(excludeIds = []) {
+
+    const relationships =
+      window.DragRelationshipGame
+        .getGlobalAnchorRelationships();
+
+    const excluded =
+      excludeIds.map(
+        id => String(id)
+      );
+
+    const available =
+      relationships.filter(
+        item =>
+          !excluded.includes(
+            String(item.personId)
+          )
+      );
+
+    if (!available.length) {
+      return null;
+    }
+
+    return available[
+      Math.floor(
+        Math.random() *
+        available.length
+      )
+    ];
+
+  }; // ← TUTUP getRandomGlobalAnchorRelationship
+
+
+// ============================================================
+// 6. CREATE GLOBAL RELATIONSHIP QUESTION
+// ============================================================
+
+window.DragRelationshipGame
+  .createGlobalRelationshipQuestion =
+  function(
+    fromId,
+    toId
+  ) {
+
+    return (
+      window.DragRelationshipGame
+        .createGameQuestionOfDragGame(
+          fromId,
+          toId
+        )
+    );
+
+  }; // ← TUTUP createGlobalRelationshipQuestion
+
+
+
+// ============================================================
+// 7. START Q1 / Q2
+// ============================================================
+//
+// IMPORTANT:
+//
+// Global Quiz TIDAK lagi menentukan relationship Q1
+// dari:
+//
+//   fid
+//   mid
+//   pids
+//
+// Karena struktur tersebut dapat mengandung relasi spouse
+// atau relasi lain yang membuat seseorang terlihat seperti
+// parent/child.
+//
+// SSOT:
+//
+//   WhoToWhom.get()
+//   getDragGameLabel()
+//
+// ============================================================
+
+
+// ============================================================
+// GLOBAL QUIZ — BUILD PERSON INDEX
+// Satu kali scan people
+// ============================================================
+
+function GlobalQuizBuildPersonIndex(people) {
+
+  const personById =
+    new Map();
+
+  people.forEach(
+    person => {
+
+      personById.set(
+        String(person.id),
+        person
+      );
+
+    }
+  );
+
+  return personById;
+
+}
+
+
+// ============================================================
+// GLOBAL QUIZ — GET PERSON NAME
+// ============================================================
+
+function GlobalQuizGetPersonName(person) {
+
+  return (
+    person.name ||
+    person.fullName ||
+    person.nama ||
+    String(person.id)
+  );
+
+}
+
+
+// ============================================================
+// GLOBAL QUIZ — GET RELATION
+// ============================================================
+
+function GlobalQuizGetRelation(
+  fromId,
+  toId
+) {
+
+  try {
+
+    const resolved =
+      window.WhoToWhom?.get(
+        String(fromId),
+        String(toId)
+      );
+
+    if (!resolved) {
+      return null;
+    }
+
+    return (
+      resolved.result ||
+      resolved ||
+      null
+    );
+
+  }
+  catch(error) {
+
+    console.warn(
+      "⚠️ [GLOBAL Q1] WhoToWhom error:",
+      {
+        fromId,
+        toId,
+        error
+      }
+    );
+
+    return null;
+  }
+
+}
+
+
+// ============================================================
+// GLOBAL QUIZ — ADD CANDIDATE
+// ============================================================
+
+function GlobalQuizAddCandidate(
+  candidates,
+  person,
+  relation,
+  question,
+  result,
+  fromPerson
+) {
+
+  if (!person) {
+    return;
+  }
+
+  candidates.push({
+
+    personId:
+      String(person.id),
+
+    personName:
+      GlobalQuizGetPersonName(person),
+
+    relation,
+
+    question,
+
+    result,
+
+    relationshipLabel:
+      "",
+
+    _fromPerson:
+      fromPerson
+
+  });
+
+}
+
+
+// ============================================================
+// GLOBAL QUIZ — SCAN CHILD + SIBLING
+//
+// PENTING:
+// people HANYA DISCAN SATU KALI.
+//
+// Tidak ada:
+// - scan Child
+// - scan Sibling
+//
+// terpisah.
+// ============================================================
+
+function GlobalQuizScanCandidates(
+  people,
+  anchorId,
+  fatherId,
+  motherId,
+  hasDirectParents,
+  anchorName,
+  candidates
+) {
+
+  const directSiblingRelations =
+    new Set([
+
+      "sibling",
+      "brother",
+      "sister",
+      "older_sibling",
+      "younger_sibling",
+      "older_brother",
+      "younger_brother",
+      "older_sister",
+      "younger_sister",
+      "genealogy_sibling"
+
+    ]);
+
+
+  // ==========================================================
+  // SATU KALI SCAN
+  // ==========================================================
+
+  people.forEach(
+    person => {
+
+      const personId =
+        String(person.id);
+
+
+      if (
+        personId ===
+        anchorId
+      ) {
+        return;
+      }
+
+
+      // ========================================================
+      // NORMALIZE PARENT ID SEKALI
+      // ========================================================
+
+      const personFatherId =
+        person.fid !== undefined &&
+        person.fid !== null &&
+        String(person.fid).trim() !== ""
+          ? String(person.fid)
+          : null;
+
+
+      const personMotherId =
+        person.mid !== undefined &&
+        person.mid !== null &&
+        String(person.mid).trim() !== ""
+          ? String(person.mid)
+          : null;
+
+
+    // ========================================================
+    // SPOUSE / PARTNER
+    // ========================================================
+
+    const personPartnerIds =
+      Array.isArray(person.pids)
+        ? person.pids.map(
+            id => String(id)
+          )
+        : [];
+
+
+    if (
+      personPartnerIds.includes(
+        anchorId
+      )
+    ) {
+
+      GlobalQuizAddCandidate(
+
+        candidates,
+
+        person,
+
+        "SPOUSE",
+
+        `Siapa pasangan ${anchorName}?`,
+
+        {
+
+          type:
+            "genealogy",
+
+          relation:
+            "genealogy_spouse",
+
+          fromId:
+            anchorId,
+
+          toId:
+            personId
+
+        },
+
+        null
+
+      );
+
+    }
+
+
+      // ========================================================
+      // CHILD
+      // ========================================================
+
+      const isChild =
+        personFatherId === anchorId ||
+        personMotherId === anchorId;
+
+
+      if (isChild) {
+
+        // ------------------------------------------------------
+        // Kalau anchor tidak punya parent,
+        // gunakan fast-path langsung.
+        // ------------------------------------------------------
+
+        if (!hasDirectParents) {
+
+          GlobalQuizAddCandidate(
+
+            candidates,
+
+            person,
+
+            "CHILD",
+
+            `Siapa anak ${anchorName}?`,
+
+            {
+
+              type:
+                "genealogy",
+
+              relation:
+                "genealogy_child",
+
+              fromId:
+                anchorId,
+
+              toId:
+                personId
+
+            },
+
+            null
+
+          );
+
+        }
+
+        else {
+
+          // ----------------------------------------------------
+          // Anchor punya parent.
+          // Validasi menggunakan WhoToWhom.
+          // ----------------------------------------------------
+
+          const result =
+            GlobalQuizGetRelation(
+              anchorId,
+              personId
+            );
+
+
+          if (result) {
+
+            const relation =
+              String(
+                result.relation ||
+                ""
+              )
+              .trim()
+              .toLowerCase();
+
+
+            if (
+              relation === "child" ||
+              relation === "genealogy_child"
+            ) {
+
+              GlobalQuizAddCandidate(
+
+                candidates,
+
+                person,
+
+                "CHILD",
+
+                `Siapa anak ${anchorName}?`,
+
+                result,
+
+                null
+
+              );
+
+            }
+
+          }
+
+        }
+
+      }
+
+
+      // ========================================================
+      // SIBLING
+      //
+      // Hanya kalau anchor punya parent.
+      // ========================================================
+
+      if (hasDirectParents) {
+
+        const sameFather =
+          !!fatherId &&
+          personFatherId === fatherId;
+
+
+        const sameMother =
+          !!motherId &&
+          personMotherId === motherId;
+
+
+        if (
+          sameFather ||
+          sameMother
+        ) {
+
+          const result =
+            GlobalQuizGetRelation(
+              anchorId,
+              personId
+            );
+
+
+          if (result) {
+
+            const relation =
+              String(
+                result.relation ||
+                ""
+              )
+              .trim()
+              .toLowerCase();
+
+
+            if (
+              directSiblingRelations.has(
+                relation
+              )
+            ) {
+
+              GlobalQuizAddCandidate(
+
+                candidates,
+
+                person,
+
+                "SIBLING",
+
+                `Siapa saudara ${anchorName}?`,
+
+                result,
+
+                null
+
+              );
+
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+  );
+
+} // ← TUTUP GlobalQuizScanCandidates
+
+
+
+// ============================================================
+// 7. START Q1 / Q2 — OPTIMIZED
+// ============================================================
+
+window.DragRelationshipGame
+  .startGlobalAnchorQuestion =
+  function(questionNumber) {
+
+    const game =
+      window.DragRelationshipGame;
+
+    const state =
+      game.globalRelationQuizState;
+
+
+    if (
+      !state ||
+      !state.anchorId
+    ) {
+
+      console.warn(
+        "❌ [GLOBAL] Anchor kosong"
+      );
+
+      return;
+    }
+
+
+    // ========================================================
+    // Q2
+    // ========================================================
+
+    if (
+      questionNumber === 2
+    ) {
+
+      game.startGlobalExtendedRelationshipQuestion();
+
+      return;
+    }
+
+
+    if (
+      questionNumber !== 1
+    ) {
+      return;
+    }
+
+
+    // ========================================================
+    // PEOPLE
+    // ========================================================
+
+    const people =
+      game.getMobileQuizPeople();
+
+
+    if (
+      !Array.isArray(people) ||
+      !people.length
+    ) {
+
+      console.warn(
+        "❌ [GLOBAL] Data orang kosong"
+      );
+
+      return;
+    }
+
+
+    // ========================================================
+    // ANCHOR
+    // ========================================================
+
+    const anchorId =
+      String(state.anchorId);
+
+
+    const anchor =
+      people.find(
+        person =>
+          String(person.id) ===
+          anchorId
+      );
+
+
+    if (!anchor) {
+
+      console.warn(
+        "❌ [GLOBAL] Anchor tidak ditemukan:",
+        anchorId
+      );
+
+      return;
+    }
+
+
+    const anchorName =
+      GlobalQuizGetPersonName(anchor);
+
+
+    // ========================================================
+    // DIRECT FAMILY ID
+    // ========================================================
+
+    const fatherId =
+      anchor.fid !== undefined &&
+      anchor.fid !== null &&
+      String(anchor.fid).trim() !== ""
+        ? String(anchor.fid)
+        : null;
+
+
+    const motherId =
+      anchor.mid !== undefined &&
+      anchor.mid !== null &&
+      String(anchor.mid).trim() !== ""
+        ? String(anchor.mid)
+        : null;
+
+
+    const hasDirectParents =
+      !!fatherId ||
+      !!motherId;
+
+
+    console.log(
+      "🎮 [GLOBAL Q1] START:",
+      {
+        anchorId,
+        anchorName,
+        fid: fatherId,
+        mid: motherId,
+        hasDirectParents
+      }
+    );
+
+
+    // ========================================================
+    // INDEX
+    //
+    // SATU KALI SCAN
+    // ========================================================
+
+    const personById =
+      GlobalQuizBuildPersonIndex(
+        people
+      );
+
+
+    const candidates = [];
+
+
+    // ========================================================
+    // FATHER
+    // ========================================================
+
+    if (fatherId) {
+
+      const father =
+        personById.get(
+          fatherId
+        );
+
+
+      if (father) {
+
+        const result =
+          GlobalQuizGetRelation(
+            fatherId,
+            anchorId
+          );
+
+
+        if (result) {
+
+          GlobalQuizAddCandidate(
+
+            candidates,
+
+            father,
+
+            "FATHER",
+
+            `Siapa ayah ${anchorName}?`,
+
+            result,
+
+            father
+
+          );
+
+        }
+
+      }
+
+    }
+
+
+    // ========================================================
+    // MOTHER
+    // ========================================================
+
+    if (motherId) {
+
+      const mother =
+        personById.get(
+          motherId
+        );
+
+
+      if (mother) {
+
+        const result =
+          GlobalQuizGetRelation(
+            motherId,
+            anchorId
+          );
+
+
+        if (result) {
+
+          GlobalQuizAddCandidate(
+
+            candidates,
+
+            mother,
+
+            "MOTHER",
+
+            `Siapa ibu ${anchorName}?`,
+
+            result,
+
+            mother
+
+          );
+
+        }
+
+      }
+
+    }
+
+
+    // ========================================================
+    // CHILD + SIBLING
+    //
+    // SATU SCAN SAJA
+    // ========================================================
+
+    GlobalQuizScanCandidates(
+
+      people,
+
+      anchorId,
+
+      fatherId,
+
+      motherId,
+
+      hasDirectParents,
+
+      anchorName,
+
+      candidates
+
+    );
+
+
+    // ========================================================
+    // UNIQUE
+    // ========================================================
+
+    const uniqueCandidates =
+      candidates.filter(
+        (item, index, array) =>
+          array.findIndex(
+            x =>
+              String(x.personId) ===
+              String(item.personId) &&
+              x.relation ===
+              item.relation
+          ) === index
+      );
+
+
+    // ========================================================
+    // JIKA TIDAK ADA
+    // ========================================================
+
+    if (
+  !uniqueCandidates.length
+) {
+
+  console.warn(
+    "⏭️ [GLOBAL Q1] Tidak ada Q1 → Q3 WHO AM I"
+  );
+
+
+  game.startGlobalWhoAmI({
+
+    // Tidak ada Q1 yang berhasil,
+    // jadi tidak ada person Q1 yang perlu dikecualikan.
+    excludePersonIds: [],
+
+    // Tidak ada relation Q1 yang berhasil.
+    excludeRelations: []
+
+  });
+
+
+  return;
+
+}
+
+
+
+    // ========================================================
+    // RANDOM
+    // ========================================================
+
+    const selected =
+      uniqueCandidates[
+        Math.floor(
+          Math.random() *
+          uniqueCandidates.length
+        )
+      ];
+
+
+    // ========================================================
+    // LABEL — HANYA 1x
+    // ========================================================
+
+    try {
+
+      selected.relationshipLabel =
+        game.getDragGameLabel(
+          selected.result,
+          selected._fromPerson || anchor,
+          personById.get(
+            selected.personId
+          )
+        ) || "";
+
+    }
+    catch(error) {
+
+      console.warn(
+        "⚠️ [GLOBAL Q1] Label error:",
+        error
+      );
+
+      selected.relationshipLabel =
+        "";
+
+    }
+
+
+    // ========================================================
+    // HAPUS INTERNAL FIELD
+    // ========================================================
+
+    delete selected._fromPerson;
+
+
+    // ========================================================
+    // STATE
+    // ========================================================
+
+    state.q1PersonId =
+      String(selected.personId);
+
+    state.q1PersonName =
+      selected.personName;
+
+    state.q1Relation =
+      selected.relation;
+
+    state.q1Result =
+      selected.result;
+
+    state.q1Label =
+      selected.relationshipLabel;
+
+    state.step =
+      1;
+
+
+    // ========================================================
+    // DEBUG
+    // ========================================================
+
+    console.log(
+      "🎮 [GLOBAL Q1] RANDOM:",
+      selected
+    );
+
+
+    // ========================================================
+    // SHOW
+    // ========================================================
+
+    game.showGlobalDirectRelationshipQuestion(
+      selected,
+      1
+    );
+
+
+
+  }; // ← TUTUP startGlobalAnchorQuestion
+
+
+// ============================================================
+// 🎮 GLOBAL Q2
+// ============================================================
+//
+// Q2 menggunakan hubungan extended genealogy:
+//
+// - AUNT
+// - UNCLE
+// - COUSIN
+// - NIECE
+// - NEPHEW
+//
+// IMPORTANT:
+// Pertanyaan:
+//
+//   "Siapa cousin Sustono?"
+//
+// berarti kita mencari:
+//
+//   person → anchor
+//
+// BUKAN:
+//
+//   anchor → person
+//
+// Karena itu relationship detail harus di-resolve
+// dari candidate ke anchor.
+// ============================================================
+
+
+// ============================================================
+// Q2 CATEGORY HELPER
+// ============================================================
+
+function getQ2CategoryGlobalQuiz(
+  relation,
+  result
+) {
+
+  const r =
+    String(
+      relation ||
+      result?.relation ||
+      ""
+    )
+      .trim()
+      .toLowerCase();
+
+
+  if (!r) {
+    return null;
+  }
+
+
+  // ==========================================================
+  // HAPUS PENOLAKAN OF_SPOUSE
+  //
+  // Relasi melalui pasangan tetap boleh masuk Q2.
+  // Kategorinya ditentukan dari jenis relasi dasarnya.
+  // ==========================================================
+
+
+  // ==========================================================
+  // ANCESTOR
+  // ==========================================================
+
+  if (
+    r.includes("ancestor")
+  ) {
+    return "ANCESTOR";
+  }
+
+
+  // ==========================================================
+  // DESCENDANT
+  // ==========================================================
+
+  if (
+    r.includes("descendant")
+  ) {
+    return "DESCENDANT";
+  }
+
+
+  // ==========================================================
+  // AUNT / UNCLE
+  // ==========================================================
+
+  if (
+    r.includes("aunt") ||
+    r.includes("uncle")
+  ) {
+    return "AUNT_UNCLE";
+  }
+
+
+  // ==========================================================
+  // NIECE / NEPHEW
+  // ==========================================================
+
+  if (
+    r.includes("niece") ||
+    r.includes("nephew")
+  ) {
+    return "NIECE_NEPHEW";
+  }
+
+
+  // ==========================================================
+  // COUSIN
+  // ==========================================================
+
+  if (
+    r.includes("cousin")
+  ) {
+    return "COUSIN";
+  }
+
+
+  // ==========================================================
+  // FALLBACK TYPE
+  // ==========================================================
+
+  const type =
+    String(
+      result?.type ||
+      ""
+    )
+      .trim()
+      .toLowerCase();
+
+
+  if (
+    type.includes("ancestor")
+  ) {
+    return "ANCESTOR";
+  }
+
+
+  if (
+    type.includes("descendant")
+  ) {
+    return "DESCENDANT";
+  }
+
+
+  if (
+    type.includes("aunt") ||
+    type.includes("uncle")
+  ) {
+    return "AUNT_UNCLE";
+  }
+
+
+  if (
+    type.includes("niece") ||
+    type.includes("nephew")
+  ) {
+    return "NIECE_NEPHEW";
+  }
+
+
+  if (
+    type.includes("cousin")
+  ) {
+    return "COUSIN";
+  }
+
+
+  return null;
+
+
+
+} // ← TUTUP helper function getQ2CategoryGlobalQuiz
+
+
+
+
+// ============================================================
+// START GLOBAL Q2
+// ============================================================
+
+window.DragRelationshipGame
+  .startGlobalExtendedRelationshipQuestion =
+  function() {
+
+    const game =
+      window.DragRelationshipGame;
+
+
+    const state =
+      game.globalRelationQuizState;
+
+
+    const people =
+      game.getMobileQuizPeople();
+
+
+    // ========================================================
+    // VALIDASI
+    // ========================================================
+
+    if (
+      !state ||
+      !state.anchorId ||
+      !Array.isArray(people) ||
+      !people.length
+    ) {
+
+      console.warn(
+        "❌ [GLOBAL Q2] State atau data kosong"
+      );
+
+      return;
+    }
+
+
+    const anchorId =
+      String(state.anchorId);
+
+
+    const anchor =
+      people.find(
+        person =>
+          String(person.id) ===
+          anchorId
+      );
+
+
+    if (!anchor) {
+
+      console.warn(
+        "❌ [GLOBAL Q2] Anchor tidak ditemukan:",
+        anchorId
+      );
+
+      return;
+    }
+
+
+    // ========================================================
+    // CACHE FUNCTION
+    // ========================================================
+
+    const whoToWhom =
+      window.WhoToWhom;
+
+
+    const getDragGameLabel =
+      game.getDragGameLabel;
+
+
+    const candidates = [];
+
+
+    // ========================================================
+    // SCAN SEMUA ORANG
+    // ========================================================
+
+    people.forEach(
+      person => {
+
+        const personId =
+          String(person.id);
+
+
+        // ----------------------------------------------------
+        // Jangan anchor sendiri
+        // ----------------------------------------------------
+
+        if (
+          personId ===
+          anchorId
+        ) {
+          return;
+        }
+
+
+        // ====================================================
+        // WHO TO WHOM
+        //
+        // person → anchor
+        // ====================================================
+
+        let resolved = null;
+
+
+        try {
+
+          resolved =
+            whoToWhom?.get(
+              personId,
+              anchorId
+            );
+
+        }
+        catch(error) {
+
+          console.warn(
+            "⚠️ [GLOBAL Q2] WhoToWhom error:",
+            {
+              personId,
+              anchorId,
+              error
+            }
+          );
+
+          return;
+        }
+
+
+        if (!resolved) {
+          return;
+        }
+
+
+        const result =
+          resolved.result ||
+          resolved;
+
+
+        if (!result) {
+          return;
+        }
+
+
+        // ====================================================
+        // RELATION ASLI
+        // ====================================================
+
+        const relation =
+          String(
+            result.relation ||
+            ""
+          )
+          .trim()
+          .toLowerCase();
+
+
+        // ====================================================
+        // CATEGORY
+        //
+        // PENTING:
+        // CATEGORY TIDAK DITENTUKAN DARI LABEL.
+        //
+        // Hanya dari relation SSOT.
+        // ====================================================
+
+        const category =
+          getQ2CategoryGlobalQuiz(
+            relation,
+            result
+          );
+
+
+        if (!category) {
+
+          console.log(
+            "🚫 [GLOBAL Q2] RELATION DITOLAK:",
+            {
+              personId,
+              relation,
+              result
+            }
+          );
+
+          return;
+        }
+
+
+        // ====================================================
+        // LABEL
+        //
+        // HANYA DIPANGGIL UNTUK CANDIDATE VALID.
+        //
+        // Ini membuat proses lebih cepat karena relasi yang
+        // langsung ditolak tidak perlu generate label.
+        // ====================================================
+
+        let label = "";
+
+
+        try {
+
+          label =
+            getDragGameLabel(
+              result,
+              person,
+              anchor
+            ) ||
+            "";
+
+        }
+        catch(error) {
+
+          console.warn(
+            "⚠️ [GLOBAL Q2] getDragGameLabel error:",
+            {
+              personId,
+              anchorId,
+              error
+            }
+          );
+
+          return;
+        }
+
+
+        // ====================================================
+        // NAMA
+        // ====================================================
+
+        const personName =
+          person.name ||
+          person.fullName ||
+          person.nama ||
+          String(person.id);
+
+
+        // ====================================================
+        // PERTANYAAN
+        //
+        // Contoh:
+        //
+        // Kerabat sepupu tingkat 1...
+        //
+        // menjadi:
+        //
+        // Siapa kerabat sepupu tingkat 1 ... Sustono?
+        // ====================================================
+
+        const cleanLabel =
+          String(label)
+            .split(" (")[0]
+            .trim();
+
+
+        const question =
+          `Siapa ${cleanLabel.toLowerCase()} ${state.anchorName}?`;
+
+
+        // ====================================================
+        // CANDIDATE
+        // ====================================================
+
+        candidates.push({
+
+          personId,
+
+          personName,
+
+          // CATEGORY QUIZ
+          relation:
+            category,
+
+          // RELASI ASLI SSOT
+          actualRelation:
+            result.relation,
+
+          // LABEL LENGKAP
+          label,
+
+          // HASIL ENGINE
+          result,
+
+          // PERTANYAAN LENGKAP
+          question
+
+        });
+
+
+        console.log(
+          "🎮 [GLOBAL Q2] CANDIDATE:",
+          {
+            personId,
+            personName,
+            relation,
+            category,
+            label,
+            result
+          }
+        );
+
+      }
+    );
+
+
+    // ========================================================
+    // TIDAK ADA CANDIDATE
+    // ========================================================
+
+    if (!candidates.length) {
+
+      console.warn(
+        "⚠️ [GLOBAL Q2] Tidak ditemukan candidate valid:",
+        {
+          anchor:
+            state.anchorName
+        }
+      );
+
+
+      // Langsung lanjut ke Q3
+        game.startGlobalWhoAmI();
+
+
+
+      return;
+    }
+
+
+    // ========================================================
+    // UNIQUE
+    // ========================================================
+    //
+    // Satu orang hanya boleh muncul satu kali.
+    // ========================================================
+
+    const uniqueCandidates =
+      candidates.filter(
+        (item, index, array) =>
+
+          array.findIndex(
+            x =>
+              String(x.personId) ===
+              String(item.personId)
+          ) === index
+      );
+
+
+    // ========================================================
+    // RANDOM
+    // ========================================================
+
+    const selected =
+      uniqueCandidates[
+        Math.floor(
+          Math.random() *
+          uniqueCandidates.length
+        )
+      ];
+
+
+    // ========================================================
+    // STATE
+    // ========================================================
+
+    state.q2PersonId =
+      String(selected.personId);
+
+
+    state.q2PersonName =
+      selected.personName;
+
+
+    state.q2Relation =
+      selected.relation;
+
+
+    state.q2Result =
+      selected.result;
+
+
+    state.q2Label =
+      selected.label;
+
+
+    state.step =
+      2;
+
+
+    // ========================================================
+    // DEBUG FINAL
+    // ========================================================
+
+    console.log(
+      "🎮 [GLOBAL Q2] RANDOM:",
+      selected
+    );
+
+
+    // ========================================================
+    // SHOW QUESTION
+    // ========================================================
+
+    game
+      .showGlobalDirectRelationshipQuestion(
+        selected,
+        2
+      );
+
+
+  }; // ← TUTUP startGlobalExtendedRelationshipQuestion
+
+
+// ============================================================
+// 8. SHOW DIRECT RELATIONSHIP QUESTION
+// ============================================================
+
+// ============================================================
+// 🎮 GLOBAL QUIZ
+// SHOW DIRECT RELATIONSHIP QUESTION
+// ============================================================
+//
+// Digunakan untuk:
+// - Q1 = Father / Mother / Child / Sibling
+// - Q2 = Aunt / Uncle / Cousin / Niece / Nephew
+//
+// IMPORTANT:
+// - Tidak membuat modal baru.
+// - Tetap menggunakan createDragGameQuestionModal()
+//   milik Drag Relationship yang sudah existing.
+// - Global Quiz hanya mengganti isi options menjadi NAMA ORANG.
+// ============================================================
+
+window.DragRelationshipGame
+  .showGlobalDirectRelationshipQuestion =
+  function(
+    candidate,
+    questionNumber
+  ) {
+
+    // ========================================================
+    // AMBIL GLOBAL STATE
+    // ========================================================
+
+    const state =
+      window.DragRelationshipGame
+        .globalRelationQuizState;
+
+
+    // ========================================================
+    // AMBIL SEMUA DATA ORANG
+    // ========================================================
+
+    const people =
+      window.DragRelationshipGame
+        .getMobileQuizPeople();
+
+
+    // ========================================================
+    // VALIDASI DATA
+    // ========================================================
+
+    if (
+      !candidate ||
+      !state ||
+      !Array.isArray(people)
+    ) {
+
+      console.warn(
+        "❌ [GLOBAL DIRECT] Candidate / state / people tidak valid"
+      );
+
+      return;
+
+    }
+
+
+    // ========================================================
+    // CARI JAWABAN YANG BENAR
+    // ========================================================
+
+    const correctPerson =
+      people.find(
+        person =>
+          String(person.id) ===
+          String(candidate.personId)
+      );
+
+
+    if (!correctPerson) {
+
+      console.warn(
+        "❌ [GLOBAL DIRECT] Correct person tidak ditemukan:",
+        candidate.personId
+      );
+
+      return;
+
+    }
+
+
+    // ========================================================
+    // BUAT DISTRACTOR
+    //
+    // Jangan menggunakan:
+    // - orang yang benar
+    // - anchor
+    //
+    // Maksimal 4 distractor.
+    // Total options = 5 (1 answer + 4 distractor).
+    // ========================================================
+
+    const distractors =
+      people
+        .filter(
+          person =>
+            String(person.id) !==
+            String(candidate.personId) &&
+            String(person.id) !==
+            String(state.anchorId)
+        )
+        .sort(
+          () =>
+            Math.random() - 0.5
+        )
+        .slice(0, 4);
+
+
+    // ========================================================
+    // GABUNGKAN JAWABAN BENAR + DISTRACTOR
+    // ========================================================
+
+    const optionPeople =
+      [
+        correctPerson,
+        ...distractors
+      ]
+      .sort(
+        () =>
+          Math.random() - 0.5
+      );
+
+
+    // ========================================================
+    // BUAT OPTIONS UNTUK createDragGameQuestionModal()
+    //
+    // IMPORTANT:
+    //
+    // createDragGameQuestionModal() melakukan:
+    //
+    // gameQuestion.options.map(
+    //   ([relation, label]) => ...
+    // )
+    //
+    // Jadi options WAJIB berupa ARRAY.
+    //
+    // Untuk Global Quiz:
+    // relation = ID orang
+    // label    = NAMA orang
+    //
+    // Setelah modal dibuat, options ini akan kita ganti
+    // menjadi button dengan data-person-id.
+    // ========================================================
+
+    const modalOptions =
+      optionPeople.map(
+        person => [
+
+          String(person.id),
+
+          person.name ||
+          person.fullName ||
+          person.nama ||
+          String(person.id)
+
+        ]
+      );
+
+
+    // ========================================================
+    // GAME QUESTION
+    //
+    // Ini HARUS mempunyai:
+    // - fromName
+    // - toName
+    // - relation
+    // - label
+    // - options
+    //
+    // options diperlukan supaya createDragGameQuestionModal()
+    // tidak mengalami:
+    //
+    // Cannot read properties of undefined (reading 'map')
+    // ========================================================
+
+    const gameQuestion = {
+
+      fromName:
+        candidate.personName,
+
+      toName:
+        state.anchorName,
+
+     // ID orang yang menjadi jawaban benar
+      relation:
+        String(candidate.personId),
+
+     // TEKS SOAL
+      label:
+        candidate.question,
+
+  // RELASI LENGKAP DARI SSOT
+  relationshipLabel:
+    candidate.label,
+
+  // RELASI ASLI DARI WhoToWhom
+  actualRelation:
+    candidate.actualRelation,
+
+  // HASIL LENGKAP DARI WhoToWhom
+  result:
+    candidate.result,
+
+      options:
+        modalOptions
+
+    };
+
+    // ========================================================
+    // SIMPAN GAME QUESTION UNTUK GLOBAL WRONG
+    // ========================================================
+
+    window.DragRelationshipGame.globalDirectGameQuestion =
+      gameQuestion;
+
+    console.log(
+      "🎮 [GLOBAL DIRECT] GAME QUESTION:",
+      gameQuestion
+    );
+
+
+    // ========================================================
+    // BUAT MODAL EXISTING
+    // ========================================================
+
+    const {
+      modal,
+      box
+    } =
+      createDragGameQuestionModal(
+        gameQuestion
+      );
+
+
+    // ========================================================
+    // VALIDASI MODAL
+    // ========================================================
+
+    if (!modal || !box) {
+
+      console.warn(
+        "❌ [GLOBAL DIRECT] Modal gagal dibuat"
+      );
+
+      return;
+
+    }
+
+
+    // ========================================================
+    // SET FLAG EXISTING DRAG GAME
+    //
+    // Global Quiz tetap memakai modal existing,
+    // sehingga flag existing perlu dibuat aktif.
+    // ========================================================
+
+    relationshipQuestionOpen =
+      true;
+
+    dragFromId =
+      null;
+
+
+    // ========================================================
+    // UBAH JUDUL
+    // ========================================================
+
+    const title =
+      box.querySelector(
+        ".drag-question-title"
+      );
+
+
+    if (title) {
+
+      title.textContent =
+        "🎮 RELATION QUIZ";
+
+    }
+
+
+    // ========================================================
+    // UBAH TEKS PERTANYAAN
+    // ========================================================
+
+    const questionElement =
+      box.querySelector(
+        ".drag-question-text"
+      );
+
+
+    if (questionElement) {
+
+      questionElement.innerHTML = `
+        <strong>
+          ${escapeHtml(
+            candidate.question
+          )}
+        </strong>
+      `;
+
+    }
+
+
+    // ========================================================
+    // AMBIL OPTIONS BOX
+    // ========================================================
+
+    const optionsBox =
+      box.querySelector(
+        ".drag-question-options"
+      );
+
+
+    if (!optionsBox) {
+
+      console.warn(
+        "❌ [GLOBAL DIRECT] Options box tidak ditemukan"
+      );
+
+      return;
+
+    }
+
+
+    // ========================================================
+    // GANTI OPTIONS DEFAULT
+    //
+    // Modal existing sebelumnya membuat:
+    //
+    // data-relation="..."
+    //
+    // Tetapi Global Quiz membutuhkan:
+    //
+    // data-person-id="..."
+    //
+    // Karena jawaban Global Q1/Q2 adalah ORANG.
+    // ========================================================
+
+    optionsBox.innerHTML =
+      optionPeople
+        .map(
+          person => {
+
+            const personId =
+              String(person.id);
+
+
+            const personName =
+              person.name ||
+              person.fullName ||
+              person.nama ||
+              person.id;
+
+
+            return `
+
+              <button
+                type="button"
+                class="drag-answer global-direct-answer"
+                data-person-id="${escapeHtml(
+                  personId
+                )}"
+              >
+                ${escapeHtml(
+                  personName
+                )}
+              </button>
+
+            `;
+
+          }
+        )
+        .join("");
+
+
+    // ========================================================
+    // SELECTED ANSWER
+    // ========================================================
+
+    let selectedPersonId =
+      null;
+
+
+    // ========================================================
+    // BIND CLICK OPTIONS
+    // ========================================================
+
+    box
+      .querySelectorAll(
+        ".global-direct-answer"
+      )
+      .forEach(
+        button => {
+
+          button.addEventListener(
+            "click",
+            function(e) {
+
+              e.preventDefault();
+              e.stopPropagation();
+
+
+              // ----------------------------------------------
+              // HAPUS SELECTED DARI SEMUA BUTTON
+              // ----------------------------------------------
+
+              box
+                .querySelectorAll(
+                  ".global-direct-answer"
+                )
+                .forEach(
+                  btn =>
+                    btn.classList.remove(
+                      "selected"
+                    )
+                );
+
+
+              // ----------------------------------------------
+              // SELECT BUTTON
+              // ----------------------------------------------
+
+              button.classList.add(
+                "selected"
+              );
+
+
+              // ----------------------------------------------
+              // SIMPAN PERSON ID
+              // ----------------------------------------------
+
+              selectedPersonId =
+                button.getAttribute(
+                  "data-person-id"
+                );
+
+
+              console.log(
+                "🎮 [GLOBAL DIRECT] SELECTED:",
+                selectedPersonId
+              );
+
+            }
+          );
+
+        }
+      );
+
+
+    // ========================================================
+    // BIND CLOSE EXISTING DRAG MODAL
+    // ========================================================
+
+    bindDragGameClose(
+      modal,
+      box
+    );
+
+
+    // ========================================================
+    // BIND SUBMIT
+    // ========================================================
+
+    box
+      .querySelector(
+        ".drag-question-submit"
+      )
+      ?.addEventListener(
+        "click",
+        function(e) {
+
+          e.preventDefault();
+          e.stopPropagation();
+
+
+          // --------------------------------------------------
+          // BELUM MEMILIH
+          // --------------------------------------------------
+
+          if (!selectedPersonId) {
+
+            alert(
+              "Pilih jawaban dulu."
+            );
+
+            return;
+
+          }
+
+
+          // --------------------------------------------------
+          // CEK JAWABAN
+          // --------------------------------------------------
+
+          if (
+            String(selectedPersonId) ===
+            String(candidate.personId)
+          ) {
+
+            console.log(
+              "🎉 [GLOBAL DIRECT] JAWABAN BENAR"
+            );
+
+
+            // ----------------------------------------------
+            // TAMBAH SCORE GLOBAL
+            // ----------------------------------------------
+
+            stateGlobalCorrectAnswer();
+
+
+            // ----------------------------------------------
+            // TAMPILKAN HASIL BENAR
+            // ----------------------------------------------
+
+            window.DragRelationshipGame
+              .showGlobalCorrectResult(
+                box,
+                {
+                  fromName:
+                    candidate.personName,
+
+                  toName:
+                    state.anchorName,
+
+                  label:
+                    candidate.question,
+
+                  relation:
+                    candidate.relation
+
+                },
+                questionNumber
+              );
+
+
+            return;
+
+          }
+
+
+          // --------------------------------------------------
+          // JAWABAN SALAH
+          // --------------------------------------------------
+
+          console.log(
+            "❌ [GLOBAL DIRECT] JAWABAN SALAH:",
+            selectedPersonId
+          );
+
+
+         //kasih data untuk hasil render jawaban yang benar
+          window.DragRelationshipGame
+            .showGlobalWrongResult(
+              box,
+              {
+                fromName:
+                  candidate.personName,
+
+                toName:
+                  state.anchorName,
+
+                label:
+                  candidate.question
+              },
+              questionNumber
+            );
+
+        }
+      );
+
+
+    // ========================================================
+    // KEYBOARD
+    // ========================================================
+
+    window.DragRelationshipGame
+      .initDragGameKeyboard(
+        modal,
+        box
+      );
+
+
+    // ========================================================
+    // TUTUP FUNGSI
+    // ========================================================
+
+  }; // ← TUTUP showGlobalDirectRelationshipQuestion
+
+
+// ============================================================
+// 9. SHOW GLOBAL RELATIONSHIP QUESTION
+// ============================================================
+
+window.DragRelationshipGame
+  .showGlobalRelationshipQuestion =
+  function(
+    gameQuestion,
+    questionNumber
+  ) {
+
+    if (!gameQuestion) {
+      return;
+    }
+
+    const {
+      modal,
+      box
+    } =
+      createDragGameQuestionModal(
+        gameQuestion
+      );
+
+    relationshipQuestionOpen =
+      true;
+
+    dragFromId =
+      null;
+
+    const getSelectedRelation =
+      bindDragGameAnswerSelection(
+        box
+      );
+
+    bindDragGameClose(
+      modal,
+      box
+    );
+
+    box
+      .querySelector(
+        ".drag-question-submit"
+      )
+      ?.addEventListener(
+        "click",
+        function(e) {
+
+          e.preventDefault();
+          e.stopPropagation();
+
+          const selectedRelation =
+            getSelectedRelation();
+
+          if (!selectedRelation) {
+
+            alert(
+              "Pilih jawaban dulu."
+            );
+
+            return;
+
+          }
+
+          const correctRelation =
+            gameQuestion.relation;
+
+          if (
+            selectedRelation ===
+            correctRelation
+          ) {
+
+            stateGlobalCorrectAnswer();
+
+            window.DragRelationshipGame
+              .showGlobalCorrectResult(
+                box,
+                gameQuestion,
+                questionNumber
+              );
+
+            return;
+
+          }
+
+          window.DragRelationshipGame
+            .showGlobalWrongResult(
+              box,
+              gameQuestion,
+              questionNumber
+            );
+
+        }
+      );
+
+    window.DragRelationshipGame
+      .initDragGameKeyboard(
+        modal,
+        box
+      );
+
+  }; // ← TUTUP showGlobalRelationshipQuestion
+
+
+// ============================================================
+// 10. GLOBAL SCORE
+// ============================================================
+
+function stateGlobalCorrectAnswer() {
+
+  const state =
+    window.DragRelationshipGame
+      .globalRelationQuizState;
+
+  state.correctAnswers++;
+
+  console.log(
+    "🎮 [GLOBAL] SCORE:",
+    state.correctAnswers
+  );
+
+} // ← TUTUP stateGlobalCorrectAnswer
+
+
+// ============================================================
+// GLOBAL QUIZ — Q3 WHO AM I SCANNER
+// ============================================================
+//
+// Scanner ini adalah SATU-SATUNYA scanner untuk Q3.
+//
+// Bisa dipakai dari:
+//   1. Q1 → Q3
+//   2. Q2 → Q3
+//
+// Prinsip:
+// - Relationship selalu PERSON → ANCHOR
+// - Tidak memakai label Q1/Q2
+// - Selalu resolve ulang dengan WhoToWhom
+// - Kandidat yang sudah dipakai bisa dikecualikan
+// - Relation yang sudah dipakai bisa dikecualikan
+// - Mencakup seluruh relation yang tersedia dari engine
+//
+// ============================================================
+
+window.DragRelationshipGame
+  .scanGlobalWhoAmICandidates =
+  function(options = {}) {
+
+    const game =
+      window.DragRelationshipGame;
+
+    const state =
+      game.globalRelationQuizState;
+
+    if (
+      !state ||
+      !state.anchorId
+    ) {
+
+      console.warn(
+        "❌ [GLOBAL Q3] State / anchor tidak tersedia"
+      );
+
+      return [];
+
+    }
+
+
+    // ========================================================
+    // PEOPLE
+    // ========================================================
+
+    const people =
+      game.getMobileQuizPeople();
+
+
+    if (
+      !Array.isArray(people) ||
+      !people.length
+    ) {
+
+      console.warn(
+        "❌ [GLOBAL Q3] People kosong"
+      );
+
+      return [];
+
+    }
+
+
+    // ========================================================
+    // ANCHOR
+    // ========================================================
+
+    const anchorId =
+      String(state.anchorId);
+
+
+    const anchor =
+      people.find(
+        person =>
+          String(person.id) ===
+          anchorId
+      );
+
+
+    if (!anchor) {
+
+      console.warn(
+        "❌ [GLOBAL Q3] Anchor tidak ditemukan:",
+        anchorId
+      );
+
+      return [];
+
+    }
+
+
+    const anchorName =
+      anchor.name ||
+      anchor.fullName ||
+      anchor.nama ||
+      anchorId;
+
+
+    // ========================================================
+    // EXCLUDE PERSON
+    // ========================================================
+    //
+    // Q1 dan Q2 bisa mengirim person yang sudah digunakan.
+    //
+    // Contoh:
+    //
+    // Q1 = Eti
+    // Q2 = Sutarno
+    //
+    // Maka Q3 tidak boleh memilih:
+    //
+    // Eti
+    // Sutarno
+    //
+    // ========================================================
+
+    const excludedPersonIds =
+      new Set(
+        (
+          options.excludePersonIds ||
+          []
+        )
+        .filter(
+          id =>
+            id !== null &&
+            id !== undefined
+        )
+        .map(
+          id =>
+            String(id)
+        )
+      );
+
+
+    // ========================================================
+    // SELALU EXCLUDE ANCHOR
+    // ========================================================
+
+    excludedPersonIds.add(
+      anchorId
+    );
+
+
+    // ========================================================
+    // EXCLUDE RELATION
+    // ========================================================
+    //
+    // Bisa dipakai untuk mencegah Q3 mengulang relation Q2.
+    //
+    // Misalnya:
+    //
+    // Q2 = genealogy_cousin
+    //
+    // Maka Q3 tidak boleh genealogy_cousin lagi.
+    //
+    // ========================================================
+
+    const excludedRelations =
+      new Set(
+        (
+          options.excludeRelations ||
+          []
+        )
+        .filter(
+          relation =>
+            relation !== null &&
+            relation !== undefined
+        )
+        .map(
+          relation =>
+            String(relation)
+              .trim()
+              .toLowerCase()
+        )
+      );
+
+
+    // ========================================================
+    // WHO TO WHOM
+    // ========================================================
+
+    const whoToWhom =
+      window.WhoToWhom;
+
+
+    if (
+      !whoToWhom ||
+      typeof whoToWhom.get !== "function"
+    ) {
+
+      console.warn(
+        "❌ [GLOBAL Q3] WhoToWhom.get tidak tersedia"
+      );
+
+      return [];
+
+    }
+
+
+    // ========================================================
+    // CANDIDATES
+    // ========================================================
+
+    const candidates = [];
+
+
+    // ========================================================
+    // SCAN SEMUA ORANG
+    // ========================================================
+
+    people.forEach(
+      person => {
+
+        const personId =
+          String(person.id);
+
+
+        // ----------------------------------------------------
+        // SKIP PERSON YANG SUDAH DIGUNAKAN
+        // ----------------------------------------------------
+
+        if (
+          excludedPersonIds.has(
+            personId
+          )
+        ) {
+
+          return;
+
+        }
+
+
+        // ====================================================
+        // RESOLVE ULANG
+        //
+        // Q3:
+        //
+        // PERSON → ANCHOR
+        //
+        // Contoh:
+        //
+        // Saoji → Sustono
+        //
+        // bukan:
+        //
+        // Sustono → Saoji
+        //
+        // ====================================================
+
+        let resolved = null;
+
+
+        try {
+
+          resolved =
+            whoToWhom.get(
+              personId,
+              anchorId
+            );
+
+        }
+        catch(error) {
+
+          console.warn(
+            "⚠️ [GLOBAL Q3] WhoToWhom error:",
+            {
+              personId,
+              anchorId,
+              error
+            }
+          );
+
+          return;
+
+        }
+
+
+        if (!resolved) {
+
+          return;
+
+        }
+
+
+        // ====================================================
+        // RESULT
+        // ====================================================
+
+        const result =
+          resolved.result ||
+          resolved;
+
+
+        if (!result) {
+
+          return;
+
+        }
+
+
+        // ====================================================
+        // RELATION ASLI
+        // ====================================================
+
+        const actualRelation =
+          String(
+            result.relation ||
+            result.type ||
+            ""
+          )
+          .trim()
+          .toLowerCase();
+
+
+        if (!actualRelation) {
+
+          return;
+
+        }
+
+
+        // ====================================================
+        // EXCLUDE RELATION
+        // ====================================================
+
+        if (
+          excludedRelations.has(
+            actualRelation
+          )
+        ) {
+
+          return;
+
+        }
+
+
+        // ====================================================
+        // GENERATE LABEL BARU
+        // ====================================================
+        //
+        // PENTING:
+        //
+        // Label SELALU dibuat dari result baru.
+        //
+        // Tidak boleh:
+        //
+        // state.q1Label
+        // state.q2Label
+        //
+        // ====================================================
+
+        let label = "";
+
+
+        try {
+
+          label =
+            game.getDragGameLabel(
+              result,
+              person,
+              anchor
+            ) ||
+            "";
+
+        }
+        catch(error) {
+
+          console.warn(
+            "⚠️ [GLOBAL Q3] getDragGameLabel error:",
+            {
+              personId,
+              actualRelation,
+              error
+            }
+          );
+
+          return;
+
+        }
+
+
+        if (!label) {
+
+          return;
+
+        }
+
+
+        // ====================================================
+        // PERSON NAME
+        // ====================================================
+
+        const personName =
+          person.name ||
+          person.fullName ||
+          person.nama ||
+          personId;
+
+
+        // ====================================================
+        // PUSH CANDIDATE
+        // ====================================================
+
+        candidates.push({
+
+          personId,
+
+          personName,
+
+          relation:
+            actualRelation,
+
+          actualRelation,
+
+          label,
+
+          result
+
+        });
+
+
+        // ====================================================
+        // DEBUG
+        // ====================================================
+
+        console.log(
+          "🕵️ [GLOBAL Q3] CANDIDATE:",
+          {
+            personId,
+            personName,
+            relation:
+              actualRelation,
+            label,
+            result
+          }
+        );
+
+      }
+    );
+
+
+    // ========================================================
+    // UNIQUE PERSON
+    // ========================================================
+    //
+    // Satu orang hanya muncul satu kali.
+    //
+    // ========================================================
+
+    const uniqueCandidates =
+      candidates.filter(
+        (item, index, array) =>
+
+          array.findIndex(
+            other =>
+              String(
+                other.personId
+              ) ===
+              String(
+                item.personId
+              )
+          ) === index
+
+      );
+
+
+    // ========================================================
+    // DEBUG FINAL
+    // ========================================================
+
+    console.log(
+      "🕵️ [GLOBAL Q3] SCAN SELESAI:",
+      {
+        anchorId,
+        anchorName,
+        total:
+          uniqueCandidates.length,
+        excludedPersonIds:
+          [...excludedPersonIds],
+        excludedRelations:
+          [...excludedRelations]
+      }
+    );
+
+
+    return uniqueCandidates;
+
+  }; // ← TUTUP scanGlobalWhoAmICandidates
+
+
+
+// ============================================================
+// 11. HASIL BENAR GLOBAL
+// ============================================================
+
+window.DragRelationshipGame
+  .showGlobalCorrectResult =
+  function(
+    box,
+    gameQuestion,
+    questionNumber
+  ) {
+
+    console.log(
+      "🟢 [GLOBAL RESULT] MASUK:",
+      {
+        questionNumber,
+        gameQuestion
+      }
+    );
+
+
+    // ========================================================
+    // VALIDASI BOX
+    // ========================================================
+
+    if (!box) {
+
+      console.error(
+        "❌ [GLOBAL RESULT] BOX TIDAK ADA"
+      );
+
+      return;
+
+    }
+
+
+    // ========================================================
+    // RENDER HASIL BENAR
+    // ========================================================
+
+    box.innerHTML = `
+
+      <div class="drag-answer-result correct">
+
+        <div class="drag-answer-result-icon">
+          🎉
+        </div>
+
+        <div class="drag-answer-result-title">
+          BENAR!
+        </div>
+
+        <div class="drag-answer-result-text">
+
+          <strong>
+            ${escapeHtml(
+              gameQuestion.fromName
+            )}
+          </strong>
+
+          adalah
+
+          <strong>
+            ${escapeHtml(
+              gameQuestion.label
+        .replace(/^Siapa\s+/i, "")
+        .replace(/\s+[^\s?]+\?$/, "")
+            )}
+          </strong>
+
+          dari
+
+          <strong>
+            ${escapeHtml(
+              gameQuestion.toName
+            )}
+          </strong>
+
+        </div>
+
+        <div class="drag-answer-result-actions">
+
+          <button
+            type="button"
+            class="drag-answer-continue global-answer-continue"
+          >
+            LANJUT
+          </button>
+
+          <button
+            type="button"
+            class="drag-answer-finish global-answer-finish"
+          >
+            SELESAI
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+
+    // ========================================================
+    // AMBIL BUTTON RESULT
+    // ========================================================
+
+    const continueButton =
+      box.querySelector(
+        ".global-answer-continue"
+      );
+
+    const finishButton =
+      box.querySelector(
+        ".global-answer-finish"
+      );
+
+
+    console.log(
+      "🟢 [GLOBAL RESULT] BUTTON:",
+      {
+        continueButton,
+        finishButton,
+        questionNumber
+      }
+    );
+
+
+    // ========================================================
+    // SELESAI
+    // ========================================================
+
+    finishButton?.addEventListener(
+      "click",
+      function(e) {
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        console.log(
+          "🔴 [GLOBAL RESULT] SELESAI DIKLIK"
+        );
+
+        closeGlobalRelationshipQuiz();
+
+      }
+    );
+
+
+    // ========================================================
+    // LANJUT
+    // ========================================================
+
+    continueButton?.addEventListener(
+      "click",
+      function(e) {
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        console.log(
+          "🟡 [GLOBAL RESULT] LANJUT DIKLIK:",
+          {
+            questionNumber
+          }
+        );
+
+
+        const game =
+          window.DragRelationshipGame;
+
+
+        const state =
+          game.globalRelationQuizState;
+
+
+        // ====================================================
+        // Q1 → Q2
+        // ====================================================
+
+        if (
+          questionNumber === 1
+        ) {
+
+          console.log(
+            "➡️ [GLOBAL RESULT] Q1 → Q2"
+          );
+
+          game.startGlobalAnchorQuestion(2);
+
+          return;
+
+        }
+
+
+        // ====================================================
+        // Q2 → SIAPA AKU
+        // ====================================================
+
+        if (
+          questionNumber === 2
+        ) {
+
+          console.log(
+            "➡️ [GLOBAL RESULT] Q2 → Q3 WHO AM I"
+          );
+
+
+            const q2PersonId =
+    state.q2PersonId
+      ? String(state.q2PersonId)
+      : null;
+
+
+  const q2Relation =
+    state.q2Result?.relation ||
+    state.q2Relation ||
+    null;
+
+
+  game.startGlobalWhoAmI({
+
+    // Q2 person tidak boleh muncul lagi
+    excludePersonIds:
+      q2PersonId
+        ? [q2PersonId]
+        : [],
+
+    // Q2 relation tidak boleh diulang
+    excludeRelations:
+      q2Relation
+        ? [q2Relation]
+        : []
+
+  });
+
+
+          return;
+
+        }
+
+
+        // ====================================================
+        // QUESTION NUMBER TIDAK DIKENAL
+        // ====================================================
+
+        console.warn(
+          "⚠️ [GLOBAL RESULT] QUESTION NUMBER TIDAK DIKENAL:",
+          questionNumber
+        );
+
+      }
+    );
+
+
+    // ========================================================
+    // KEYBOARD
+    //
+    // AKTIFKAN CONTROLLER EXISTING
+    //
+    // Controller ini akan menangani:
+    // ↑ / ↓ / ← / →
+    // ENTER / SPACE
+    // LANJUT / SELESAI
+    // ========================================================
+
+    window.DragRelationshipGame
+      .initDragGameKeyboard();
+
+
+    // ========================================================
+    // DEBUG
+    // ========================================================
+
+    console.log(
+      "🟢 [GLOBAL RESULT] HANDLER + KEYBOARD AKTIF"
+    );
+
+
+  }; // ← TUTUP showGlobalCorrectResult
+
+
+// ============================================================
+// 12. HASIL SALAH GLOBAL
+// ============================================================
+
+// ============================================================
+// HASIL SALAH GLOBAL
+// ============================================================
+
+window.DragRelationshipGame
+  .showGlobalWrongResult =
+  function(
+    box,
+    gameQuestion,
+    questionNumber
+  ) {
+
+    // ========================================================
+    // VALIDASI BOX
+    // ========================================================
+
+    if (!box) {
+
+      console.error(
+        "❌ [GLOBAL WRONG] BOX TIDAK ADA"
+      );
+
+      return;
+
+    }
+
+
+    const game =
+      window.DragRelationshipGame;
+
+
+    const state =
+      game.globalRelationQuizState;
+
+
+    // ========================================================
+    // SCORE GLOBAL
+    // ========================================================
+
+    const score =
+      Number(
+        state?.correctAnswers || 0
+      );
+
+
+    console.log(
+      "🔴 [GLOBAL WRONG] SCORE:",
+      score
+    );
+
+
+    // ========================================================
+    // SEMUA SCORE
+    //
+    // 0 / 1 / 2
+    //
+    // TETAP TAMPILKAN:
+    // SALAH
+    // Jawaban yang benar adalah...
+    // OK
+    // ========================================================
+
+// ========================================================
+// BUAT TEKS HUBUNGAN
+// "Siapa saudara Sustono?" → "saudara Sustono"
+// ========================================================
+
+
+
+// ========================================================
+// RESULT UI
+// ========================================================
+
+box.innerHTML = `
+
+  <div class="drag-answer-result wrong">
+
+    <div class="drag-answer-result-icon">
+      ❌
+    </div>
+
+    <div class="drag-answer-result-title">
+      SALAH
+    </div>
+
+    <div class="drag-answer-result-text">
+
+      ${escapeHtml(
+        gameQuestion.label
+          .replace(/^Siapa\s+/i, "")
+          .replace(/\?+$/, "")
+      )}
+
+      adalah
+
+      <strong>
+        ${escapeHtml(
+          gameQuestion.fromName
+        )}
+      </strong>
+
+    </div>
+
+
+    <div class="drag-answer-result-actions">
+
+      <button
+        type="button"
+        class="drag-answer-ok global-answer-ok"
+      >
+        OK
+      </button>
+
+    </div>
+
+  </div>
+
+`;
+
+
+    // ========================================================
+    // OK
+    // ========================================================
+
+    const okButton =
+      box.querySelector(
+        ".global-answer-ok"
+      );
+
+
+    console.log(
+      "🔴 [GLOBAL WRONG] OK BUTTON:",
+      okButton
+    );
+
+
+    okButton?.addEventListener(
+      "click",
+      function(e) {
+
+        e.preventDefault();
+        e.stopPropagation();
+
+
+        console.log(
+          "🟡 [GLOBAL WRONG] OK DIKLIK:",
+          {
+            score
+          }
+        );
+
+
+        // ====================================================
+        // SCORE 0
+        //
+        // SETELAH MELIHAT KETERANGAN SALAH,
+        // BARU PANGGIL FUNGSI SCORE 0 YANG SUDAH ADA.
+        // ====================================================
+
+        if (score === 0) {
+
+          console.log(
+            "🔍 [GLOBAL WRONG] SCORE 0 → SHOW ZERO RESULT"
+          );
+
+
+          showZeroScoreResult();
+
+
+          return;
+
+        }
+
+
+        // ====================================================
+        // SCORE 1 / 2
+        //
+        // SINKRONKAN SCORE
+        // LALU PAKAI FINAL RESULT YANG SUDAH ADA.
+        // ====================================================
+
+        relationQuizState.correctAnswers =
+          score;
+
+
+        console.log(
+          "🏁 [GLOBAL WRONG] MASUK FINAL RESULT:",
+          {
+            globalScore:
+              state?.correctAnswers,
+
+            finalScore:
+              relationQuizState.correctAnswers
+          }
+        );
+
+
+        showRelationQuizFinalResult();
+
+      }
+    );
+
+
+    // ========================================================
+    // KEYBOARD
+    //
+    // .drag-answer-ok sengaja dipertahankan
+    // agar controller keyboard yang sudah ada mengenalinya.
+    // ========================================================
+
+    game.initDragGameKeyboard();
+
+
+    console.log(
+      "🟢 [GLOBAL WRONG] RESULT + KEYBOARD AKTIF"
+    );
+
+
+  }; // ← TUTUP showGlobalWrongResult
+
+
+// ============================================================
+// 13. PICKER ORANG KEDUA
+// ============================================================
+
+
+// ← TUTUP openGlobalSecondPersonPicker
+
+// ============================================================
+// GLOBAL QUIZ — START Q3 WHO AM I
+// ============================================================
+//
+// Semua jalur menuju Q3 harus masuk ke sini.
+// 
+// Bisa dipanggil dari:
+//   Q1 → Q3
+//   Q2 → Q3
+//
+// ============================================================
+
+window.DragRelationshipGame
+  .startGlobalWhoAmI =
+  function(options = {}) {
+
+    const game =
+      window.DragRelationshipGame;
+
+    const state =
+      game.globalRelationQuizState;
+
+
+    if (
+      !state ||
+      !state.anchorId
+    ) {
+
+      console.warn(
+        "❌ [GLOBAL Q3] Tidak bisa start Q3"
+      );
+
+      return;
+
+    }
+
+
+    // ========================================================
+    // EXCLUDE PERSON
+    // ========================================================
+
+    const excludePersonIds =
+      options.excludePersonIds ||
+      [];
+
+
+    // ========================================================
+    // EXCLUDE RELATION
+    // ========================================================
+
+    const excludeRelations =
+      options.excludeRelations ||
+      [];
+
+
+    // ========================================================
+    // SCAN Q3
+    // ========================================================
+
+    const candidates =
+      game.scanGlobalWhoAmICandidates({
+
+        excludePersonIds,
+
+        excludeRelations
+
+      });
+
+
+    // ========================================================
+    // TIDAK ADA CANDIDATE
+    // ========================================================
+
+    if (
+      !candidates.length
+    ) {
+
+      console.warn(
+        "⚠️ [GLOBAL Q3] Tidak ada candidate Who Am I"
+      );
+
+      return;
+
+    }
+
+
+    // ========================================================
+    // RANDOM
+    // ========================================================
+
+    const selected =
+      candidates[
+        Math.floor(
+          Math.random() *
+          candidates.length
+        )
+      ];
+
+
+    // ========================================================
+    // STATE Q3
+    // ========================================================
+
+    state.q3PersonId =
+      String(
+        selected.personId
+      );
+
+
+    state.q3PersonName =
+      selected.personName;
+
+
+    state.q3Relation =
+      selected.relation;
+
+
+    state.q3Result =
+      selected.result;
+
+
+    state.q3Label =
+      selected.label;
+
+
+    state.step =
+      3;
+
+
+    // ========================================================
+    // MYSTERY
+    // ========================================================
+
+    const mysteryGlobalWhoAmI = {
+
+      personId:
+        String(
+          selected.personId
+        ),
+
+      personName:
+        selected.personName,
+
+      relation:
+        selected.relation,
+
+      label:
+        selected.label,
+
+      result:
+        selected.result
+
+    };
+
+
+    // ========================================================
+    // DEBUG
+    // ========================================================
+
+    console.log(
+      "🕵️ [GLOBAL Q3] SELECTED:",
+      {
+        anchor:
+          state.anchorName,
+
+        mystery:
+          mysteryGlobalWhoAmI,
+
+        q1PersonId:
+          state.q1PersonId,
+
+        q2PersonId:
+          state.q2PersonId
+      }
+    );
+
+
+    // ========================================================
+    // SHOW WHO AM I
+    // ========================================================
+
+    game.showGlobalWhoAmI(
+      state.anchorName,
+      mysteryGlobalWhoAmI
+    );
+
+  }; // ← TUTUP startGlobalWhoAmI
+
+// ============================================================
+// 18. SHOW Q3 GLOBALWHOAMI
+// ============================================================
+
+window.DragRelationshipGame
+  .showGlobalWhoAmI =
+  function(
+    rootName,
+    mysteryGlobalWhoAmI
+  ) {
+
+    // ========================================================
+    // GLOBAL STATE
+    // ========================================================
+
+    const state =
+      window.DragRelationshipGame
+        .globalRelationQuizState;
+
+
+    // ========================================================
+    // VALIDASI
+    // ========================================================
+
+    if (
+      !state ||
+      !mysteryGlobalWhoAmI ||
+      !mysteryGlobalWhoAmI.personId
+    ) {
+
+      console.warn(
+        "❌ [GLOBAL Q3] State / mysteryGlobalWhoAmI tidak valid"
+      );
+
+      return;
+
+    }
+
+
+    // ========================================================
+    // AMBIL SEMUA DATA ORANG
+    // ========================================================
+
+    const allPeople =
+      window.DragRelationshipGame
+        .getMobileQuizPeople();
+
+
+    if (
+      !Array.isArray(allPeople) ||
+      !allPeople.length
+    ) {
+
+      console.warn(
+        "❌ [GLOBAL Q3] Data orang kosong"
+      );
+
+      return;
+
+    }
+
+
+    // ========================================================
+    // CARI JAWABAN BENAR
+    // ========================================================
+
+    const correctPerson =
+      allPeople.find(
+        person =>
+          String(person.id) ===
+          String(mysteryGlobalWhoAmI.personId)
+      );
+
+
+    if (!correctPerson) {
+
+      console.warn(
+        "❌ [GLOBAL Q3] Correct person tidak ditemukan:",
+        mysteryGlobalWhoAmI.personId
+      );
+
+      return;
+
+    }
+
+
+    // ========================================================
+    // DISTRACTOR
+    //
+    // Jangan menggunakan:
+    // - orang yang benar
+    // - anchor
+    //
+    // Maksimal 4 distractor.
+    // Total options = 5.
+    // ========================================================
+
+    const distractors =
+      allPeople
+        .filter(
+          person => {
+
+            const id =
+              String(person.id);
+
+
+            return (
+              id !==
+                String(
+                  mysteryGlobalWhoAmI.personId
+                ) &&
+              id !==
+                String(
+                  state.anchorId
+                )
+            );
+
+          }
+        )
+        .sort(
+          () =>
+            Math.random() - 0.5
+        )
+        .slice(
+          0,
+          4
+        );
+
+
+    // ========================================================
+    // OPTION PEOPLE
+    // ========================================================
+
+    const optionPeople =
+      [
+        correctPerson,
+        ...distractors
+      ]
+      .sort(
+        () =>
+          Math.random() - 0.5
+      );
+
+
+    // ========================================================
+    // OPTIONS UNTUK createDragGameQuestionModal()
+    //
+    // HARUS ARRAY:
+    // [relation, label]
+    //
+    // relation = person ID
+    // label    = nama orang
+    // ========================================================
+
+    const modalOptions =
+      optionPeople.map(
+        person => [
+
+          String(person.id),
+
+          person.name ||
+          person.fullName ||
+          person.nama ||
+          String(person.id)
+
+        ]
+      );
+
+
+    // ========================================================
+    // GAME QUESTION
+    //
+    // Dipakai hanya sebagai wadah untuk membuat
+    // modal existing.
+    // ========================================================
+
+    const gameQuestion = {
+
+      fromName:
+        rootName,
+
+      toName:
+        rootName,
+
+      relation:
+        String(
+          mysteryGlobalWhoAmI.personId
+        ),
+
+      label:
+        mysteryGlobalWhoAmI.label,
+
+      relationshipLabel:
+        mysteryGlobalWhoAmI.label,
+
+      actualRelation:
+        mysteryGlobalWhoAmI.relation,
+
+      result:
+        mysteryGlobalWhoAmI.result,
+
+      options:
+        modalOptions
+
+    };
+
+
+    console.log(
+      "🕵️ [GLOBAL Q3] GAME QUESTION:",
+      gameQuestion
+    );
+
+
+    // ========================================================
+    // BUAT MODAL EXISTING
+    //
+    // INI YANG SEBELUMNYA HILANG PADA Q1/Q2 NULL
+    // ========================================================
+
+    const {
+      modal,
+      box
+    } =
+      createDragGameQuestionModal(
+        gameQuestion
+      );
+
+
+    // ========================================================
+    // VALIDASI MODAL
+    // ========================================================
+
+    if (
+      !modal ||
+      !box
+    ) {
+
+      console.warn(
+        "❌ [GLOBAL Q3] Modal gagal dibuat"
+      );
+
+      return;
+
+    }
+
+
+    // ========================================================
+    // SET FLAG EXISTING DRAG GAME
+    // ========================================================
+
+    relationshipQuestionOpen =
+      true;
+
+    dragFromId =
+      null;
+
+
+    // ========================================================
+    // JUDUL
+    // ========================================================
+
+    const title =
+      box.querySelector(
+        ".drag-question-title"
+      );
+
+
+    if (title) {
+
+      title.textContent =
+        "🕵️ GUESS WHO I AM?";
+
+    }
+
+
+    // ========================================================
+    // TEKS PERTANYAAN
+    // ========================================================
+
+    const questionElement =
+      box.querySelector(
+        ".drag-question-text"
+      );
+
+
+    if (questionElement) {
+
+      questionElement.innerHTML = `
+
+        Aku adalah
+        <strong>
+          ${escapeHtml(
+            mysteryGlobalWhoAmI.label
+          )}
+        </strong>
+        dari
+        <strong>
+          ${escapeHtml(
+            rootName
+          )}
+        </strong>.
+
+        <br><br>
+
+        Siapakah aku?
+
+      `;
+
+    }
+
+
+    // ========================================================
+    // OPTIONS BOX
+    // ========================================================
+
+    const optionsBox =
+      box.querySelector(
+        ".drag-question-options"
+      );
+
+
+    if (!optionsBox) {
+
+      console.warn(
+        "❌ [GLOBAL Q3] Options box tidak ditemukan"
+      );
+
+      return;
+
+    }
+
+
+    // ========================================================
+    // GANTI OPTIONS DEFAULT
+    //
+    // Global Q3 memakai:
+    // data-person-id
+    // ========================================================
+
+    optionsBox.innerHTML =
+      optionPeople
+        .map(
+          person => {
+
+            const personId =
+              String(
+                person.id
+              );
+
+
+            const personName =
+              person.name ||
+              person.fullName ||
+              person.nama ||
+              person.id;
+
+
+            return `
+
+              <button
+                type="button"
+                class="drag-answer who-am-i-answer"
+                data-person-id="${escapeHtml(
+                  personId
+                )}"
+              >
+                ${escapeHtml(
+                  personName
+                )}
+              </button>
+
+            `;
+
+          }
+        )
+        .join("");
+
+
+    // ========================================================
+    // SELECTED ANSWER
+    // ========================================================
+
+    let selectedPersonId =
+      null;
+
+
+    // ========================================================
+    // BIND OPTION CLICK
+    // ========================================================
+
+    box
+      .querySelectorAll(
+        ".who-am-i-answer"
+      )
+      .forEach(
+        button => {
+
+          button.addEventListener(
+            "click",
+            function(e) {
+
+              e.preventDefault();
+              e.stopPropagation();
+
+
+              box
+                .querySelectorAll(
+                  ".who-am-i-answer"
+                )
+                .forEach(
+                  btn =>
+                    btn.classList.remove(
+                      "selected"
+                    )
+                );
+
+
+              button.classList.add(
+                "selected"
+              );
+
+
+              selectedPersonId =
+                button.getAttribute(
+                  "data-person-id"
+                );
+
+
+              console.log(
+                "🕵️ [GLOBAL Q3] SELECTED ANSWER:",
+                selectedPersonId
+              );
+
+            }
+          );
+
+        }
+      );
+
+
+    // ========================================================
+    // CLOSE EXISTING MODAL
+    // ========================================================
+
+    bindDragGameClose(
+      modal,
+      box
+    );
+
+
+    // ========================================================
+    // SUBMIT
+    // ========================================================
+
+    box
+      .querySelector(
+        ".drag-question-submit"
+      )
+      ?.addEventListener(
+        "click",
+        function(e) {
+
+          e.preventDefault();
+          e.stopPropagation();
+
+
+          // --------------------------------------------------
+          // BELUM PILIH
+          // --------------------------------------------------
+
+          if (!selectedPersonId) {
+
+            alert(
+              "Pilih nama dulu."
+            );
+
+            return;
+
+          }
+
+
+          // --------------------------------------------------
+          // BENAR
+          // --------------------------------------------------
+
+          if (
+            String(
+              selectedPersonId
+            ) ===
+            String(
+              mysteryGlobalWhoAmI.personId
+            )
+          ) {
+
+            console.log(
+              "🎉 [GLOBAL Q3] JAWABAN BENAR"
+            );
+
+
+            stateGlobalCorrectAnswer();
+
+            //pemanggil isi render hasil jawaban benar
+            showGlobalWhoAmIResult(
+              rootName,
+              mysteryGlobalWhoAmI.personName,
+              mysteryGlobalWhoAmI.label
+            );
+
+
+            return;
+
+          }
+
+
+          // --------------------------------------------------
+          // SALAH
+          // --------------------------------------------------
+
+          console.log(
+            "❌ [GLOBAL Q3] JAWABAN SALAH:",
+            selectedPersonId
+          );
+
+
+          // ==================================================
+          // RENDER JAWABAN BENAR KETIKA SALAH PILIH
+          //  tidak bergantung pada variabel lokal state
+          // ==================================================
+
+          showGlobalWhoAmIWrongResult(
+            mysteryGlobalWhoAmI.personName,
+            mysteryGlobalWhoAmI.label,
+            window.DragRelationshipGame
+              ?.globalRelationQuizState
+              ?.anchorName
+          );
+
+        }
+      );
+
+
+    // ========================================================
+    // KEYBOARD
+    // ========================================================
+
+    window.DragRelationshipGame
+      .initDragGameKeyboard(
+        modal,
+        box
+      );
+
+
+    // ========================================================
+    // DEBUG
+    // ========================================================
+
+    console.log(
+      "✅ [GLOBAL Q3] WHO AM I BERHASIL DITAMPILKAN",
+      {
+        rootName,
+        mysteryPersonId:
+          mysteryGlobalWhoAmI.personId,
+        mysteryPersonName:
+          mysteryGlobalWhoAmI.personName,
+        q1PersonId:
+          state.q1PersonId,
+        q2PersonId:
+          state.q2PersonId
+      }
+    );
+
+  
+  }; // ← TUTUP showGlobalWhoAmI
+
+
+
+// ============================================================
+// 19. Q5 RESULT
+// ============================================================
+
+// ============================================================
+// 🕵️ GLOBAL RELATION QUIZ
+// Q5 RESULT — BENAR
+// ============================================================
+
+function showGlobalWhoAmIResult(
+  rootName,
+  personName,
+  relationshipLabel
+) {
+
+  const box =
+    document.getElementById(
+      "dragRelationshipQuestion"
+    );
+
+
+  if (!box) {
+
+    console.warn(
+      "❌ [GLOBAL Q3 RESULT] Question box tidak ditemukan"
+    );
+
+    return;
+
+  }
+
+
+  // ==========================================================
+  // GLOBAL STATE
+  // ==========================================================
+
+  const state =
+    window.DragRelationshipGame
+      ?.globalRelationQuizState;
+
+
+  if (!state) {
+
+    console.warn(
+      "❌ [GLOBAL Q3 RESULT] Global state tidak ditemukan"
+    );
+
+    return;
+
+  }
+
+
+  // ==========================================================
+  // SCORE
+  //
+  // SCORE SUDAH DIHITUNG SEBELUM MASUK KE SINI
+  // ==========================================================
+
+  const score =
+    Number(
+      state.correctAnswers || 0
+    );
+
+
+  console.log(
+    "🎉 [GLOBAL Q3 RESULT] BENAR",
+    {
+      globalScore:
+        score
+    }
+  );
+
+
+  // ==========================================================
+  // RESULT UI 
+  // 1st berdasarkan hubungan dengan ganti ke dari
+  // ==========================================================
+
+  box.innerHTML = `
+
+    <div class="drag-answer-result correct">
+
+      <div class="drag-answer-result-icon">
+        🎉
+      </div>
+
+      <div class="drag-answer-result-title">
+        BENAR!
+      </div>
+
+      <div class="drag-answer-result-text">
+
+        Jawabannya adalah
+
+        <strong>
+          ${escapeHtml(
+            personName
+          )}
+        </strong><br>
+
+
+        ${escapeHtml(
+          personName
+        )}
+        adalah
+
+        <strong>
+          ${escapeHtml(
+            relationshipLabel || ""
+          )}
+        </strong>
+
+        dari
+
+        <strong>
+          ${escapeHtml(
+            rootName
+          )}
+        </strong>.
+
+      </div>
+
+      <div class="drag-answer-result-actions">
+
+        <button
+          type="button"
+          class="drag-answer-finish"
+        >
+          SELESAI
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  // ==========================================================
+  // KEYBOARD
+  // ==========================================================
+
+  window.DragRelationshipGame
+    .initDragGameKeyboard();
+
+
+  // ==========================================================
+  // SELESAI
+  // ==========================================================
+
+  box
+    .querySelector(
+      ".drag-answer-finish"
+    )
+    ?.addEventListener(
+      "click",
+      function(e) {
+
+        e.preventDefault();
+        e.stopPropagation();
+
+      console.log(
+        "🔴 [GLOBAL WHO AM I] SALAH → SELESAI"
+      );
+
+        // ====================================================
+        // SINKRONKAN SCORE GLOBAL
+        //
+        // showRelationQuizFinalResult()
+        // menggunakan relationQuizState.
+        // ====================================================
+
+        relationQuizState.correctAnswers =
+          Number(
+            state.correctAnswers || 0
+          );
+
+
+        console.log(
+          "🏁 [GLOBAL Q3 RESULT] MASUK FINAL RESULT",
+          {
+            globalScore:
+              state.correctAnswers,
+
+            finalScore:
+              relationQuizState.correctAnswers
+          }
+        );
+
+
+        // ====================================================
+        // PAKAI FINAL RESULT YANG SUDAH ADA
+        // ====================================================
+
+        showRelationQuizFinalResult();
+
+      }
+    );
+
+
+} // ← TUTUP showGlobalWhoAmIResult
+
+
+
+// ============================================================
+// 🕵️ GLOBAL RELATION QUIZ
+// Q5 RESULT — SALAH
+// ============================================================
+
+function showGlobalWhoAmIWrongResult(
+  correctPersonName,
+  relationshipLabel,
+  rootName
+) {
+
+  const box =
+    document.getElementById(
+      "dragRelationshipQuestion"
+    );
+
+
+  if (!box) {
+
+    console.warn(
+      "❌ [GLOBAL WHO AM I] Question box tidak ditemukan"
+    );
+
+    return;
+
+  }
+
+
+  // ==========================================================
+  // RESULT UI
+  // 1st berdasarkan hubungan dengan ganti ke dari
+  // ==========================================================
+
+box.innerHTML = `
+
+  <div class="drag-answer-result wrong">
+
+    <div class="drag-answer-result-icon">
+      ❌
+    </div>
+
+    <div class="drag-answer-result-title">
+      SALAH
+    </div>
+
+    <div class="drag-answer-result-text">
+
+
+      Jawaban yang benar adalah
+
+      <strong>
+        ${escapeHtml(correctPersonName || "")}
+      </strong>.<br>
+
+      
+        ${escapeHtml(correctPersonName || "")}
+      
+
+      adalah
+
+      <strong>
+        ${escapeHtml(relationshipLabel || "")}
+      </strong>
+
+      dari
+
+      <strong>
+        ${escapeHtml(rootName || "")}
+      </strong>
+
+    </div>
+
+    <div class="drag-answer-result-actions">
+
+      <button
+        type="button"
+        class="drag-answer-finish"
+      >
+        SELESAI
+      </button>
+
+    </div>
+
+  </div>
+
+`;
+
+  // ==========================================================
+  // SELESAI
+  // ==========================================================
+
+  box
+    .querySelector(
+      ".drag-answer-finish"
+    )
+    ?.addEventListener(
+      "click",
+      function(e) {
+
+        e.preventDefault();
+        e.stopPropagation();
+
+
+        console.log(
+          "🔴 [GLOBAL WHO AM I] SALAH → SELESAI"
+        );
+
+
+        // ====================================================
+        // AMBIL SCORE GLOBAL
+        // ====================================================
+
+        const state =
+          window.DragRelationshipGame
+            ?.globalRelationQuizState;
+
+
+        const score =
+          Number(
+            state?.correctAnswers || 0
+          );
+
+
+        console.log(
+          "🎮 [GLOBAL WHO AM I] SCORE AKHIR:",
+          score
+        );
+
+
+        // ====================================================
+        // SINKRONKAN KE STATE YANG DIPAKAI
+        // showRelationQuizFinalResult()
+        // ====================================================
+
+        relationQuizState.correctAnswers =
+          score;
+
+
+        console.log(
+          "🏁 [GLOBAL WHO AM I] MASUK FINAL RESULT:",
+          {
+            globalScore:
+              score,
+
+            finalScore:
+              relationQuizState.correctAnswers
+          }
+        );
+
+
+        // ====================================================
+        // JANGAN closeGlobalRelationshipQuiz() DI SINI
+        // ====================================================
+
+        showRelationQuizFinalResult();
+
+      }
+    );
+
+} // ← TUTUP showGlobalWhoAmIWrongResult
+
+
+// ============================================================
+// 🎮 CLOSE GLOBAL RELATIONSHIP QUIZ
+// ============================================================
+
+window.closeGlobalRelationshipQuiz =
+  function() {
+
+    console.log(
+      "🔒 [GLOBAL QUIZ] MENUTUP QUIZ"
+    );
+
+
+    // ========================================================
+    // HAPUS GLOBAL PICKER
+    // ========================================================
+
+    const globalModal =
+      document.getElementById(
+        "globalRelationQuizModal"
+      );
+
+    if (globalModal) {
+
+      globalModal.remove();
+
+    }
+
+
+    // ========================================================
+    // HAPUS DRAG QUESTION MODAL
+    // Dipakai Q1 / Q2 / Q3 / Q4 / Q5
+    // ========================================================
+
+    const dragModal =
+      document.getElementById(
+        "dragRelationshipModal"
+      );
+
+    if (dragModal) {
+
+      dragModal.remove();
+
+    }
+
+
+    // ========================================================
+    // FALLBACK — jika ada modal global lain
+    // ========================================================
+
+    const globalQuestionModal =
+      document.getElementById(
+        "globalRelationshipQuestionModal"
+      );
+
+    if (globalQuestionModal) {
+
+      globalQuestionModal.remove();
+
+    }
+
+
+    // ========================================================
+    // RESET FLAG EXISTING DRAG GAME
+    // ========================================================
+
+    if (
+      typeof relationshipQuestionOpen !==
+      "undefined"
+    ) {
+
+      relationshipQuestionOpen =
+        false;
+
+    }
+
+
+    if (
+      typeof dragFromId !==
+      "undefined"
+    ) {
+
+      dragFromId =
+        null;
+
+    }
+
+
+    // ========================================================
+    // RESET GLOBAL STATE
+    // ========================================================
+
+    if (
+      window.DragRelationshipGame
+        .resetGlobalRelationQuizState
+    ) {
+
+      window.DragRelationshipGame
+        .resetGlobalRelationQuizState();
+
+    }
+
+
+    console.log(
+      "🔓 [GLOBAL QUIZ] CLOSED + STATE RESET"
+    );
+
+  }; // ← TUTUP closeGlobalRelationshipQuiz
+
+//---------------------------------------------------------------------
+
 
 
 // ==================================================================================================== 
@@ -43419,6 +49392,8 @@ service cloud.firestore {
 }
 
 → Semua user bisa read, hanya admin bisa write.
+🌐 Semua orang boleh menjelajah silsilah
+🔐 Hanya admin boleh mengubah data
 
 rules_version = '2';
 
@@ -43505,6 +49480,24 @@ g.node
 ├── .drag-relationship-overlay
 │
 └── #dragRelationshipQuestion
+
+                 👑 GITHUB
+            ┌─────────────────┐
+            │  RATU SINGGASANA │
+            │    index.html    │
+            └────────┬────────┘
+                     │
+          ┌──────────┴──────────┐
+          │                     │
+    🏰 Firebase             📚 Backup
+     tempat hidup          794 arsip
+          │                     │
+          │              para pekerja rodi
+          │                     😂
+          │
+     🌳 MULTI BANI
+MULTI BANI ROYAL ARCHIVE™
+Established 17 September 2026. 👑🌳❤️
 
 We’re good. 🤝
 
