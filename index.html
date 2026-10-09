@@ -7699,13 +7699,16 @@ Router → menentukan arah
 
   <!-- =====================================================
        LOGIN DENGAN PASSWORD
+       input email dan password ada di dalam form
+       onsubmit memanggil fungsi login tanpa memuat ulang halaman
+       autocomplete bantu browser mengenali email sebagai identitas akun login
   ====================================================== -->
 
-  <div
-    id="loginWithPassword"
-    style="display:none;">
+<div id="loginWithPassword" style="display:none;">
 
-    <h4>Login with Password</h4>
+  <h4>Login with Password</h4>
+
+  <form id="adminPasswordForm" onsubmit="event.preventDefault(); loginWithPassword();">
 
     <label for="passwordEmail">
       Email
@@ -7714,8 +7717,10 @@ Router → menentukan arah
     <input
       type="email"
       id="passwordEmail"
+      name="email"
       placeholder="Masukkan email"
-      autocomplete="email"
+      autocomplete="username"
+      required
     >
 
     <label for="adminPassword">
@@ -7725,25 +7730,27 @@ Router → menentukan arah
     <input
       type="password"
       id="adminPassword"
+      name="password"
       placeholder="Masukkan password"
       autocomplete="current-password"
+      required
     >
 
-    <button
-      type="button"
-      onclick="loginWithPassword()">
+    <button type="submit">
       Login
     </button>
 
-    <button
-      type="button"
-      onclick="showLoginMethods()">
-      ← Kembali
-    </button>
+  </form>
 
-    <p id="passwordLoginMessage"></p>
+  <button
+    type="button"
+    onclick="showLoginMethods()">
+    ← Kembali
+  </button>
 
-  </div>
+  <p id="passwordLoginMessage"></p>
+
+</div>
 
 </div>   <!-- LOGIN ADMIN SELESAI -->
 
@@ -8616,7 +8623,7 @@ window.showLoginWithPassword = function () {
 
 }; // <-- end window.showLoginWithPassword
 
-//---------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 
@@ -8846,7 +8853,7 @@ window.loginWithPassword = async function () {
   }
 
 }; // <-- end window.loginWithPassword
-//---------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // =================================
 // KIRIM MAGIC LINK
@@ -9165,7 +9172,7 @@ if (loginLinkCooldown) {
   }
 
 }; // <-- end window.sendLoginLink
-//---------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // =================================
@@ -9447,7 +9454,7 @@ async function handleEmailLoginLink() {
   }
 
 } // <-- end handleEmailLoginLink()
-//---------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // =================================
@@ -9665,49 +9672,57 @@ async function handleMagicLinkFlow() {
     );
 
 } // <-- end handleMagicLinkFlow()
-//---------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // =================================
 // PROSES MAGIC LINK LANJUT KE:
 // window.addEventListener("DOMContentLoaded", async () => {
 // =================================
 
-//---------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // =================================
 // VERIFIKASI IDENTITAS KELUARGA
+//
+// openFamilyVerification()
+// │
+// ├── isMagicLinkFamilyVerification()
+// │
+// ├── getFamilyVerificationElements()
+// │
+// ├── loadFamilyVerificationPersons()
+// │
+// ├── resetFamilyVerificationUI()
+// │
+// ├── setupFamilyVerificationAutocomplete()
+// │   ├── searchFamilyVerificationPersons()
+// │   └── renderFamilyVerificationSuggestions()
+// │
+// └── showFamilyVerificationUI()
 // =================================
 
-async function openFamilyVerification() {
+// =================================
+// FAMILY VERIFICATION
+// HELPER — CEK MAGIC LINK
+// =================================
 
-  // =============================================
-  // FAMILY VERIFICATION HANYA UNTUK MAGIC LINK
-  // =============================================
+function isMagicLinkFamilyVerification() {
 
-  const isMagicLinkFlow =
+  return (
     sessionStorage.getItem(
       "pendingFamilyVerification"
-    ) === "true";
-
-
-  if (!isMagicLinkFlow) {
-
-    console.log(
-      "🔓 BUKAN MAGIC LINK — FAMILY VERIFICATION DILEWATI"
-    );
-
-    return;
-  }
-
-
-  console.log(
-    "🔐 MAGIC LINK — FAMILY VERIFICATION AKTIF"
+    ) === "true"
   );
 
+} // <-- end isMagicLinkFamilyVerification()
 
-  // =============================================
-  // AMBIL ELEMENT FAMILY VERIFICATION
-  // =============================================
+
+// =================================
+// FAMILY VERIFICATION
+// HELPER — AMBIL ELEMENT UI
+// =================================
+
+function getFamilyVerificationElements() {
 
   const verificationBox =
     document.getElementById(
@@ -9752,9 +9767,37 @@ async function openFamilyVerification() {
       "❌ Family verification UI tidak ditemukan."
     );
 
-    return;
+    return null;
   }
 
+
+  return {
+
+    verificationBox,
+
+    personInput,
+
+    personSuggestions,
+
+    fatherInput,
+
+    fatherSuggestions,
+
+    verificationMessage
+
+  };
+
+} // <-- end getFamilyVerificationElements()
+
+
+// =================================
+// FAMILY VERIFICATION
+// HELPER — LOAD DATA FAMILY
+// =================================
+
+async function loadFamilyVerificationPersons(
+  verificationMessage
+) {
 
   // =============================================
   // PASTIKAN DATA FAMILY SUDAH ADA
@@ -9775,25 +9818,35 @@ async function openFamilyVerification() {
   }
 
 
+  // =============================================
+  // KALAU BELUM ADA → INIT APP
+  // =============================================
+
   if (!familyPersons.length) {
 
     try {
 
       await initApp();
 
-    } catch (error) {
+    }
+    catch (error) {
 
       console.error(
         "❌ Gagal memuat data keluarga:",
         error
       );
 
+
       if (verificationMessage) {
+
         verificationMessage.textContent =
           "Data keluarga gagal dimuat.";
+
       }
 
-      return;
+
+      return [];
+
     }
 
 
@@ -9814,14 +9867,22 @@ async function openFamilyVerification() {
   }
 
 
+  // =============================================
+  // DATA FAMILY TETAP TIDAK ADA
+  // =============================================
+
   if (!familyPersons.length) {
 
     if (verificationMessage) {
+
       verificationMessage.textContent =
         "Data anggota keluarga belum tersedia.";
+
     }
 
-    return;
+
+    return [];
+
   }
 
 
@@ -9831,266 +9892,387 @@ async function openFamilyVerification() {
   );
 
 
+  return familyPersons;
+
+} // <-- end loadFamilyVerificationPersons
+
+
+// =================================
+// FAMILY VERIFICATION
+// HELPER — RESET UI
+// =================================
+
+function resetFamilyVerificationUI(
+  elements
+) {
+
+  const {
+    personInput,
+    personSuggestions,
+    fatherInput,
+    fatherSuggestions,
+    verificationMessage
+  } = elements;
+
+
   // =============================================
-  // RESET FAMILY VERIFICATION
+  // RESET INPUT
   // =============================================
 
   personInput.value = "";
+
   fatherInput.value = "";
 
-  personInput.dataset.personId = "";
-  fatherInput.dataset.personId = "";
 
-  personSuggestions.innerHTML = "";
-  fatherSuggestions.innerHTML = "";
+  // =============================================
+  // RESET PERSON ID
+  // =============================================
 
-  personSuggestions.style.display = "none";
-  fatherSuggestions.style.display = "none";
+  personInput.dataset.personId =
+    "";
+
+  fatherInput.dataset.personId =
+    "";
+
+
+  // =============================================
+  // RESET SUGGESTIONS
+  // =============================================
+
+  personSuggestions.innerHTML =
+    "";
+
+  fatherSuggestions.innerHTML =
+    "";
+
+
+  personSuggestions.style.display =
+    "none";
+
+  fatherSuggestions.style.display =
+    "none";
+
+
+  // =============================================
+  // RESET MESSAGE
+  // =============================================
 
   if (verificationMessage) {
-    verificationMessage.textContent = "";
+
+    verificationMessage.textContent =
+      "";
+
+  }
+
+} // <-- end resetFamilyVerificationUI
+
+
+// =================================
+// FAMILY VERIFICATION
+// HELPER — SEARCH PERSON
+// =================================
+
+function searchFamilyVerificationPersons(
+  familyPersons,
+  query
+) {
+
+  const normalizedQuery =
+    String(query || "")
+      .trim()
+      .toLowerCase();
+
+
+  if (!normalizedQuery) {
+
+    return [];
+
   }
 
 
-  // =============================================
-  // CARI PERSON UNTUK FAMILY VERIFICATION
-  // =============================================
+  return familyPersons
+    .filter(person => {
 
-  function searchFamilyVerificationPersons(query) {
+      if (
+        !person ||
+        person.id == null
+      ) {
 
-    const normalizedQuery =
-      String(query || "")
-        .trim()
+        return false;
+
+      }
+
+
+      const personName =
+        String(
+          person.name || ""
+        )
         .toLowerCase();
 
 
-    if (!normalizedQuery) {
-      return [];
-    }
+      const personId =
+        String(
+          person.id || ""
+        )
+        .toLowerCase();
 
 
-    return familyPersons
-      .filter(person => {
-
-        if (
-          !person ||
-          person.id == null
-        ) {
-          return false;
-        }
-
-
-        const personName =
-          String(person.name || "")
-            .toLowerCase();
-
-
-        const personId =
-          String(person.id || "")
-            .toLowerCase();
-
-
-        return (
-          personName.includes(normalizedQuery) ||
-          personId.includes(normalizedQuery)
-        );
-
-      })
-      .slice(0, 5);
-
-  }
-
-
-  // =============================================
-  // RENDER AUTOCOMPLETE FAMILY VERIFICATION
-  // =============================================
-
-  function renderFamilyVerificationSuggestions(
-    matches,
-    container,
-    input,
-    fieldType
-  ) {
-
-    container.innerHTML = "";
-
-
-    if (!matches.length) {
-
-      container.style.display = "none";
-
-      return;
-    }
-
-
-    matches.forEach(person => {
-
-      const suggestionItem =
-        document.createElement("div");
-
-
-      suggestionItem.className =
-        "familyVerify-suggestion-item";
-
-
-      suggestionItem.textContent =
-        `${person.id} — ${person.name || ""}`;
-
-
-      suggestionItem.addEventListener(
-        "click",
-        function () {
-
-          input.value =
-            `${person.name || ""} (${person.id})`;
-
-
-          input.dataset.personId =
-            String(person.id);
-
-
-          container.innerHTML = "";
-
-          container.style.display =
-            "none";
-
-
-          // Setelah memilih orang yang diverifikasi,
-          // pilihan ayah harus di-reset.
-
-          if (fieldType === "person") {
-
-            fatherInput.value = "";
-
-            fatherInput.dataset.personId =
-              "";
-
-            fatherSuggestions.innerHTML =
-              "";
-
-            fatherSuggestions.style.display =
-              "none";
-
-          }
-
-        }
+      return (
+        personName.includes(
+          normalizedQuery
+        ) ||
+        personId.includes(
+          normalizedQuery
+        )
       );
 
+    })
+    .slice(0, 5);
 
-      container.appendChild(
-        suggestionItem
-      );
-
-    });
+} // <-- end searchFamilyVerificationPersons
 
 
-    // =============================================
-    // POSISI SUGGESTION TEPAT DI BAWAH INPUT
-    // =============================================
+// =================================
+// FAMILY VERIFICATION
+// HELPER — RENDER SUGGESTIONS
+// =================================
 
-    const inputRect =
-      input.getBoundingClientRect();
+function renderFamilyVerificationSuggestions(
+  matches,
+  container,
+  input,
+  fieldType,
+  elements
+) {
 
-
-    container.style.position =
-      "fixed";
-
-
-    container.style.left =
-      inputRect.left + "px";
-
-
-    container.style.top =
-      (inputRect.bottom + 4) + "px";
+  container.innerHTML =
+    "";
 
 
-    container.style.width =
-      inputRect.width + "px";
-
-
-    container.style.maxHeight =
-      "180px";
-
-
-    container.style.overflowY =
-      "auto";
-
-
-    container.style.background =
-      "#ffffff";
-
-
-    container.style.border =
-      "1px solid #ccc";
-
-
-    container.style.zIndex =
-      "var(--z-login)";
-
+  if (!matches.length) {
 
     container.style.display =
-      "block";
+      "none";
+
+    return;
 
   }
+
+
+  matches.forEach(person => {
+
+    const suggestionItem =
+      document.createElement("div");
+
+
+    suggestionItem.className =
+      "familyVerify-suggestion-item";
+
+
+    suggestionItem.textContent =
+      `${person.id} — ${person.name || ""}`;
+
+
+    suggestionItem.addEventListener(
+      "click",
+      function () {
+
+        input.value =
+          `${person.name || ""} (${person.id})`;
+
+
+        input.dataset.personId =
+          String(person.id);
+
+
+        container.innerHTML =
+          "";
+
+
+        container.style.display =
+          "none";
+
+
+        // =========================================
+        // SETELAH MEMILIH ORANG YANG DIVERIFIKASI,
+        // PILIHAN AYAH DI-RESET
+        // =========================================
+
+        if (
+          fieldType === "person"
+        ) {
+
+          elements.fatherInput.value =
+            "";
+
+          elements.fatherInput.dataset.personId =
+            "";
+
+          elements.fatherSuggestions.innerHTML =
+            "";
+
+          elements.fatherSuggestions.style.display =
+            "none";
+
+        }
+
+      }
+    );
+
+
+    container.appendChild(
+      suggestionItem
+    );
+
+  });
+
+
+  // =============================================
+  // POSISI SUGGESTION TEPAT DI BAWAH INPUT
+  // =============================================
+
+  const inputRect =
+    input.getBoundingClientRect();
+
+
+  container.style.position =
+    "fixed";
+
+
+  container.style.left =
+    inputRect.left + "px";
+
+
+  container.style.top =
+    (inputRect.bottom + 4) + "px";
+
+
+  container.style.width =
+    inputRect.width + "px";
+
+
+  container.style.maxHeight =
+    "180px";
+
+
+  container.style.overflowY =
+    "auto";
+
+
+  container.style.background =
+    "#ffffff";
+
+
+  container.style.border =
+    "1px solid #ccc";
+
+
+  container.style.zIndex =
+    "var(--z-login)";
+
+
+  container.style.display =
+    "block";
+
+} // <-- end renderFamilyVerificationSuggestions
+
+
+// =================================
+// FAMILY VERIFICATION
+// HELPER — SETUP AUTOCOMPLETE
+// =================================
+
+function setupFamilyVerificationAutocomplete(
+  elements,
+  familyPersons
+) {
+
+  const {
+    personInput,
+    personSuggestions,
+    fatherInput,
+    fatherSuggestions
+  } = elements;
 
 
   // =============================================
   // AUTOCOMPLETE — NAMA SENDIRI
   // =============================================
 
-  personInput.oninput = function () {
+  personInput.oninput =
+    function () {
 
-    // Kalau user mengubah teks,
-    // pilihan sebelumnya dianggap batal.
+      // -------------------------------------------
+      // Kalau user mengubah teks,
+      // pilihan sebelumnya dianggap batal.
+      // -------------------------------------------
 
-    personInput.dataset.personId =
-      "";
+      personInput.dataset.personId =
+        "";
 
 
-    const matchingPersons =
-      searchFamilyVerificationPersons(
-        personInput.value
+      const matchingPersons =
+        searchFamilyVerificationPersons(
+          familyPersons,
+          personInput.value
+        );
+
+
+      renderFamilyVerificationSuggestions(
+        matchingPersons,
+        personSuggestions,
+        personInput,
+        "person",
+        elements
       );
 
-
-    renderFamilyVerificationSuggestions(
-      matchingPersons,
-      personSuggestions,
-      personInput,
-      "person"
-    );
-
-  };
+    };
 
 
   // =============================================
   // AUTOCOMPLETE — AYAH
   // =============================================
 
-  fatherInput.oninput = function () {
+  fatherInput.oninput =
+    function () {
 
-    // Kalau user mengubah teks,
-    // pilihan sebelumnya dianggap batal.
+      // -------------------------------------------
+      // Kalau user mengubah teks,
+      // pilihan sebelumnya dianggap batal.
+      // -------------------------------------------
 
-    fatherInput.dataset.personId =
-      "";
+      fatherInput.dataset.personId =
+        "";
 
 
-    const matchingPersons =
-      searchFamilyVerificationPersons(
-        fatherInput.value
+      const matchingPersons =
+        searchFamilyVerificationPersons(
+          familyPersons,
+          fatherInput.value
+        );
+
+
+      renderFamilyVerificationSuggestions(
+        matchingPersons,
+        fatherSuggestions,
+        fatherInput,
+        "father",
+        elements
       );
 
+    };
 
-    renderFamilyVerificationSuggestions(
-      matchingPersons,
-      fatherSuggestions,
-      fatherInput,
-      "father"
-    );
+} // <-- end setupFamilyVerificationAutocomplete
 
-  };
 
+// =================================
+// FAMILY VERIFICATION
+// HELPER — SHOW UI
+// =================================
+
+function showFamilyVerificationUI(
+  verificationBox
+) {
 
   // =============================================
   // TAMPILKAN VERIFICATION BOX
@@ -10100,10 +10282,17 @@ async function openFamilyVerification() {
     "block";
 
 
-  // 🔒 UI DI BELAKANG VERIFICATION TERLIHAT TAPI TIDAK BISA DIKLIK
+  // =============================================
+  // UI DI BELAKANG VERIFICATION
+  // TERLIHAT TAPI TIDAK BISA DIKLIK
+  // =============================================
 
   showVerifyLoginInteractionBlocker();
 
+
+  // =============================================
+  // SCROLL KE VERIFICATION BOX
+  // =============================================
 
   verificationBox.scrollIntoView({
     behavior: "smooth",
@@ -10115,8 +10304,101 @@ async function openFamilyVerification() {
     "🎯 FAMILY VERIFICATION SIAP"
   );
 
+} // <-- end showFamilyVerificationUI
+
+
+// =================================
+// VERIFIKASI IDENTITAS KELUARGA
+// MAIN FUNCTION
+// orchestrator utama
+// =================================
+
+async function openFamilyVerification() {
+
+  // =============================================
+  // FAMILY VERIFICATION HANYA UNTUK MAGIC LINK
+  // =============================================
+
+  const isMagicLinkFlow =
+    isMagicLinkFamilyVerification();
+
+
+  if (!isMagicLinkFlow) {
+
+    console.log(
+      "🔓 BUKAN MAGIC LINK — FAMILY VERIFICATION DILEWATI"
+    );
+
+    return;
+  }
+
+
+  console.log(
+    "🔐 MAGIC LINK — FAMILY VERIFICATION AKTIF"
+  );
+
+
+  // =============================================
+  // AMBIL ELEMENT FAMILY VERIFICATION
+  // =============================================
+
+  const elements =
+    getFamilyVerificationElements();
+
+
+  if (!elements) {
+
+    return;
+
+  }
+
+
+  // =============================================
+  // PASTIKAN DATA FAMILY SUDAH ADA
+  // =============================================
+
+  const familyPersons =
+    await loadFamilyVerificationPersons(
+      elements.verificationMessage
+    );
+
+
+  if (!familyPersons.length) {
+
+    return;
+
+  }
+
+
+  // =============================================
+  // RESET FAMILY VERIFICATION
+  // =============================================
+
+  resetFamilyVerificationUI(
+    elements
+  );
+
+
+  // =============================================
+  // SETUP AUTOCOMPLETE
+  // =============================================
+
+  setupFamilyVerificationAutocomplete(
+    elements,
+    familyPersons
+  );
+
+
+  // =============================================
+  // TAMPILKAN VERIFICATION BOX
+  // =============================================
+
+  showFamilyVerificationUI(
+    elements.verificationBox
+  );
+
 } // <-- end openFamilyVerification()
-//---------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // =================================
 // CEK JAWABAN VERIFIKASI
@@ -10426,7 +10708,7 @@ window.verifyFamilyIdentity = async function () {
   enterAdminUI();
 
 }; // <-- end window.verifyFamilyIdentity
-//---------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // =================================
@@ -10677,7 +10959,7 @@ function enterAdminUI() {
   }
 
 } // <-- end enterAdminUI()
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // mengunci UI saat verifikasi loginlink
 function showVerifyLoginInteractionBlocker() {
@@ -10712,7 +10994,7 @@ function hideVerifyLoginInteractionBlocker() {
   }
 
 }
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // Note:
 // acceptAdminNotice ← nama fungsi
@@ -10745,7 +11027,7 @@ window.acceptAdminNotice = function(){
 
 
 }; // <-- end window.acceptAdminNotice
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // mengaktifkan tombol mengerti setelah scroll
 const notifikasibeforeadmin =
@@ -10770,7 +11052,7 @@ notifikasibeforeadmin.addEventListener("scroll", function () {
   }
 
 });
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 //untuk toggle notifikasi before admin off saat logout
 function closeAdminNoticeToggles() {
@@ -10787,7 +11069,7 @@ function closeAdminNoticeToggles() {
     detail.removeAttribute("open");
   });
 }
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 //interaksi klik/touch → pakai:pointerdown
 //untuk klik mana aja login admin hilang 
@@ -10810,8 +11092,17 @@ document.addEventListener("pointerdown", function (e) {
   }
 
 });
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
+function resetLoginAdminButton() {
+  const btn = document.getElementById("loginadminbtn");
+
+  if (!btn) return;
+
+  btn.textContent = "Login";
+  btn.onclick = showLogin;
+}
+//-------------------------------------------------------------------
 
  // ==================================================================================================== 
     // FUNGSI HELPER GLOBAL
@@ -10821,7 +11112,7 @@ document.addEventListener("pointerdown", function (e) {
 //UI IKUTI BASE INI DAN ATUR UI SENDIRI di UI SENDIRI dengan modal.style.paddingBottom = "90px"; di UI MASING MASING BUKAN DISINI!
 // BASE HANYA MENYEDIAKAN RUANG.
 //UI MASING-MASING MENENTUKAN SIAPA YANG SCROLL.
-//------------------------------------------------------------------------
+//-------------------------------------------------------------------
 window.UI = window.UI || {};
 
 window.UI.showModalLayer = function(modal){
@@ -10881,7 +11172,7 @@ async function toggleBox(id, onOpen = null) {
   }
 
 }
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 //FUNGSI GLOBAL OPEN/CLOSE KOLOM DI PANEL ADMIN
 //dipakai oleh window.openAuditHistory dan window.toggleFirestoreData
@@ -10901,7 +11192,7 @@ function closeAdminPanels(){
   });
 
 }
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 //agar SEARCHBOX OFF saat di PANEL ADMIN
 function lockSearchWhenAdminOpen(lock){
@@ -10919,7 +11210,7 @@ function lockSearchWhenAdminOpen(lock){
   }
 
 }
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 //agar SEARCHBOX OFF saat di RIGHT PANEL
 function lockSearchWhenRightPanelOpen(lock){
@@ -10968,7 +11259,7 @@ function lockSearchWhenRightPanelOpen(lock){
   }
 
 }
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 //muncul notifikasi saat klik searchbox terus menerus sampai tutup right panel
 // ==========================================================
@@ -11052,14 +11343,14 @@ window.UI.hideLockSearchNoticeRightPanel = function(){
   );
 
 };
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 //agar mematikan fungsi ui ketika panel admin dibuka
 window.isAdminPanelOpen = function () {
     const panel = document.getElementById("adminPanel");
     return panel && panel.style.display === "block";
 };
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 //SHOW/HIDE loginadmintopbar
 //ada di window.UI.closeRightPanel, window.selectBani, window.UI.closeMobilePopup
@@ -11079,7 +11370,7 @@ window.hideAdminTopbar = function () {
     loginAdminTopbar.style.display = "none";
   }
 };
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 //SHOW/HIDE BACK TO BANI
 // show back button
@@ -11099,7 +11390,7 @@ window.hideBaniBackBtn = function () {
     btn.style.display = "none";
   }
 };
-//---------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // ============================================================
 // ASK ME BUTTON VISIBILITY
@@ -11120,7 +11411,7 @@ function hideAskMeButton(hide){
     hide ? "none" : "block";
 
 }
-//---------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ============================================================
@@ -11144,7 +11435,7 @@ function hideGlobalRelationshipQuiz(hide) {
     hide ? "none" : "block";
 
 }
-//---------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ============================================================
@@ -11168,7 +11459,7 @@ function hideRadialMenuButton(hide) {
     hide ? "none" : "flex";
 
 }
-//---------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ==================================================================================================== 
@@ -11205,7 +11496,7 @@ themeModeBtn.addEventListener("click",()=>{
   applyBalkanSubTreeTheme();
 
 });
-//---------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 //agar balkan bisa light/dark theme
 function applyBalkanTheme(){
@@ -11270,12 +11561,12 @@ FamilyTree.templates.tommy.field_0 = `
   </foreignObject>`;
 
 } // <-- end applyBalkanTheme()
-//---------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // setelah script Balkan FamilyTree sudah load
 FamilyTree.templates.subtreeTommy =
 JSON.parse(JSON.stringify(FamilyTree.templates.tommy));
-//---------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 //applyBalkanSubTreeTheme() = warna isi node
 //bft-dark = background dan style bawaan Balkan
@@ -11337,7 +11628,7 @@ FamilyTree.templates.subtreeTommy.field_0 = `
   </foreignObject>`;
 
 } // <-- end applyBalkanSubTreeTheme()
-//---------------------------------------------------------------------
+//-------------------------------------------------------------------
 
  // ==================================================================================================== 
     //1. CORE UTILITIES
@@ -11541,7 +11832,7 @@ setInterval(() => {
   const keyword = document.getElementById("inspectId")?.value?.trim();
   if (keyword) window.inspectPerson();
 }, 1500);
-//---------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ==================================================================================================== 
@@ -11575,7 +11866,7 @@ window.FamilyRepository = {
   }
 
 }; // <-- end window.FamilyRepository
-//---------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 /*
 =========================================================
@@ -23758,30 +24049,30 @@ window.WhoRelationLabel = {
     // ================================
 
 if (
-  relation === "genealogy_extended_aunt_uncle"
+  relation === "genealogy_ancestor_sibling"
 ) {
-  return this.genealogyExtendedAuntUncle(result);
+  return this.genealogyAncestorSibling(result);
 }
 
 if (
   relation ===
-  "spouse_of_genealogy_extended_aunt_uncle"
+  "spouse_of_genealogy_ancestor_sibling"
 ) {
-  return this.spouseOfGenealogyExtendedAuntUncle(result);
+  return this.spouseOfGenealogyAncestorSibling(result);
 }
 
 if (
   relation ===
-  "genealogy_extended_aunt_uncle_of_spouse"
+  "genealogy_ancestor_sibling_of_spouse"
 ) {
-  return this.genealogyExtendedAuntUncleOfSpouse(result);
+  return this.genealogyAncestorSiblingOfSpouse(result);
 }
 
 if (
   relation ===
-  "spouse_of_genealogy_extended_aunt_uncle_of_spouse"
+  "spouse_of_genealogy_ancestor_sibling_of_spouse"
 ) {
-  return this.spouseOfGenealogyExtendedAuntUncleOfSpouse(result);
+  return this.spouseOfGenealogyAncestorSiblingOfSpouse(result);
 }
 
     // ================================
@@ -23806,30 +24097,30 @@ if (
 
 
     if (
-      relation === "genealogy_extended_niece_nephew"
+      relation === "genealogy_sibling_descendant"
     ) {
-      return this.genealogyExtendedNieceNephew(result);
+      return this.genealogySiblingDescendant(result);
     }
 
 if (
   relation ===
-  "genealogy_extended_niece_nephew_of_spouse"
+  "genealogy_sibling_descendant_of_spouse"
 ) {
-  return this.genealogyExtendedNieceNephewOfSpouse(result);
+  return this.genealogySiblingDescendantOfSpouse(result);
 }
 
 if (
   relation ===
-  "spouse_of_genealogy_extended_niece_nephew"
+  "spouse_of_genealogy_sibling_descendant"
 ) {
-  return this.spouseOfGenealogyExtendedNieceNephew(result);
+  return this.spouseOfGenealogySiblingDescendant(result);
 }
 
 if (
   relation ===
-  "spouse_of_genealogy_extended_niece_nephew_of_spouse"
+  "spouse_of_genealogy_sibling_descendant_of_spouse"
 ) {
-  return this.spouseOfGenealogyExtendedNieceNephewOfSpouse(
+  return this.spouseOfGenealogySiblingDescendantOfSpouse(
     result
   );
 }
@@ -24314,23 +24605,20 @@ nieceNephewSpouseLabel(
 // GENEALOGY EXTENDED NIECE / NEPHEW OF SPOUSE
 // ========================================================
 
-genealogyExtendedNieceNephew(result) {
-
+genealogySiblingDescendant(result) {
   if (!result) {
     return null;
   }
 
-  const genealogical =
-    result.via?.genealogical;
+  const genealogical = result.via?.genealogical;
 
   if (!genealogical) {
     return null;
   }
 
-  const generation =
-    Number(
-      genealogical.ancestorGeneration
-    );
+  const generation = Number(
+    genealogical.ancestorGeneration
+  );
 
   if (
     !Number.isFinite(generation) ||
@@ -24339,18 +24627,10 @@ genealogyExtendedNieceNephew(result) {
     return null;
   }
 
-  const ageRelation =
-    genealogical.ageRelation;
-
+  const ageRelation = genealogical.ageRelation;
 
   // ======================================================
-  // LABEL MENGIKUTI HASIL CONSOLE
-  //
-  // ageRelation = "younger"
-  // → dari adik
-  //
-  // ageRelation = "older"
-  // → dari kakak
+  // RELATIVE
   // ======================================================
 
   const relative =
@@ -24360,158 +24640,18 @@ genealogyExtendedNieceNephew(result) {
         ? "kakak"
         : null;
 
-
   // ======================================================
   // INDONESIAN
+  // Mendukung generasi 1 hingga tanpa batas.
   // ======================================================
 
-  const label =
-    relative
-      ? `Keponakan generasi ${generation} dari ${relative}`
-      : `Keponakan generasi ${generation}`;
+  const generationLabel =
+    window.WhoGenerationLabel?.get(generation) ??
+    `Keturunan ke-${generation}`;
 
-
-  // ======================================================
-  // ENGLISH
-  // ======================================================
-
-  const greatPrefix =
-    generation >= 2
-      ? "great-".repeat(
-          generation - 1
-        )
-      : "";
-
-  const englishRelative =
-    ageRelation === "younger"
-      ? "younger sibling"
-      : ageRelation === "older"
-        ? "older sibling"
-        : "sibling";
-
-  const english =
-    `(${this.ordinal(generation)}-generation ` +
-    `${greatPrefix}niece/nephew of ` +
-    `${englishRelative})`;
-
-
-  return `${label} ${english}`;
-},
-
-
-genealogyExtendedNieceNephewOfSpouse(result) {
-
-  if (!result) {
-    return null;
-  }
-
-  const genealogical =
-    result.via?.genealogical;
-
-  if (!genealogical) {
-    return null;
-  }
-
-  const generation =
-    Number(
-      genealogical.ancestorGeneration
-    );
-
-  if (
-    !Number.isFinite(generation) ||
-    generation < 1
-  ) {
-    return null;
-  }
-
-  const ageRelation =
-    genealogical.ageRelation;
-
-  const relative =
-    ageRelation === "younger"
-      ? "adik"
-      : ageRelation === "older"
-        ? "kakak"
-        : null;
-
-  const label =
-    relative
-      ? `Keponakan generasi ${generation} dari ${relative} pasangan`
-      : `Keponakan generasi ${generation} dari pasangan`;
-
-  const greatPrefix =
-    generation >= 2
-      ? "great-".repeat(
-          generation - 1
-        )
-      : "";
-
-  const englishRelative =
-    ageRelation === "younger"
-      ? "younger sibling"
-      : ageRelation === "older"
-        ? "older sibling"
-        : "sibling";
-
-  const english =
-    `(${this.ordinal(generation)}-generation ` +
-    `${greatPrefix}niece/nephew of ` +
-    `spouse's ${englishRelative})`;
-
-  return `${label} ${english}`;
-},
-
-
-// ========================================================
-// SPOUSE OF GENEALOGY EXTENDED NIECE / NEPHEW CEK YAA
-// ========================================================
-
-spouseOfGenealogyExtendedNieceNephew(result) {
-
-  if (!result) {
-    return null;
-  }
-
-  const genealogical =
-    result.via?.genealogical;
-
-  if (!genealogical) {
-    return null;
-  }
-
-  const generation =
-    Number(
-      genealogical.ancestorGeneration
-    );
-
-  if (
-    !Number.isFinite(generation) ||
-    generation < 1
-  ) {
-    return null;
-  }
-
-
-  // ======================================================
-  // INDONESIAN
-  // ======================================================
-
-  const ageRelation =
-    genealogical.ageRelation;
-
-  const siblingLabel =
-    ageRelation === "older"
-      ? "adik"
-      : ageRelation === "younger"
-        ? "kakak"
-        : null;
-
-
-  let label =
-    siblingLabel
-      ? `Pasangan keponakan generasi ${generation} dari ${siblingLabel}`
-      : `Pasangan keponakan generasi ${generation}`;
-
+  const label = relative
+    ? `${generationLabel} dari ${relative}`
+    : generationLabel;
 
   // ======================================================
   // ENGLISH
@@ -24522,121 +24662,252 @@ spouseOfGenealogyExtendedNieceNephew(result) {
       ? "great-".repeat(generation - 1)
       : "";
 
-  const englishSibling =
-    ageRelation === "older"
-      ? "younger sibling"
-      : ageRelation === "younger"
-        ? "older sibling"
-        : null;
-
-
-  let english =
-    `spouse of ${this.ordinal(generation)}-generation ` +
-    `${greatPrefix}niece/nephew`;
-
-  if (englishSibling) {
-    english +=
-      ` of ${englishSibling}`;
-  }
-
-
-  return (
-    `${label} (${english})`
-  );
-},
-
-// ========================================================
-// SPOUSE OF GENEALOGY EXTENDED NIECE / NEPHEW OF SPOUSE
-// ========================================================
-
-spouseOfGenealogyExtendedNieceNephewOfSpouse(result) {
-
-  if (!result) {
-    return null;
-  }
-
-  const genealogical =
-    result.via?.genealogical;
-
-  if (!genealogical) {
-    return null;
-  }
-
-  const generation =
-    Number(
-      genealogical.ancestorGeneration
-    );
-
-  if (
-    !Number.isFinite(generation) ||
-    generation < 1
-  ) {
-    return null;
-  }
-
-
-  // ======================================================
-  // ageRelation MENGIKUTI HASIL CONSOLE
-  //
-  // console:
-  //
-  // ageRelation: "younger"
-  //
-  // maka label:
-  //
-  // younger → adik
-  // older   → kakak
-  // ======================================================
-
-  const ageRelation =
-    genealogical.ageRelation;
-
-
-  const siblingLabel =
-    ageRelation === "younger"
-      ? "adik"
-      : ageRelation === "older"
-        ? "kakak"
-        : null;
-
-
-  const greatPrefix =
-    generation >= 2
-      ? "great-".repeat(
-          generation - 1
-        )
-      : "";
-
-
-  const englishSibling =
+  const englishRelative =
     ageRelation === "younger"
       ? "younger sibling"
       : ageRelation === "older"
         ? "older sibling"
         : "sibling";
 
-
-  const label =
-    siblingLabel
-      ? `Pasangan keponakan generasi ${generation} dari ${siblingLabel} pasangan`
-      : `Pasangan keponakan generasi ${generation} dari pasangan`;
-
-
   const english =
-    `(spouse of ${this.ordinal(generation)}-generation ` +
-    `${greatPrefix}niece/nephew ` +
-    `of spouse's ${englishSibling})`;
-
+    `(${this.ordinal(generation)}-generation ` +
+    `${greatPrefix}descendant of ` +
+    `${englishRelative})`;
 
   return `${label} ${english}`;
 },
 
+genealogySiblingDescendantOfSpouse(result) {
+  if (!result) {
+    return null;
+  }
+
+  const genealogical = result.via?.genealogical;
+
+  if (!genealogical) {
+    return null;
+  }
+
+  const generation = Number(
+    genealogical.ancestorGeneration
+  );
+
+  if (
+    !Number.isFinite(generation) ||
+    generation < 1
+  ) {
+    return null;
+  }
+
+  const ageRelation = genealogical.ageRelation;
+
+  // ======================================================
+  // RELATIVE
+  // ======================================================
+
+  const relative =
+    ageRelation === "younger"
+      ? "adik"
+      : ageRelation === "older"
+        ? "kakak"
+        : null;
+
+  // ======================================================
+  // INDONESIAN
+  // Menggunakan generationLabels dari luar fungsi
+  // ======================================================
+
+  const generationLabel =
+    window.WhoGenerationLabel?.get(generation) ??
+    `Pasangan keturunan ke-${generation}`;
+
+
+
+  const label = relative
+    ? `${generationLabel} dari ${relative} pasangan`
+    : `${generationLabel} dari pasangan`;
+
+  // ======================================================
+  // ENGLISH
+  // ======================================================
+
+  const greatPrefix =
+    generation >= 2
+      ? "great-".repeat(generation - 1)
+      : "";
+
+  const englishRelative =
+    ageRelation === "younger"
+      ? "younger sibling"
+      : ageRelation === "older"
+        ? "older sibling"
+        : "sibling";
+
+  const english =
+    `(${this.ordinal(generation)}-generation ` +
+    `${greatPrefix}descendant of ` +
+    `spouse's ${englishRelative})`;
+
+  return `${label} ${english}`;
+},
+
+// ========================================================
+// SPOUSE OF GENEALOGY EXTENDED NIECE / NEPHEW CEK YAA
+// ========================================================
+
+spouseOfGenealogySiblingDescendant(result) {
+  if (!result) {
+    return null;
+  }
+
+  const genealogical = result.via?.genealogical;
+
+  if (!genealogical) {
+    return null;
+  }
+
+  const generation = Number(
+    genealogical.ancestorGeneration
+  );
+
+  if (
+    !Number.isFinite(generation) ||
+    generation < 1
+  ) {
+    return null;
+  }
+
+  const ageRelation = genealogical.ageRelation;
+
+  // ======================================================
+  // RELATIVE
+  // ======================================================
+
+  const relative =
+    ageRelation === "younger"
+      ? "adik"
+      : ageRelation === "older"
+        ? "kakak"
+        : null;
+
+  // ======================================================
+  // INDONESIAN
+  // Mendukung generasi 1 hingga tanpa batas.
+  // ======================================================
+
+  const generationLabel =
+    window.WhoGenerationLabel?.get(generation) ??
+    `Keturunan ke-${generation}`;
+
+  const label = relative
+    ? `Pasangan ${generationLabel} dari ${relative}`
+    : `Pasangan ${generationLabel}`;
+
+  // ======================================================
+  // ENGLISH
+  // ======================================================
+
+  const greatPrefix =
+    generation >= 2
+      ? "great-".repeat(generation - 1)
+      : "";
+
+  const englishRelative =
+    ageRelation === "younger"
+      ? "younger sibling"
+      : ageRelation === "older"
+        ? "older sibling"
+        : "sibling";
+
+  const english =
+    `(spouse of ${this.ordinal(generation)}-generation ` +
+    `${greatPrefix}descendant of ` +
+    `${englishRelative})`;
+
+  return `${label} ${english}`;
+},
+
+// ========================================================
+// SPOUSE OF GENEALOGY EXTENDED NIECE / NEPHEW OF SPOUSE
+// ========================================================
+
+spouseOfGenealogySiblingDescendantOfSpouse(result) {
+  if (!result) {
+    return null;
+  }
+
+  const genealogical = result.via?.genealogical;
+
+  if (!genealogical) {
+    return null;
+  }
+
+  const generation = Number(
+    genealogical.ancestorGeneration
+  );
+
+  if (
+    !Number.isFinite(generation) ||
+    generation < 1
+  ) {
+    return null;
+  }
+
+  const ageRelation = genealogical.ageRelation;
+
+  // ======================================================
+  // RELATIVE
+  // ======================================================
+
+  const relative =
+    ageRelation === "younger"
+      ? "adik"
+      : ageRelation === "older"
+        ? "kakak"
+        : null;
+
+  // ======================================================
+  // INDONESIAN
+  // Menggunakan pola penamaan yang sama.
+  // ======================================================
+
+  const generationLabel =
+    window.WhoGenerationLabel?.get(generation) ??
+    `Keturunan ke-${generation}`;
+
+  const label = relative
+    ? `Pasangan ${generationLabel} dari ${relative} pasangan`
+    : `Pasangan ${generationLabel} dari pasangan`;
+
+  // ======================================================
+  // ENGLISH
+  // ======================================================
+
+  const greatPrefix =
+    generation >= 2
+      ? "great-".repeat(generation - 1)
+      : "";
+
+  const englishRelative =
+    ageRelation === "younger"
+      ? "younger sibling"
+      : ageRelation === "older"
+        ? "older sibling"
+        : "sibling";
+
+  const english =
+    `(spouse of ${this.ordinal(generation)}-generation ` +
+    `${greatPrefix}descendant of spouse's ` +
+    `${englishRelative})`;
+
+  return `${label} ${english}`;
+},
 
 // ========================================================
 // GENEALOGY EXTENDED AUNT / UNCLE
 // ========================================================
 
-genealogyExtendedAuntUncle(result) {
+genealogyAncestorSibling(result) {
 
   if (!result) {
     return null;
@@ -24666,54 +24937,120 @@ genealogyExtendedAuntUncle(result) {
 
 
   // ======================================================
+  // IKUTI ancestorGenerationLabels
+  //
+  // 1 → Bapak/Ibu
+  // 2 → Eyang
+  // 3 → Eyang Buyut
+  // 4 → Eyang Canggah
+  // 5 → Eyang Wareng
+  // ...
+  //
+  // Extended aunt/uncle:
+  //
+  // generation 1 → kakak/adik dari Eyang
+  // generation 2 → kakak/adik dari Eyang Buyut
+  // generation 3 → kakak/adik dari Eyang Canggah
+  //
+  // Karena tabel dimulai dari Bapak/Ibu,
+  // gunakan generation + 1.
+  // ======================================================
+
+  const ancestorGeneration =
+    generation;
+
+
+  const ancestorLabel =
+    WhoAncestorGenerationLabel.get(
+      ancestorGeneration
+    );
+
+
+  // ======================================================
   // INDONESIAN
   // ======================================================
 
-  let label =
+  let label;
+
+  if (
     ageRelation === "older"
-      ? "Pakde/Bude"
-      : ageRelation === "younger"
-        ? "Paklik/Bulik"
-        : "Om/Tante";
+  ) {
 
+    label =
+      `Kakak dari ${ancestorLabel}`;
 
-  label +=
-    ` generasi ${generation}`;
+  }
+
+  else if (
+    ageRelation === "younger"
+  ) {
+
+    label =
+      `Adik dari ${ancestorLabel}`;
+
+  }
+
+  else {
+
+    label =
+      `saudara dari ${ancestorLabel}`;
+
+  }
 
 
   // ======================================================
   // ENGLISH
+  //
+  // generation engine tetap dipakai apa adanya.
+  //
+  // generation 2
+  // → 2nd-generation ancestor
   // ======================================================
 
-  const greatPrefix =
-    generation >= 2
-      ? "great-".repeat(
-          generation - 1
-        )
-      : "";
+  let englishRelation;
+
+  if (
+    ageRelation === "older"
+  ) {
+
+    englishRelation =
+      "older sibling";
+
+  }
+
+  else if (
+    ageRelation === "younger"
+  ) {
+
+    englishRelation =
+      "younger sibling";
+
+  }
+
+  else {
+
+    englishRelation =
+      "sibling";
+
+  }
 
 
-  const agePrefix =
-  ageRelation === "older"
-    ? "older "
-    : ageRelation === "younger"
-      ? "younger "
-      : "";
+  const english =
+    `(${englishRelation} of ` +
+    `${this.ordinal(generation)}-generation ancestor)`;
 
-const english =
-  `(${this.ordinal(generation)}-generation ` +
-  `${agePrefix}${greatPrefix}aunt/uncle)`;
 
   return (
     `${label} ${english}`
   );
+
 },
 
 // ========================================================
 // SPOUSE OF GENEALOGY EXTENDED AUNT / UNCLE
 // ========================================================
 
-spouseOfGenealogyExtendedAuntUncle(result) {
+spouseOfGenealogyAncestorSibling(result) {
 
   if (!result) {
     return null;
@@ -24740,117 +25077,93 @@ spouseOfGenealogyExtendedAuntUncle(result) {
 
   const ageRelation =
     genealogical.ageRelation;
+
+
+  // ======================================================
+  // GENERASI LELUHUR
+  // ======================================================
+
+  const ancestorGeneration =
+    generation;
+
+
+  const ancestorLabel =
+    WhoAncestorGenerationLabel.get(
+      ancestorGeneration
+    );
 
 
   // ======================================================
   // INDONESIAN
   // ======================================================
 
-  let auntUncleLabel =
+  let siblingLabel;
+
+  if (
     ageRelation === "older"
-      ? "Pakde/Bude"
-      : ageRelation === "younger"
-        ? "Paklik/Bulik"
-        : "Om/Tante";
+  ) {
+
+    siblingLabel =
+      `kakak dari ${ancestorLabel}`;
+
+  }
+
+  else if (
+    ageRelation === "younger"
+  ) {
+
+    siblingLabel =
+      `adik dari ${ancestorLabel}`;
+
+  }
+
+  else {
+
+    siblingLabel =
+      `saudara dari ${ancestorLabel}`;
+
+  }
 
 
-  auntUncleLabel +=
-    ` generasi ${generation}`;
+  const label =
+    `Pasangan ${siblingLabel}`;
 
 
   // ======================================================
   // ENGLISH
   // ======================================================
 
-  const greatPrefix =
-    generation >= 2
-      ? "great-".repeat(
-          generation - 1
-        )
-      : "";
-
-
-  const agePrefix =
-  ageRelation === "older"
-    ? "older "
-    : ageRelation === "younger"
-      ? "younger "
-      : "";
-
-const english =
-  `(spouse of ${this.ordinal(generation)}-generation ` +
-  `${agePrefix}${greatPrefix}aunt/uncle)`;
-
-
-
-  return (
-    `Pasangan ${auntUncleLabel} ${english}`
-  );
-},
-
-// ========================================================
-// GENEALOGY EXTENDED AUNT / UNCLE OF SPOUSE
-// ========================================================
-
-genealogyExtendedAuntUncleOfSpouse(result) {
-
-  if (!result) {
-    return null;
-  }
-
-  const genealogical =
-    result.via?.genealogical;
-
-  if (!genealogical) {
-    return null;
-  }
-
-  const generation =
-    Number(
-      genealogical.ancestorGeneration
-    );
+  let englishRelation;
 
   if (
-    !Number.isFinite(generation) ||
-    generation < 1
+    ageRelation === "older"
   ) {
-    return null;
+
+    englishRelation =
+      "older sibling";
+
   }
 
-  const ageRelation =
-    genealogical.ageRelation;
+  else if (
+    ageRelation === "younger"
+  ) {
+
+    englishRelation =
+      "younger sibling";
+
+  }
+
+  else {
+
+    englishRelation =
+      "sibling";
+
+  }
 
 
-  let label =
-    ageRelation === "older"
-      ? "Pakde/Bude"
-      : ageRelation === "younger"
-        ? "Paklik/Bulik"
-        : "Om/Tante";
-
-
-  label +=
-    ` generasi ${generation} dari pasangan`;
-
-
-  const greatPrefix =
-    generation >= 2
-      ? "great-".repeat(
-          generation - 1
-        )
-      : "";
-
-
-  const agePrefix =
-  ageRelation === "older"
-    ? "older "
-    : ageRelation === "younger"
-      ? "younger "
-      : "";
-
-const english =
-  `(${this.ordinal(generation)}-generation ` +
-  `${agePrefix}${greatPrefix}aunt/uncle of spouse)`;
+  const english =
+    `(spouse of ${englishRelation} of ` +
+    `${this.ordinal(ancestorGeneration)}-generation ancestor)`;
 
 
   return (
@@ -24859,8 +25172,11 @@ const english =
 
 },
 
+// ========================================================
+// GENEALOGY EXTENDED AUNT / UNCLE OF SPOUSE
+// ========================================================
 
-spouseOfGenealogyExtendedAuntUncleOfSpouse(result) {
+genealogyAncestorSiblingOfSpouse(result) {
 
   if (!result) {
     return null;
@@ -24890,50 +25206,255 @@ spouseOfGenealogyExtendedAuntUncleOfSpouse(result) {
 
 
   // ======================================================
+  // GENERASI LELUHUR
+  //
+  // generation 1 → Eyang
+  // generation 2 → Eyang Buyut
+  // generation 3 → Eyang Canggah
+  // dst.
+  // ======================================================
+
+  const ancestorGeneration =
+    generation;
+
+
+  const ancestorLabel =
+    WhoAncestorGenerationLabel.get(
+      ancestorGeneration
+    );
+
+
+  // ======================================================
   // INDONESIAN
   // ======================================================
 
-  const label =
+  let label;
+
+  if (
     ageRelation === "older"
-      ? "Pasangan Pakde/Bude"
-      : ageRelation === "younger"
-        ? "Pasangan Paklik/Bulik"
-        : "Pasangan Om/Tante";
+  ) {
 
+    label =
+      `kakak dari ${ancestorLabel} dari pasangan`;
 
-  const indonesian =
-    `${label} generasi ${generation} dari pasangan`;
+  }
+
+  else if (
+    ageRelation === "younger"
+  ) {
+
+    label =
+      `adik dari ${ancestorLabel} dari pasangan`;
+
+  }
+
+  else {
+
+    label =
+      `saudara dari ${ancestorLabel} dari pasangan`;
+
+  }
 
 
   // ======================================================
   // ENGLISH
   // ======================================================
 
-  const greatPrefix =
-    generation >= 2
-      ? "great-".repeat(
-          generation - 1
-        )
-      : "";
+  let englishRelation;
 
-  const agePrefix =
+  if (
     ageRelation === "older"
-      ? "older "
-      : ageRelation === "younger"
-        ? "younger "
-        : "";
+  ) {
+
+    englishRelation =
+      "older sibling";
+
+  }
+
+  else if (
+    ageRelation === "younger"
+  ) {
+
+    englishRelation =
+      "younger sibling";
+
+  }
+
+  else {
+
+    englishRelation =
+      "sibling";
+
+  }
+
 
   const english =
-    `(spouse of ` +
-    `${this.ordinal(generation)}-generation ` +
-    `${agePrefix}${greatPrefix}aunt/uncle ` +
-    `of spouse)`;
+    `(${englishRelation} of ` +
+    `${this.ordinal(ancestorGeneration)}-generation ` +
+    `ancestor of spouse)`;
 
+
+  // ======================================================
+  // FINAL
+  // ======================================================
 
   return (
-    `${indonesian} ${english}`
+    `${label} ${english}`
   );
+
 },
+
+
+
+  spouseOfGenealogyAncestorSiblingOfSpouse(result) {
+
+    if (!result) {
+      return null;
+    }
+
+    const genealogical =
+      result.via?.genealogical;
+
+    if (!genealogical) {
+      return null;
+    }
+
+    const generation =
+      Number(
+        genealogical.ancestorGeneration
+      );
+
+    if (
+      !Number.isFinite(generation) ||
+      generation < 1
+    ) {
+      return null;
+    }
+
+    const ageRelation =
+      genealogical.ageRelation;
+
+
+    // ======================================================
+    // ANCESTOR GENERATION
+    //
+    // 1 → Bapak/Ibu
+    // 2 → Eyang
+    // 3 → Eyang Buyut
+    // ...
+    // 18 → Eyang Trah Tumerah
+    // 19 → Moyang ke-19
+    // 20 → Moyang ke-20
+    // ...
+    //
+    // ======================================================
+
+    const ancestorGeneration =
+      generation;
+
+
+    let ancestorLabel =
+      WhoAncestorGenerationLabel.get(
+        ancestorGeneration
+      );
+
+
+    // ======================================================
+    // FALLBACK MOYANG
+    //
+    // Jika sudah melewati daftar
+    // ancestorGenerationLabels,
+    // gunakan "Moyang ke-N".
+    // ======================================================
+
+    if (!ancestorLabel) {
+
+      ancestorLabel =
+        `Moyang ke-${ancestorGeneration}`;
+
+    }
+
+
+    // ======================================================
+    // INDONESIAN
+    // ======================================================
+
+    let relation;
+
+    if (
+      ageRelation === "older"
+    ) {
+
+      relation =
+        `kakak dari ${ancestorLabel}`;
+
+    }
+
+    else if (
+      ageRelation === "younger"
+    ) {
+
+      relation =
+        `adik dari ${ancestorLabel}`;
+
+    }
+
+    else {
+
+      relation =
+        `saudara dari ${ancestorLabel}`;
+
+    }
+
+
+    const indonesian =
+      `Pasangan ${relation} dari pasangan`;
+
+
+    // ======================================================
+    // ENGLISH
+    // ======================================================
+
+    let englishRelation;
+
+    if (
+      ageRelation === "older"
+    ) {
+
+      englishRelation =
+        "older sibling";
+
+    }
+
+    else if (
+      ageRelation === "younger"
+    ) {
+
+      englishRelation =
+        "younger sibling";
+
+    }
+
+    else {
+
+      englishRelation =
+        "sibling";
+
+    }
+
+
+    const english =
+      `(spouse of ` +
+      `${englishRelation} of ` +
+      `${this.ordinal(generation)}-generation ancestor ` +
+      `of spouse)`;
+
+
+    return (
+      `${indonesian} ${english}`
+    );
+
+  },
 
   // ========================================================
   // SPOUSE DESCENDANT GENERATION
@@ -25202,11 +25723,11 @@ spouseOfGenealogyExtendedAuntUncleOfSpouse(result) {
     spouse_of_aunt_uncle:
       "Pasangan om/tante (spouse-of-aunt/uncle)",
 
-    older_spouse_of_aunt_uncle:
-      "Pasangan Pakde/Bude (older-spouse-of-aunt/uncle)",
+    spouse_of_older_aunt_uncle:
+      "Pasangan Pakde/Bude (spouse-of-older-aunt/uncle)",
 
-    younger_spouse_of_aunt_uncle:
-      "Pasangan Paklik/Bulik (younger-spouse-of-aunt/uncle)",
+    spouse_of_younger_aunt_uncle:
+      "Pasangan Paklik/Bulik (spouse-of-younger-aunt/uncle)",
 
     aunt_uncle_of_spouse:
       "Om/Tante dari pasangan (aunt/uncle-of-spouse)",
@@ -25217,10 +25738,10 @@ spouseOfGenealogyExtendedAuntUncleOfSpouse(result) {
     younger_aunt_uncle_of_spouse:
       "Paklik/Bulik dari pasangan (younger-aunt/uncle-of-spouse)",
 
-    older_spouse_of_aunt_uncle_of_spouse:
+    spouse_of_older_aunt_uncle_of_spouse:
       "Pasangan Pakde/Bude dari pasangan (spouse's older aunt/uncle's spouse)",
 
-    younger_spouse_of_aunt_uncle_of_spouse:
+    spouse_of_younger_aunt_uncle_of_spouse:
       "Pasangan Paklik/Bulik dari pasangan (spouse's younger aunt/uncle's spouse)",
 
     niece_nephew:
@@ -25238,10 +25759,10 @@ spouseOfGenealogyExtendedAuntUncleOfSpouse(result) {
     cousin:
       "Sepupu (cousin)",
 
-    cousin_older:
+    older_cousin:
       "Kakak sepupu (older-cousin)",
 
-    cousin_younger:
+    younger_cousin:
       "Adik sepupu (younger-cousin)",
 
     older_cousin_of_spouse:
@@ -25250,11 +25771,11 @@ spouseOfGenealogyExtendedAuntUncleOfSpouse(result) {
     younger_cousin_of_spouse:
       "Adik sepupu dari pasangan (younger-cousin-of-spouse)",
 
-    older_spouse_of_cousin:
-      "Pasangan kakak sepupu (older-spouse-of-cousin)",
+    spouse_of_older_cousin:
+      "Pasangan kakak sepupu (spouse-of-older-cousin)",
 
-    younger_spouse_of_cousin:
-      "Pasangan adik sepupu (younger-spouse-of-cousin)",
+    spouse_of_younger_cousin:
+      "Pasangan adik sepupu (spouse-of-younger-cousin)",
 
     spouse_of_genealogy_cousin_of_spouse:
       "Pasangan sepupu (genealogy-cousin) dari pasangan"
@@ -26460,7 +26981,7 @@ window.WhoSpouseSiblingSpouseRelation = {
   }
 
 }; // <-- end WhoSpouseSiblingSpouseRelation
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // ============================================================
 // 🆕 WHO TO WHOM
@@ -28353,7 +28874,7 @@ getSpouseOfStepChildOfSpouse(fromId, toId) {
 } // <-- end getSpouseOfStepChildOfSpouse
 
 }; // <-- end WhoStepRelation
-//-----------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ============================================================
@@ -28485,126 +29006,6 @@ window.WhoAuntUncleRelation = {
 
     }
 
-    // ========================================================
-    // 5. GENEALOGY EXTENDED AUNT / UNCLE
-    // ========================================================
-
-    const extendedAuntUncle =
-      GenealogyEngine
-        .GenealogyExtendedAuntUncle
-        .get(
-          fromKey,
-          toKey
-        );
-
-    if (extendedAuntUncle) {
-
-
-console.log(
-  "🔎 [EXTENDED AUNT/UNCLE]",
-  extendedAuntUncle
-);
-
-      return {
-
-        type:
-          WHO_RELATIONS.AUNT_UNCLE,
-
-        relation:
-          "genealogy_extended_aunt_uncle",
-
-        fromId:
-          fromKey,
-
-        toId:
-          toKey,
-
-        via: {
-
-          type:
-            "genealogy_extended_aunt_uncle",
-
-          genealogical:
-            extendedAuntUncle
-
-        }
-
-      };
-
-    }
-
-    // ========================================================
-    // 6. SPOUSE OF GENEALOGY EXTENDED AUNT / UNCLE
-    // ========================================================
-
-    const spouseOfExtendedAuntUncle =
-      this.getSpouseOfGenealogyExtendedAuntUncle(
-        fromKey,
-        toKey
-      );
-
-    if (spouseOfExtendedAuntUncle) {
-      return spouseOfExtendedAuntUncle;
-    }
-
-    // ========================================================
-    // 7. GENEALOGY EXTENDED AUNT / UNCLE DARI PASANGAN
-    // ========================================================
-
-    const genealogyExtendedAuntUncleOfSpouse =
-      this.getGenealogyExtendedAuntUncleOfSpouse(
-        fromKey,
-        toKey
-      );
-
-    if (genealogyExtendedAuntUncleOfSpouse) {
-
-      return {
-
-        type:
-          WHO_RELATIONS.AUNT_UNCLE,
-
-        relation:
-          "genealogy_extended_aunt_uncle_of_spouse",
-
-        fromId:
-          fromKey,
-
-        toId:
-          toKey,
-
-        via: {
-
-          type:
-            "genealogy_extended_aunt_uncle_of_spouse",
-
-          spouseOfTo:
-            genealogyExtendedAuntUncleOfSpouse.spouseOfTo,
-
-          genealogical:
-            genealogyExtendedAuntUncleOfSpouse.genealogical
-
-        }
-
-      };
-
-    }
-
-    // ========================================================
-    // 8. SPOUSE OF GENEALOGY EXTENDED AUNT / UNCLE DARI PASANGAN
-    // ========================================================
-
-    const spouseOfGenealogyExtendedAuntUncleOfSpouse =
-      this.getSpouseOfGenealogyExtendedAuntUncleOfSpouse(
-        fromKey,
-        toKey
-      );
-
-    if (spouseOfGenealogyExtendedAuntUncleOfSpouse) {
-
-      return spouseOfGenealogyExtendedAuntUncleOfSpouse;
-
-    }
 
     // ========================================================
     // BELUM ADA
@@ -28735,7 +29136,7 @@ console.log(
 if (options.log === true) {
 
   console.log(
-    "🔎 [AUNT/UNCLE HALF]",
+    "🔎 [FULL/HALF AUNT/UNCLE]",
     {
       fromId: String(from.id),
       toId: String(to.id),
@@ -28948,7 +29349,7 @@ if (options.log === true) {
         ) {
 
           relation =
-            "older_spouse_of_aunt_uncle";
+            "spouse_of_older_aunt_uncle";
 
         }
 
@@ -28958,7 +29359,7 @@ if (options.log === true) {
         ) {
 
           relation =
-            "younger_spouse_of_aunt_uncle";
+            "spouse_of_younger_aunt_uncle";
 
         }
 
@@ -29299,21 +29700,21 @@ if (options.log === true) {
 
       if (
         relation.relation ===
-        "older_spouse_of_aunt_uncle"
+        "spouse_of_older_aunt_uncle"
       ) {
 
         compositeRelation =
-          "older_spouse_of_aunt_uncle_of_spouse";
+          "spouse_of_older_aunt_uncle_of_spouse";
 
       }
 
       else if (
         relation.relation ===
-        "younger_spouse_of_aunt_uncle"
+        "spouse_of_younger_aunt_uncle"
       ) {
 
         compositeRelation =
-          "younger_spouse_of_aunt_uncle_of_spouse";
+          "spouse_of_younger_aunt_uncle_of_spouse";
 
       }
 
@@ -29362,335 +29763,11 @@ if (options.log === true) {
 
     return null;
 
-  }, // <-- end getSpouseOfAuntUncleOfSpouse
+  } // <-- end getSpouseOfAuntUncleOfSpouse
 
-  // ========================================================
-  // GENEALOGY EXTENDED AUNT / UNCLE OF SPOUSE
-  //
-  // FROM = aunt/uncle secara genealogis
-  // TO   = pasangan dari orang tersebut
-  //
-  // Contoh:
-  //
-  // Alwan → Alishka
-  // = Pakde/Bude generasi 2
-  //
-  // Alishka → coba16
-  // = spouse
-  //
-  // Alwan → coba16
-  // = Pakde/Bude generasi 2 dari pasangan
-  // ========================================================
-
-  getGenealogyExtendedAuntUncleOfSpouse(
-    fromId,
-    toId
-  ) {
-
-    const from =
-      FamilyRepository.getPerson(fromId);
-
-    const to =
-      FamilyRepository.getPerson(toId);
-
-    if (!from || !to) {
-      return null;
-    }
-
-
-    // ======================================================
-    // Cari pasangan TO
-    // coba16 → Alishka
-    // ======================================================
-
-    const spouses =
-      WhoSpouseReader.getSpouses(to.id);
-
-
-    for (const spouse of spouses) {
-
-      // ====================================================
-      // Cek:
-      //
-      // Alwan → Alishka
-      //
-      // Apakah FROM adalah genealogy extended aunt/uncle
-      // dari pasangan TO?
-      // ====================================================
-
-      const genealogy =
-        GenealogyEngine
-          .GenealogyExtendedAuntUncle
-          .get(
-            from.id,
-            spouse.id
-          );
-
-
-      if (!genealogy) {
-        continue;
-      }
-
-
-      return {
-
-        fromId:
-          String(from.id),
-
-        toId:
-          String(to.id),
-
-        spouseOfTo:
-          String(spouse.id),
-
-        genealogical:
-          genealogy
-
-      };
-
-    }
-
-
-    return null;
-
-  }, // <-- end getGenealogyExtendedAuntUncleOfSpouse
-
-getSpouseOfGenealogyExtendedAuntUncleOfSpouse(fromId, toId) {
-
-    const from =
-      FamilyRepository.getPerson(fromId);
-
-    const to =
-      FamilyRepository.getPerson(toId);
-
-    if (!from || !to) {
-      return null;
-    }
-
-
-    // ======================================================
-    // FROM = Umar
-    // TO   = coba16
-    //
-    // Umar  = pasangan Alwan
-    // Alwan = extended aunt/uncle dari Alishka
-    // Alishka = pasangan coba16
-    //
-    // Jadi:
-    //
-    // Umar → Alwan → Alishka → coba16
-    // ======================================================
-
-    const fromSpouses =
-      WhoSpouseReader.getSpouses(from.id);
-
-    const toSpouses =
-      WhoSpouseReader.getSpouses(to.id);
-
-
-    // ======================================================
-    // Cari pasangan FROM
-    // ======================================================
-
-    for (const fromSpouse of fromSpouses) {
-
-      const auntUncle =
-        FamilyRepository.getPerson(
-          String(fromSpouse.id)
-        );
-
-      if (!auntUncle) {
-        continue;
-      }
-
-
-      // ====================================================
-      // Cari pasangan TO
-      // ====================================================
-
-      for (const toSpouse of toSpouses) {
-
-        const nieceNephew =
-          FamilyRepository.getPerson(
-            String(toSpouse.id)
-          );
-
-        if (!nieceNephew) {
-          continue;
-        }
-
-
-        // ==================================================
-        // Cek hubungan genealogy:
-        //
-        // Alwan → Alishka
-        // ==================================================
-
-        const genealogical =
-          GenealogyEngine
-            .GenealogyExtendedAuntUncle
-            .get(
-              auntUncle.id,
-              nieceNephew.id
-            );
-
-
-        if (!genealogical) {
-          continue;
-        }
-
-
-        // ==================================================
-        // Pastikan memang pasangan
-        // ==================================================
-
-        const fromIsSpouse =
-          WhoSpouseReader
-            .getSpouses(auntUncle.id)
-            .some(spouse =>
-              String(spouse.id) ===
-              String(from.id)
-            );
-
-        if (!fromIsSpouse) {
-          continue;
-        }
-
-
-        const toIsSpouse =
-          WhoSpouseReader
-            .getSpouses(nieceNephew.id)
-            .some(spouse =>
-              String(spouse.id) ===
-              String(to.id)
-            );
-
-        if (!toIsSpouse) {
-          continue;
-        }
-
-
-        // ==================================================
-        // RESULT
-        // ==================================================
-
-        return {
-
-          type:
-            WHO_RELATIONS.AUNT_UNCLE,
-
-          relation:
-            "spouse_of_genealogy_extended_aunt_uncle_of_spouse",
-
-          fromId:
-            String(from.id),
-
-          toId:
-            String(to.id),
-
-          via: {
-
-            type:
-              "spouse_of_genealogy_extended_aunt_uncle_of_spouse",
-
-            spouseOfFrom:
-              String(auntUncle.id),
-
-            auntUncle:
-              String(auntUncle.id),
-
-            nieceNephew:
-              String(nieceNephew.id),
-
-            spouseOfTo:
-              String(nieceNephew.id),
-
-            genealogical
-
-          }
-
-        };
-
-      }
-
-    }
-
-
-    return null;
-
-  }, // <-- end getSpouseOfGenealogyExtendedAuntUncleOfSpouse
-
-getSpouseOfGenealogyExtendedAuntUncle(fromId, toId) {
-
-  const fromKey = String(fromId);
-  const toKey   = String(toId);
-
-  const toPerson =
-    FamilyRepository.getPerson(toKey);
-
-  if (!toPerson) {
-    return null;
-  }
-
-  const spouses =
-    WhoSpouseReader.getSpouses(
-      fromKey
-    );
-
-  for (const spouse of spouses) {
-
-    const extendedAuntUncle =
-      GenealogyEngine
-        .GenealogyExtendedAuntUncle
-        .get(
-          spouse.id,
-          toKey
-        );
-
-    if (!extendedAuntUncle) {
-      continue;
-    }
-
-    return {
-
-      type:
-        WHO_RELATIONS.AUNT_UNCLE,
-
-      relation:
-        "spouse_of_genealogy_extended_aunt_uncle",
-
-      fromId:
-        fromKey,
-
-      toId:
-        toKey,
-
-      via: {
-
-        type:
-          "spouse_of_genealogy_extended_aunt_uncle",
-
-        spouse:
-          String(fromKey),
-
-        auntUncle:
-          String(spouse.id),
-
-        genealogical:
-          extendedAuntUncle
-
-      }
-
-    };
-
-  }
-
-  return null;
-
-} // <-- end getSpouseOfGenealogyExtendedAuntUncle
 
 }; // <-- end WhoAuntUncleRelation
-//-----------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // ============================================================
 // WHO TO WHOM
@@ -29877,143 +29954,6 @@ window.WhoNieceNephewRelation = {
 
     }
 
-    // ========================================================
-    // 5. GENEALOGY EXTENDED NIECE / NEPHEW
-    // ========================================================
-
-    const extendedNieceNephew =
-      GenealogyEngine
-        .GenealogyExtendedNieceNephew
-        .get(
-          fromKey,
-          toKey
-        );
-
-    if (extendedNieceNephew) {
-
-      return {
-
-        type:
-          WHO_RELATIONS.NIECE_NEPHEW,
-
-        relation:
-          "genealogy_extended_niece_nephew",
-
-        fromId:
-          fromKey,
-
-        toId:
-          toKey,
-
-        via: {
-
-          type:
-            "genealogy_extended_niece_nephew",
-
-          genealogical:
-            extendedNieceNephew
-
-        }
-
-      };
-
-    }
-
-    // ========================================================
-    // 6. GENEALOGY EXTENDED NIECE / NEPHEW OF SPOUSE
-    // ========================================================
-
-    const toPerson =
-      FamilyRepository.getPerson(
-        toKey
-      );
-
-    if (toPerson) {
-
-      const spouses =
-        WhoSpouseReader.getSpouses(
-          toPerson.id
-        );
-
-      for (const spouse of spouses) {
-
-        const extended =
-          GenealogyEngine
-            .GenealogyExtendedNieceNephew
-            .get(
-              fromKey,
-              spouse.id
-            );
-
-        if (!extended) {
-          continue;
-        }
-
-        return {
-
-          type:
-            WHO_RELATIONS.NIECE_NEPHEW,
-
-          relation:
-            "genealogy_extended_niece_nephew_of_spouse",
-
-          fromId:
-            fromKey,
-
-          toId:
-            toKey,
-
-          via: {
-
-            type:
-              "genealogy_extended_niece_nephew_of_spouse",
-
-            genealogical:
-              extended,
-
-            spouse:
-              String(spouse.id)
-
-          }
-
-        };
-
-      }
-
-    }
-
-    // ========================================================
-    // 7. SPOUSE OF GENEALOGY EXTENDED NIECE / NEPHEW
-    // ========================================================
-
-    const spouseOfGenealogyExtendedNieceNephew =
-      this.getSpouseOfGenealogyExtendedNieceNephew(
-        fromKey,
-        toKey
-      );
-
-    if (spouseOfGenealogyExtendedNieceNephew) {
-
-      return spouseOfGenealogyExtendedNieceNephew;
-
-    }
-
-    // ========================================================
-    // 8. SPOUSE OF GENEALOGY EXTENDED NIECE / NEPHEW
-    //    DARI PASANGAN
-    // ========================================================
-
-    const spouseOfExtendedNieceNephewOfSpouse =
-      this.getSpouseOfGenealogyExtendedNieceNephewOfSpouse(
-        fromKey,
-        toKey
-      );
-
-    if (spouseOfExtendedNieceNephewOfSpouse) {
-
-      return spouseOfExtendedNieceNephewOfSpouse;
-
-    }
 
     // ========================================================
     // BELUM ADA
@@ -31118,352 +31058,7 @@ window.WhoNieceNephewRelation = {
 
     return null;
 
-  }, // <-- end getSpouseOfNieceNephewOfSpouse
-
-getSpouseOfGenealogyExtendedNieceNephew(fromId, toId) {
-
-    const from =
-      FamilyRepository.getPerson(String(fromId));
-
-    const to =
-      FamilyRepository.getPerson(String(toId));
-
-    if (!from || !to) {
-      return null;
-    }
-
-    // ========================================================
-    // FROM = coba16
-    // TO   = Alwan
-    //
-    // coba16 → spouse → Alishka
-    // Alishka → extended niece/nephew → Alwan
-    // ========================================================
-
-    const spouses =
-      WhoSpouseReader.getSpouses(from.id);
-
-    if (!spouses?.length) {
-      return null;
-    }
-
-    for (const spouse of spouses) {
-
-      const spouseId =
-        String(spouse.id);
-
-      const genealogical =
-        GenealogyEngine
-          .GenealogyExtendedNieceNephew
-          .get(
-            spouseId,
-            String(to.id)
-          );
-
-      if (!genealogical) {
-        continue;
-      }
-
-      const ancestorGeneration =
-        Number(
-          genealogical.ancestorGeneration
-        );
-
-      if (
-        !Number.isFinite(
-          ancestorGeneration
-        ) ||
-        ancestorGeneration < 1
-      ) {
-        continue;
-      }
-
-      // ======================================================
-      // ARAH AGE RELATION
-      //
-      // GenealogyExtendedNieceNephew:
-      //
-      // Alishka → Alwan
-      //
-      // Jika genealogy membaca:
-      // older = Alwan lebih tua dari ancestor Alishka
-      //
-      // Maka untuk label niece/nephew:
-      //
-      // older   → kakak
-      // younger → adik
-      //
-      // Hasil yang dibutuhkan kasus ini:
-      //
-      // Alwan = younger sibling
-      // → "dari kakak"
-      //
-      // Karena hubungan sibling yang dipakai adalah
-      // TO terhadap ancestor.
-      // ======================================================
-
-      const siblingAge =
-        WhoSiblingReader.getSiblingAge(
-          String(to.id),
-          String(genealogical.ancestorId)
-        );
-
-      const ageRelation =
-        siblingAge?.ageRelation ??
-        genealogical.ageRelation ??
-        "unknown";
-
-      // ======================================================
-      // RESULT
-      // ======================================================
-
-      return {
-
-        type:
-          WHO_RELATIONS.NIECE_NEPHEW,
-
-        relation:
-          "spouse_of_genealogy_extended_niece_nephew",
-
-        fromId:
-          String(from.id),
-
-        toId:
-          String(to.id),
-
-        via: {
-
-          type:
-            "spouse_of_genealogy_extended_niece_nephew",
-
-          spouseOfFrom:
-            spouseId,
-
-          nieceNephew:
-            spouseId,
-
-          auntUncle:
-            String(to.id),
-
-          genealogical: {
-
-            fromId:
-              String(genealogical.fromId),
-
-            toId:
-              String(genealogical.toId),
-
-            ancestorId:
-              String(genealogical.ancestorId),
-
-            ancestorGeneration:
-              ancestorGeneration,
-
-            generationDifference:
-              Number(
-                genealogical.generationDifference
-              ),
-
-            siblingSubtype:
-              genealogical.siblingSubtype,
-
-            ageRelation:
-              ageRelation
-
-          }
-
-        }
-
-      };
-
-    }
-
-    return null;
-
-  }, // <-- end getSpouseOfGenealogyExtendedNieceNephew
-
-  // ========================================================
-  // SPOUSE OF GENEALOGY EXTENDED NIECE / NEPHEW OF SPOUSE
-  //
-  // FROM = pasangan dari extended niece/nephew
-  // TO   = pasangan dari extended aunt/uncle
-  //
-  // Contoh:
-  //
-  // coba16 ── Alishka
-  //              │
-  //              │ extended niece/nephew
-  //              ↓
-  //            Alwan ── Umar
-  //
-  // coba16 → Umar
-  //
-  // = pasangan keponakan generasi 2 dari adik pasangan
-  // ========================================================
-
-  getSpouseOfGenealogyExtendedNieceNephewOfSpouse(
-    fromId,
-    toId
-  ) {
-
-    const from =
-      FamilyRepository.getPerson(fromId);
-
-    const to =
-      FamilyRepository.getPerson(toId);
-
-    if (!from || !to) {
-      return null;
-    }
-
-
-    // ========================================================
-    // FROM = pasangan dari niece/nephew
-    //
-    // coba16 → Alishka
-    // ========================================================
-
-    const spousesOfFrom =
-      WhoSpouseReader.getSpouses(
-        String(from.id)
-      );
-
-    if (!spousesOfFrom?.length) {
-      return null;
-    }
-
-
-    // ========================================================
-    // TO = pasangan dari aunt/uncle
-    //
-    // Umar → Alwan
-    // ========================================================
-
-    const spousesOfTo =
-      WhoSpouseReader.getSpouses(
-        String(to.id)
-      );
-
-    if (!spousesOfTo?.length) {
-      return null;
-    }
-
-
-    // ========================================================
-    // Cari:
-    //
-    // pasangan FROM
-    //        ↓
-    // extended niece/nephew
-    //        ↓
-    // pasangan TO
-    //
-    // coba16
-    //    ↓ spouse
-    // Alishka
-    //    ↓ extended niece/nephew
-    // Alwan
-    //    ↑ spouse
-    // Umar
-    // ========================================================
-
-    for (const spouseOfFrom of spousesOfFrom) {
-
-      const nieceNephewId =
-        String(spouseOfFrom.id);
-
-
-      for (const spouseOfTo of spousesOfTo) {
-
-        const auntUncleId =
-          String(spouseOfTo.id);
-
-
-        // ====================================================
-        // HUBUNGAN UTAMA
-        //
-        // Alishka → Alwan
-        // ====================================================
-
-        const genealogical =
-          GenealogyEngine
-            .GenealogyExtendedNieceNephew
-            .get(
-              nieceNephewId,
-              auntUncleId
-            );
-
-
-        if (!genealogical) {
-          continue;
-        }
-
-
-        // ====================================================
-        // GENERASI
-        // ====================================================
-
-        const generation =
-          Number(
-            genealogical.ancestorGeneration
-          );
-
-        if (
-          !Number.isFinite(generation) ||
-          generation < 1
-        ) {
-          continue;
-        }
-
-
-        // ====================================================
-        // RESULT
-        // ====================================================
-
-        return {
-
-          type:
-            WHO_RELATIONS.NIECE_NEPHEW,
-
-          relation:
-            "spouse_of_genealogy_extended_niece_nephew_of_spouse",
-
-          fromId:
-            String(from.id),
-
-          toId:
-            String(to.id),
-
-          via: {
-
-            type:
-              "spouse_of_genealogy_extended_niece_nephew_of_spouse",
-
-            spouseOfFrom:
-              nieceNephewId,
-
-            spouseOfTo:
-              auntUncleId,
-
-            genealogical: {
-
-              ...genealogical
-
-            }
-
-          }
-
-        };
-
-      }
-
-    }
-
-
-    return null;
-
-  } // <-- end getSpouseOfGenealogyExtendedNieceNephewOfSpouse
-
+  } // <-- end getSpouseOfNieceNephewOfSpouse
 
 }; // <-- end WhoNieceNephewRelation
 //-----------------------------------------------------------------------
@@ -31990,7 +31585,7 @@ window.WhoCousinRelation = {
         ) {
 
           relation =
-            "cousin_older";
+            "older_cousin";
 
         }
 
@@ -32000,7 +31595,7 @@ window.WhoCousinRelation = {
         ) {
 
           relation =
-            "cousin_younger";
+            "younger_cousin";
 
         }
 
@@ -32665,7 +32260,7 @@ getGenealogyHalfCousin(fromId, toId) {
 
       if (
         cousin.relation ===
-        "cousin_older"
+        "older_cousin"
       ) {
 
         return {
@@ -32702,7 +32297,7 @@ getGenealogyHalfCousin(fromId, toId) {
 
       if (
         cousin.relation ===
-        "cousin_younger"
+        "younger_cousin"
       ) {
 
         return {
@@ -32745,7 +32340,7 @@ getGenealogyHalfCousin(fromId, toId) {
 
     if (
       cousin.relation ===
-      "cousin_older"
+      "older_cousin"
     ) {
 
       return {
@@ -32816,7 +32411,7 @@ getGenealogyHalfCousin(fromId, toId) {
 
     if (
       cousin.relation ===
-      "cousin_younger"
+      "younger_cousin"
     ) {
 
       return {
@@ -32973,7 +32568,7 @@ getSpouseOfCousin(fromId, toId) {
 
     if (
       cousin.relation ===
-      "cousin_older"
+      "older_cousin"
     ) {
 
       return {
@@ -32982,7 +32577,7 @@ getSpouseOfCousin(fromId, toId) {
           WHO_RELATIONS.COUSIN,
 
         relation:
-          "older_spouse_of_cousin",
+          "spouse_of_older_cousin",
 
         fromId:
           String(from.id),
@@ -33055,7 +32650,7 @@ getSpouseOfCousin(fromId, toId) {
 
     if (
       cousin.relation ===
-      "cousin_younger"
+      "younger_cousin"
     ) {
 
       return {
@@ -33064,7 +32659,7 @@ getSpouseOfCousin(fromId, toId) {
           WHO_RELATIONS.COUSIN,
 
         relation:
-          "younger_spouse_of_cousin",
+          "spouse_of_younger_cousin",
 
         fromId:
           String(from.id),
@@ -33832,6 +33427,16 @@ window.WhoGenerationRelation = {
       "to_is_ancestor"
     ) {
 
+
+      const side =
+        window
+          .getGenealogySide
+          ?.GenealogySideGeneration
+          ?.get(
+            from.id,
+            genealogy.generation
+          ) ?? "unknown";
+
       return {
 
         type:
@@ -33852,7 +33457,11 @@ window.WhoGenerationRelation = {
           String(from.id),
 
         toId:
-          String(to.id)
+          String(to.id),
+
+        side:
+          side
+
 
       };
 
@@ -33973,16 +33582,12 @@ window.WhoGenerationRelation = {
   }
 
 }; // <-- end WhoGenerationRelation
-//-----------------------------------------------------------------------
+//-------------------------------------------------------------------
+
 
 // ============================================================
 // Who ancestor path reader
-// pencari half/full ancestor
-// ============================================================
-
-// ============================================================
-// Who ancestor path reader
-// pencari full ancestor
+// pencari half/full ancestor/non
 // ============================================================
 
 window.WhoAncestorPathReader = {
@@ -34170,7 +33775,6 @@ window.WhoAncestorPathReader = {
 
 }; // <-- end WhoAncestorPathReader
 
-
 // ============================================================
 // SINGLE TRUTH SOURCE
 // Who ancestor type reader 
@@ -34181,10 +33785,10 @@ window.WhoAncestorPathReader = {
 //
 // FROM = PID/PIDS dari ancestor
 // NON FID/MID
-// → half
+// → step
 //
 // NON-ANCESTOR:
-// FROM = spouse dari ancestor
+// FROM = spouse dari step ancestor
 //        yang kemudian mempunyai spouse lagi
 //        sebelum sampai ke TO.
 //
@@ -34250,7 +33854,7 @@ window.WhoAncestorTypeReader = {
           fullResult.path,
 
         ancestorType:
-          "full"
+          "full_ancestor_type_reader"
 
       };
 
@@ -34258,7 +33862,7 @@ window.WhoAncestorTypeReader = {
 
 
     // ========================================================
-    // 2. HALF ANCESTOR
+    // 2. STEP ANCESTOR
     //
     // STRICT:
     //
@@ -34395,7 +33999,7 @@ window.WhoAncestorTypeReader = {
                   current.path,
 
                 ancestorType:
-                  "half"
+                  "step_ancestor_type_reader"
 
               };
 
@@ -34544,7 +34148,7 @@ window.WhoAncestorTypeReader = {
 //
 // Hasil:
 // ancestorType:
-// "spouse_of_ancestor_spouse"
+// "non/spouse_of_step_ancestor"
 //
 // CATATAN:
 // Kusnaeni TIDAK harus FID/MID Sustono.
@@ -34753,7 +34357,7 @@ for (
       ],
 
       ancestorType:
-        "spouse_of_ancestor_spouse"
+        "spouse_of_step_ancestor__type_reader"
 
     };
 
@@ -34771,7 +34375,7 @@ for (
   }
 
 }; // <-- end WhoAncestorTypeReader
-//-----------------------------------------------------------------------
+//-------------------------------------------------------------------
 // cek console WhoAncestorTypeReader.get(ancestor_ID, ID);
 
 // ======================================================
@@ -35095,7 +34699,7 @@ window.WhoSpouseGenerationRelation = {
 
 
 }; // <-- end WhoSpouseGenerationRelation
-//-----------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // ============================================================
 // WHO TO WHOM
@@ -35106,7 +34710,7 @@ window.WhoSpouseGenerationRelation = {
 // KHUSUS PASANGAN ANCESTOR YANG TIDAK MEMILIKI FID / MID.
 // ============================================================
 
-window.WhoPidAncestorRelation = {
+window.WhoStepAncestorRelation = {
 
   // ============================================================
   // CENTRAL GET
@@ -35123,21 +34727,21 @@ window.WhoPidAncestorRelation = {
     // 1. ANCESTOR SPOUSE
     // ========================================================
 
-    const pidAncestorResult =
-      this.getPidAncestor(
+    const stepAncestorResult =
+      this.getStepAncestor(
         fromKey,
         toKey
       );
 
-    if (pidAncestorResult) {
+    if (stepAncestorResult) {
 
       return {
 
         type:
-          "ancestor_pid",
+          "step_ancestor",
 
         relation:
-          "ancestor_pid",
+          "step_ancestor",
 
         fromId:
           fromKey,
@@ -35146,26 +34750,26 @@ window.WhoPidAncestorRelation = {
           toKey,
 
         generation:
-          pidAncestorResult.generation,
+          stepAncestorResult.generation,
 
         side:
-          pidAncestorResult.side,
+          stepAncestorResult.side,
 
         spouseId:
-          pidAncestorResult.spouseId,
+          stepAncestorResult.spouseId,
 
         spouseName:
-          pidAncestorResult.spouseName,
+          stepAncestorResult.spouseName,
 
         ancestorType:
-          pidAncestorResult.ancestorType,
+          stepAncestorResult.ancestorType,
 
         spouseAncestorType:
-          pidAncestorResult.spouseAncestorType,
+          stepAncestorResult.spouseAncestorType,
 
         ancestorPath:
-          pidAncestorResult.ancestorPath ||
-          pidAncestorResult.spouseAncestorPath
+          stepAncestorResult.ancestorPath ||
+          stepAncestorResult.spouseAncestorPath
 
       };
 
@@ -35176,21 +34780,21 @@ window.WhoPidAncestorRelation = {
     // 2. ANCESTOR SPOUSE — REVERSE
     // ========================================================
 
-    const ancestorSpouseReverseResult =
-      this.getPidAncestorReverse(
+    const stepAncestorReverseResult =
+      this.getStepAncestorReverse(
         fromKey,
         toKey
       );
 
-    if (ancestorSpouseReverseResult) {
+    if (stepAncestorReverseResult) {
 
       return {
 
         type:
-          "ancestor_pid_reverse",
+          "step_ancestor_reverse",
 
         relation:
-          "ancestor_pid_reverse",
+          "step_ancestor_reverse",
 
         fromId:
           fromKey,
@@ -35199,28 +34803,28 @@ window.WhoPidAncestorRelation = {
           toKey,
 
         generation:
-          ancestorSpouseReverseResult.generation,
+          stepAncestorReverseResult.generation,
 
         spouseId:
-          ancestorSpouseReverseResult.spouseId,
+          stepAncestorReverseResult.spouseId,
 
         spouseName:
-          ancestorSpouseReverseResult.spouseName,
+          stepAncestorReverseResult.spouseName,
 
         ancestorId:
-          ancestorSpouseReverseResult.ancestorId,
+          stepAncestorReverseResult.ancestorId,
 
         ancestorName:
-          ancestorSpouseReverseResult.ancestorName,
+          stepAncestorReverseResult.ancestorName,
 
         ancestorSpouseId:
-          ancestorSpouseReverseResult.ancestorSpouseId,
+          stepAncestorReverseResult.ancestorSpouseId,
 
         ancestorSpouseName:
-          ancestorSpouseReverseResult.ancestorSpouseName,
+          stepAncestorReverseResult.ancestorSpouseName,
 
         direction:
-          "descendant_to_ancestor_pid",
+          "descendant_to_step_ancestor",
 
         reverse:
           true
@@ -35234,21 +34838,21 @@ window.WhoPidAncestorRelation = {
     // 3. ANCESTOR SPOUSE OF SPOUSE
     // ========================================================
 
-    const ancestorSpouseOfSpouseResult =
-      this.getPidAncestorOfSpouse(
+    const stepAncestorOfSpouseResult =
+      this.getStepAncestorOfSpouse(
         fromKey,
         toKey
       );
 
-    if (ancestorSpouseOfSpouseResult) {
+    if (stepAncestorOfSpouseResult) {
 
       return {
 
         type:
-          "ancestor_pid_of_spouse",
+          "step_ancestor_of_spouse",
 
         relation:
-          "ancestor_pid_of_spouse",
+          "step_ancestor_of_spouse",
 
         fromId:
           fromKey,
@@ -35257,31 +34861,31 @@ window.WhoPidAncestorRelation = {
           toKey,
 
         generation:
-          ancestorSpouseOfSpouseResult.generation,
+          stepAncestorOfSpouseResult.generation,
 
         side:
-          ancestorSpouseOfSpouseResult.side,
+          stepAncestorOfSpouseResult.side,
 
         spouseId:
-          ancestorSpouseOfSpouseResult.spouseId,
+          stepAncestorOfSpouseResult.spouseId,
 
         spouseName:
-          ancestorSpouseOfSpouseResult.spouseName,
+          stepAncestorOfSpouseResult.spouseName,
 
         label:
-          ancestorSpouseOfSpouseResult.label,
+          stepAncestorOfSpouseResult.label,
 
         ancestorType:
-          ancestorSpouseOfSpouseResult.ancestorType,
+          stepAncestorOfSpouseResult.ancestorType,
 
         spouseAncestorType:
-          ancestorSpouseOfSpouseResult.spouseAncestorType,
+          stepAncestorOfSpouseResult.spouseAncestorType,
 
         ancestorPath:
-          ancestorSpouseOfSpouseResult.ancestorPath,
+          stepAncestorOfSpouseResult.ancestorPath,
 
         viaSpouseId:
-          ancestorSpouseOfSpouseResult.viaSpouseId
+          stepAncestorOfSpouseResult.viaSpouseId
 
       };
 
@@ -35292,21 +34896,21 @@ window.WhoPidAncestorRelation = {
     // 4. ANCESTOR SPOUSE REVERSE OF SPOUSE
     // ========================================================
 
-    const ancestorSpouseReverseOfSpouseResult =
-      this.getPidAncestorReverseOfSpouse(
+    const stepAncestorReverseOfSpouseResult =
+      this.getStepAncestorReverseOfSpouse(
         fromKey,
         toKey
       );
 
-    if (ancestorSpouseReverseOfSpouseResult) {
+    if (stepAncestorReverseOfSpouseResult) {
 
       return {
 
         type:
-          "ancestor_pid_reverse_of_spouse",
+          "step_ancestor_reverse_of_spouse",
 
         relation:
-          "ancestor_pid_reverse_of_spouse",
+          "step_ancestor_reverse_of_spouse",
 
         fromId:
           fromKey,
@@ -35315,28 +34919,28 @@ window.WhoPidAncestorRelation = {
           toKey,
 
         generation:
-          ancestorSpouseReverseOfSpouseResult.generation,
+          stepAncestorReverseOfSpouseResult.generation,
 
         ancestorId:
-          ancestorSpouseReverseOfSpouseResult.ancestorId,
+          stepAncestorReverseOfSpouseResult.ancestorId,
 
         ancestorName:
-          ancestorSpouseReverseOfSpouseResult.ancestorName,
+          stepAncestorReverseOfSpouseResult.ancestorName,
 
         spouseId:
-          ancestorSpouseReverseOfSpouseResult.spouseId,
+          stepAncestorReverseOfSpouseResult.spouseId,
 
         spouseName:
-          ancestorSpouseReverseOfSpouseResult.spouseName,
+          stepAncestorReverseOfSpouseResult.spouseName,
 
         ancestorSpouseId:
-          ancestorSpouseReverseOfSpouseResult.ancestorSpouseId,
+          stepAncestorReverseOfSpouseResult.ancestorSpouseId,
 
         ancestorSpouseName:
-          ancestorSpouseReverseOfSpouseResult.ancestorSpouseName,
+          stepAncestorReverseOfSpouseResult.ancestorSpouseName,
 
         direction:
-          "descendant_to_ancestor_pid",
+          "descendant_spouse_to_step_ancestor",
 
         reverse:
           true
@@ -35391,11 +34995,11 @@ window.WhoPidAncestorRelation = {
 // TJASUMI = MID SUSTONO
 //
 // TJASUMI TIDAK BOLEH MASUK KATEGORI
-// ancestor_pid.
+// step_ancestor.
 //
 // Jadi JANGAN menggunakan aturan:
 //
-//     "tidak punya fid/mid = ancestor_pid"
+//     "tidak punya fid/mid = step_ancestor"
 //
 // Karena itu SALAH.
 //
@@ -35429,7 +35033,7 @@ window.WhoPidAncestorRelation = {
   //
   // ============================================================
 
-getPidAncestor(fromId, toId) {
+getStepAncestor(fromId, toId) {
 
         const fromKey =
         String(fromId);
@@ -35584,7 +35188,7 @@ getPidAncestor(fromId, toId) {
 
 
         // ======================================================
-        // 9. CEK FULL / HALF ANCESTOR
+        // 9. CEK FULL / STEP ANCESTOR
         //
         // spouseId → toKey
         //
@@ -35598,7 +35202,7 @@ getPidAncestor(fromId, toId) {
         //
         // FROM → PIDS → spouse → ancestor → TO
         //
-        // maka FROM = HALF ancestor.
+        // maka FROM = STEP ancestor.
         // ======================================================
 
         const ancestorTypeResult =
@@ -35630,10 +35234,10 @@ getPidAncestor(fromId, toId) {
         return {
 
           type:
-            "ancestor_pid",
+            "step_ancestor",
 
           relation:
-            "ancestor_pid",
+            "step_ancestor",
 
           fromId:
             fromKey,
@@ -35649,11 +35253,11 @@ getPidAncestor(fromId, toId) {
 
           // ====================================================
           // FROM adalah pasangan dari ancestor.
-          // Jadi hubungan FROM → TO = HALF.
+          // Jadi hubungan FROM → TO = STEP ANCESTOR.
           // ====================================================
 
           ancestorType:
-            "half",
+            "step_ancestor_type_reader",
 
           // ====================================================
           // Informasi ancestor sebenarnya
@@ -35682,7 +35286,7 @@ getPidAncestor(fromId, toId) {
 
         return null;
 
-    }, // <-- end getPidAncestor
+    }, // <-- end getStepAncestor
 
 // ============================================================
 // WHO TO WHOM
@@ -35756,7 +35360,7 @@ getPidAncestor(fromId, toId) {
   //
   // ============================================================
 
-getPidAncestorReverse(fromId, toId) {
+getStepAncestorReverse(fromId, toId) {
 
     const fromKey = String(fromId);
     const toKey = String(toId);
@@ -36092,10 +35696,10 @@ getPidAncestorReverse(fromId, toId) {
         return {
 
           type:
-            "ancestor_pid_reverse",
+            "step_ancestor_reverse",
 
           relation:
-            "ancestor_pid_reverse",
+            "step_ancestor_reverse",
 
           // --------------------------------------------------
           // FROM / TO
@@ -36154,7 +35758,7 @@ getPidAncestorReverse(fromId, toId) {
           // --------------------------------------------------
 
           direction:
-            "descendant_to_ancestor_pid",
+            "descendant_to_step_ancestor",
 
           reverse:
             true
@@ -36173,7 +35777,7 @@ getPidAncestorReverse(fromId, toId) {
       fromKey
     );
 
-  }, // <-- end getPidAncestorReverse
+  }, // <-- end getStepAncestorReverse
 
 // ============================================================
 // WHO TO WHOM
@@ -36201,7 +35805,7 @@ getPidAncestorReverse(fromId, toId) {
 //
 // Hasil:
 // Kusnaeni → coba21
-// = ancestor_pid
+// = step_ancestor
 // = generation 3
 // = paternal
 //
@@ -36224,7 +35828,7 @@ getPidAncestorReverse(fromId, toId) {
   //
   // ============================================================
 
-getPidAncestorOfSpouse(fromId, toId) {
+getStepAncestorOfSpouse(fromId, toId) {
 
   const fromKey =
     String(fromId);
@@ -36290,26 +35894,26 @@ getPidAncestorOfSpouse(fromId, toId) {
     // ANCESTOR DARI SPOUSE TO
     // ======================================================
 
-    const pidAncestorResult =
-      window.WhoPidAncestorRelation
-        ?.getPidAncestor?.(
+    const stepAncestorResult =
+      window.WhoStepAncestorRelation
+        ?.getStepAncestor?.(
           fromKey,
           spouseId
         );
 
 
-    if (!pidAncestorResult) {
+    if (!stepAncestorResult) {
       continue;
     }
 
 
     // ======================================================
-    // 4. HARUS ancestor_pid
+    // 4. HARUS step_ancestor
     // ======================================================
 
     if (
-      pidAncestorResult.type !==
-      "ancestor_pid"
+      stepAncestorResult.type !==
+      "step_ancestor"
     ) {
       continue;
     }
@@ -36322,10 +35926,10 @@ getPidAncestorOfSpouse(fromId, toId) {
     return {
 
       type:
-        "ancestor_pid_of_spouse",
+        "step_ancestor_of_spouse",
 
       relation:
-        "ancestor_pid_of_spouse",
+        "step_ancestor_of_spouse",
 
       fromId:
         fromKey,
@@ -36339,10 +35943,10 @@ getPidAncestorOfSpouse(fromId, toId) {
       // ====================================================
 
       spouseId:
-        pidAncestorResult.spouseId,
+        stepAncestorResult.spouseId,
 
       spouseName:
-        pidAncestorResult.spouseName,
+        stepAncestorResult.spouseName,
 
 
       // ====================================================
@@ -36350,7 +35954,7 @@ getPidAncestorOfSpouse(fromId, toId) {
       // ====================================================
 
       generation:
-        pidAncestorResult.generation,
+        stepAncestorResult.generation,
 
 
       // ====================================================
@@ -36358,7 +35962,7 @@ getPidAncestorOfSpouse(fromId, toId) {
       // ====================================================
 
       side:
-        pidAncestorResult.side,
+        stepAncestorResult.side,
 
 
       // ====================================================
@@ -36366,18 +35970,18 @@ getPidAncestorOfSpouse(fromId, toId) {
       // ====================================================
 
       label:
-        pidAncestorResult.label,
+        stepAncestorResult.label,
 
 
       // ====================================================
-      // FULL / HALF
+      // FULL / STEP
       //
       // FROM → ancestor spouse
       // ====================================================
 
       ancestorType:
-        pidAncestorResult.ancestorType ||
-        "half",
+        stepAncestorResult.ancestorType ||
+        "step_ancestor_type_reader",
 
 
       // ====================================================
@@ -36385,8 +35989,8 @@ getPidAncestorOfSpouse(fromId, toId) {
       // ====================================================
 
       spouseAncestorType:
-        pidAncestorResult.spouseAncestorType ||
-        "full",
+        stepAncestorResult.spouseAncestorType ||
+        "full_ancestor_type_reader",
 
 
       // ====================================================
@@ -36394,8 +35998,8 @@ getPidAncestorOfSpouse(fromId, toId) {
       // ====================================================
 
       ancestorPath:
-        pidAncestorResult.ancestorPath ||
-        pidAncestorResult.spouseAncestorPath ||
+        stepAncestorResult.ancestorPath ||
+        stepAncestorResult.spouseAncestorPath ||
         null,
 
 
@@ -36413,7 +36017,7 @@ getPidAncestorOfSpouse(fromId, toId) {
 
   return null;
 
-}, // <-- end getPidAncestorOfSpouse
+}, // <-- end getStepAncestorOfSpouse
 
 
 // ============================================================
@@ -36443,7 +36047,7 @@ getPidAncestorOfSpouse(fromId, toId) {
 // Hasil:
 //
 // coba21 → Kusnaeni
-// = ancestor_pid_reverse_of_spouse
+// = step_ancestor_reverse_of_spouse
 // = generation 3
 //
 // Label:
@@ -36469,7 +36073,7 @@ getPidAncestorOfSpouse(fromId, toId) {
   //
   // ============================================================
 
-getPidAncestorReverseOfSpouse(fromId, toId) {
+getStepAncestorReverseOfSpouse(fromId, toId) {
 
     const fromKey = String(fromId);
     const toKey   = String(toId);
@@ -36537,8 +36141,8 @@ getPidAncestorReverseOfSpouse(fromId, toId) {
       // ======================================================
 
       const reverseResult =
-        window.WhoPidAncestorRelation
-          ?.getPidAncestorReverse?.(
+       window.WhoStepAncestorRelation
+          ?.getStepAncestorReverse?.(
             spouseId,
             toKey
           );
@@ -36554,9 +36158,9 @@ getPidAncestorReverseOfSpouse(fromId, toId) {
 
       if (
         reverseResult.type !==
-          "ancestor_pid_reverse" &&
+          "step_ancestor_reverse" &&
         reverseResult.relation !==
-          "ancestor_pid_reverse"
+          "step_ancestor_reverse"
       ) {
         continue;
       }
@@ -36569,10 +36173,10 @@ getPidAncestorReverseOfSpouse(fromId, toId) {
       return {
 
         type:
-          "ancestor_pid_reverse_of_spouse",
+          "step_ancestor_reverse_of_spouse",
 
         relation:
-          "ancestor_pid_reverse_of_spouse",
+          "step_ancestor_reverse_of_spouse",
 
         fromId:
           fromKey,
@@ -36602,7 +36206,7 @@ getPidAncestorReverseOfSpouse(fromId, toId) {
           reverseResult.ancestorSpouseName,
 
         direction:
-          "descendant_to_ancestor_pid",
+          "descendant_spouse_to_step_ancestor",
 
         reverse:
           true
@@ -36612,10 +36216,986 @@ getPidAncestorReverseOfSpouse(fromId, toId) {
 
     return null;
 
-  } // <-- end getPidAncestorReverseOfSpouse
+  } // <-- end getStepAncestorReverseOfSpouse
 
-}; // <-- end WhoPidAncestorRelation
-//---------------------------------------------------------------------
+}; // <-- end window.WhoStepAncestorRelation
+//-------------------------------------------------------------------
+
+
+// ============================================================
+// WHO TO WHOM
+// WHO ANCESTOR SIBLING
+// SAUDARA DARI LELUHUR/MOYANG
+//
+// REFACTOR DARI EXTENDED_AUNT_UNCLE
+// SEMUA LOGIKA PAKAI AUNT/UNCLE & NIECE/NEPHEW JANGAN DIUBAH!!
+// ============================================================
+
+window.WhoAncestorSiblingRelation = {
+
+  // ============================================================
+  // CENTRAL GET
+  // ============================================================
+
+  get(fromId, toId) {
+
+    const fromKey = String(fromId);
+    const toKey   = String(toId);
+   
+    // ========================================================
+    // 5. GENEALOGY EXTENDED AUNT / UNCLE
+    // ========================================================
+
+    const ancestorSibling =
+      GenealogyEngine
+        .GenealogyAncestorSibling
+        .get(
+          fromKey,
+          toKey
+        );
+
+    if (ancestorSibling) {
+
+
+    console.log(
+      "🔎 [EXTENDED AUNT/UNCLE]",
+        ancestorSibling
+    );
+
+
+      return {
+
+        type:
+          WHO_RELATIONS.AUNT_UNCLE,
+
+        relation:
+          "genealogy_ancestor_sibling",
+
+        fromId:
+          fromKey,
+
+        toId:
+          toKey,
+
+        via: {
+
+          type:
+            "genealogy_ancestor_sibling",
+
+          genealogical:
+            ancestorSibling
+
+        }
+
+      };
+
+    }
+
+    // ========================================================
+    // 6. SPOUSE OF GENEALOGY EXTENDED AUNT / UNCLE
+    // ========================================================
+
+    const spouseOfAncestorSibling =
+      this.getSpouseOfGenealogyAncestorSibling(
+        fromKey,
+        toKey
+      );
+
+    if (spouseOfAncestorSibling) {
+      return spouseOfAncestorSibling;
+    }
+
+    // ========================================================
+    // 7. GENEALOGY EXTENDED AUNT / UNCLE DARI PASANGAN
+    // ========================================================
+
+    const genealogyAncestorSiblingOfSpouse =
+      this.getGenealogyAncestorSiblingOfSpouse(
+        fromKey,
+        toKey
+      );
+
+    if (genealogyAncestorSiblingOfSpouse) {
+
+      return {
+
+        type:
+          WHO_RELATIONS.AUNT_UNCLE,
+
+        relation:
+          "genealogy_ancestor_sibling_of_spouse",
+
+        fromId:
+          fromKey,
+
+        toId:
+          toKey,
+
+        via: {
+
+          type:
+            "genealogy_ancestor_sibling_of_spouse",
+
+          spouseOfTo:
+            genealogyAncestorSiblingOfSpouse.spouseOfTo,
+
+          genealogical:
+            genealogyAncestorSiblingOfSpouse.genealogical
+
+        }
+
+      };
+
+    }
+
+    // ========================================================
+    // 8. SPOUSE OF GENEALOGY EXTENDED AUNT / UNCLE DARI PASANGAN
+    // ========================================================
+
+    const spouseOfGenealogyAncestorSiblingOfSpouse =
+      this.getSpouseOfGenealogyAncestorSiblingOfSpouse(
+        fromKey,
+        toKey
+      );
+
+    if (spouseOfGenealogyAncestorSiblingOfSpouse) {
+
+      return spouseOfGenealogyAncestorSiblingOfSpouse;
+
+    }
+
+    // ========================================================
+    // BELUM ADA
+    // ========================================================
+
+    return null;
+
+  }, // <-- end get(fromId, toId)
+
+  // ============================================================
+  // INDIVIDUAL RELATION FUNCTIONS
+  // ========================================================
+
+
+  // ========================================================
+  // GENEALOGY EXTENDED AUNT / UNCLE OF SPOUSE
+  //
+  // FROM = aunt/uncle secara genealogis
+  // TO   = pasangan dari orang tersebut
+  //
+  // Contoh:
+  //
+  // Alwan → Alishka
+  // = Pakde/Bude generasi 2
+  //
+  // Alishka → coba16
+  // = spouse
+  //
+  // Alwan → coba16
+  // = Pakde/Bude generasi 2 dari pasangan
+  // ========================================================
+
+  getGenealogyAncestorSiblingOfSpouse(
+    fromId,
+    toId
+  ) {
+
+    const from =
+      FamilyRepository.getPerson(fromId);
+
+    const to =
+      FamilyRepository.getPerson(toId);
+
+    if (!from || !to) {
+      return null;
+    }
+
+
+    // ======================================================
+    // Cari pasangan TO
+    // coba16 → Alishka
+    // ======================================================
+
+    const spouses =
+      WhoSpouseReader.getSpouses(to.id);
+
+
+    for (const spouse of spouses) {
+
+      // ====================================================
+      // Cek:
+      //
+      // Alwan → Alishka
+      //
+      // Apakah FROM adalah genealogy extended aunt/uncle
+      // dari pasangan TO?
+      // ====================================================
+
+      const genealogy =
+        GenealogyEngine
+          .GenealogyAncestorSibling
+          .get(
+            from.id,
+            spouse.id
+          );
+
+
+      if (!genealogy) {
+        continue;
+      }
+
+
+      return {
+
+        fromId:
+          String(from.id),
+
+        toId:
+          String(to.id),
+
+        spouseOfTo:
+          String(spouse.id),
+
+        genealogical:
+          genealogy
+
+      };
+
+    }
+
+
+    return null;
+
+  }, // <-- end getGenealogyAncestorSiblingOfSpouse
+
+getSpouseOfGenealogyAncestorSiblingOfSpouse(fromId, toId) {
+
+    const from =
+      FamilyRepository.getPerson(fromId);
+
+    const to =
+      FamilyRepository.getPerson(toId);
+
+    if (!from || !to) {
+      return null;
+    }
+
+
+    // ======================================================
+    // FROM = Umar
+    // TO   = coba16
+    //
+    // Umar  = pasangan Alwan
+    // Alwan = extended aunt/uncle dari Alishka
+    // Alishka = pasangan coba16
+    //
+    // Jadi:
+    //
+    // Umar → Alwan → Alishka → coba16
+    // ======================================================
+
+    const fromSpouses =
+      WhoSpouseReader.getSpouses(from.id);
+
+    const toSpouses =
+      WhoSpouseReader.getSpouses(to.id);
+
+
+    // ======================================================
+    // Cari pasangan FROM
+    // ======================================================
+
+    for (const fromSpouse of fromSpouses) {
+
+      const auntUncle =
+        FamilyRepository.getPerson(
+          String(fromSpouse.id)
+        );
+
+      if (!auntUncle) {
+        continue;
+      }
+
+
+      // ====================================================
+      // Cari pasangan TO
+      // ====================================================
+
+      for (const toSpouse of toSpouses) {
+
+        const nieceNephew =
+          FamilyRepository.getPerson(
+            String(toSpouse.id)
+          );
+
+        if (!nieceNephew) {
+          continue;
+        }
+
+
+        // ==================================================
+        // Cek hubungan genealogy:
+        //
+        // Alwan → Alishka
+        // ==================================================
+
+        const genealogical =
+          GenealogyEngine
+            .GenealogyAncestorSibling
+            .get(
+              auntUncle.id,
+              nieceNephew.id
+            );
+
+
+        if (!genealogical) {
+          continue;
+        }
+
+
+        // ==================================================
+        // Pastikan memang pasangan
+        // ==================================================
+
+        const fromIsSpouse =
+          WhoSpouseReader
+            .getSpouses(auntUncle.id)
+            .some(spouse =>
+              String(spouse.id) ===
+              String(from.id)
+            );
+
+        if (!fromIsSpouse) {
+          continue;
+        }
+
+
+        const toIsSpouse =
+          WhoSpouseReader
+            .getSpouses(nieceNephew.id)
+            .some(spouse =>
+              String(spouse.id) ===
+              String(to.id)
+            );
+
+        if (!toIsSpouse) {
+          continue;
+        }
+
+
+        // ==================================================
+        // RESULT
+        // ==================================================
+
+        return {
+
+          type:
+            WHO_RELATIONS.AUNT_UNCLE,
+
+          relation:
+            "spouse_of_genealogy_ancestor_sibling_of_spouse",
+
+          fromId:
+            String(from.id),
+
+          toId:
+            String(to.id),
+
+          via: {
+
+            type:
+              "spouse_of_genealogy_ancestor_sibling_of_spouse",
+
+            spouseOfFrom:
+              String(auntUncle.id),
+
+            auntUncle:
+              String(auntUncle.id),
+
+            nieceNephew:
+              String(nieceNephew.id),
+
+            spouseOfTo:
+              String(nieceNephew.id),
+
+            genealogical
+
+          }
+
+        };
+
+      }
+
+    }
+
+
+    return null;
+
+  }, // <-- end getSpouseOfGenealogyAncestorSiblingOfSpouse
+
+getSpouseOfGenealogyAncestorSibling(fromId, toId) {
+
+  const fromKey = String(fromId);
+  const toKey   = String(toId);
+
+  const toPerson =
+    FamilyRepository.getPerson(toKey);
+
+  if (!toPerson) {
+    return null;
+  }
+
+  const spouses =
+    WhoSpouseReader.getSpouses(
+      fromKey
+    );
+
+  for (const spouse of spouses) {
+
+    const ancestorSibling =
+      GenealogyEngine
+        .GenealogyAncestorSibling
+        .get(
+          spouse.id,
+          toKey
+        );
+
+    if (!ancestorSibling) {
+      continue;
+    }
+
+    return {
+
+      type:
+        WHO_RELATIONS.AUNT_UNCLE,
+
+      relation:
+        "spouse_of_genealogy_ancestor_sibling",
+
+      fromId:
+        fromKey,
+
+      toId:
+        toKey,
+
+      via: {
+
+        type:
+          "spouse_of_genealogy_ancestor_sibling",
+
+        spouse:
+          String(fromKey),
+
+        auntUncle:
+          String(spouse.id),
+
+        genealogical:
+          ancestorSibling
+
+      }
+
+    };
+
+  }
+
+  return null;
+
+  } // <-- end getSpouseOfGenealogyAncestorSibling
+
+}; // <-- end WhoAncestorSiblingRelation
+//-------------------------------------------------------------------
+
+// ============================================================
+// WHO TO WHOM
+// WHO SIBLING DESCENDANT
+// KETURUNAN DARI SAUDARA
+//
+// REFACTOR DARI EXTENDED_NIECE_NEPHEW
+// SEMUA LOGIKA PAKAI NIECE/NEPHEW & AUNT/UNCLE JANGAN DIUBAH!!
+// ============================================================
+
+window.WhoSiblingDescendantRelation = {
+
+  // ============================================================
+  // CENTRAL GET
+  // ============================================================
+
+  get(fromId, toId) {
+
+    const fromKey = String(fromId);
+    const toKey   = String(toId);
+
+    // ========================================================
+    // 5. GENEALOGY EXTENDED NIECE / NEPHEW
+    // ========================================================
+
+    const siblingDescendant =
+      GenealogyEngine
+        .GenealogySiblingDescendant
+        .get(
+          fromKey,
+          toKey
+        );
+
+    if (siblingDescendant) {
+
+      return {
+
+        type:
+          WHO_RELATIONS.NIECE_NEPHEW,
+
+        relation:
+          "genealogy_sibling_descendant",
+
+        fromId:
+          fromKey,
+
+        toId:
+          toKey,
+
+        via: {
+
+          type:
+            "genealogy_sibling_descendant",
+
+          genealogical:
+            siblingDescendant
+
+        }
+
+      };
+
+    }
+
+    // ========================================================
+    // 6. GENEALOGY EXTENDED NIECE / NEPHEW OF SPOUSE
+    // ========================================================
+
+    const toPerson =
+      FamilyRepository.getPerson(
+        toKey
+      );
+
+    if (toPerson) {
+
+      const spouses =
+        WhoSpouseReader.getSpouses(
+          toPerson.id
+        );
+
+      for (const spouse of spouses) {
+
+        const extended =
+          GenealogyEngine
+            .GenealogySiblingDescendant
+            .get(
+              fromKey,
+              spouse.id
+            );
+
+        if (!extended) {
+          continue;
+        }
+
+        return {
+
+          type:
+            WHO_RELATIONS.NIECE_NEPHEW,
+
+          relation:
+            "genealogy_sibling_descendant_of_spouse",
+
+          fromId:
+            fromKey,
+
+          toId:
+            toKey,
+
+          via: {
+
+            type:
+              "genealogy_sibling_descendant_of_spouse",
+
+            genealogical:
+              extended,
+
+            spouse:
+              String(spouse.id)
+
+          }
+
+        };
+
+      }
+
+    }
+
+    // ========================================================
+    // 7. SPOUSE OF GENEALOGY EXTENDED NIECE / NEPHEW
+    // ========================================================
+
+    const spouseOfSiblingDescendant =
+      this.getSpouseOfGenealogySiblingDescendant(
+        fromKey,
+        toKey
+      );
+
+    if (spouseOfSiblingDescendant) {
+
+      return spouseOfSiblingDescendant;
+
+    }
+
+    // ========================================================
+    // 8. SPOUSE OF GENEALOGY EXTENDED NIECE / NEPHEW
+    //    DARI PASANGAN
+    // ========================================================
+
+    const spouseOfSiblingDescendantOfSpouse =
+      this.getSpouseOfGenealogySiblingDescendantOfSpouse(
+        fromKey,
+        toKey
+      );
+
+    if (spouseOfSiblingDescendantOfSpouse) {
+
+      return spouseOfSiblingDescendantOfSpouse;
+
+    }
+
+    // ========================================================
+    // BELUM ADA
+    // ========================================================
+
+    return null;
+
+  }, // <-- end get(fromId, toId)
+
+  // ============================================================
+  // INDIVIDUAL RELATION FUNCTIONS
+  // ============================================================
+
+getSpouseOfGenealogySiblingDescendant(fromId, toId) {
+
+  const from =
+    FamilyRepository.getPerson(String(fromId));
+
+  const to =
+    FamilyRepository.getPerson(String(toId));
+
+  if (!from || !to) {
+    return null;
+  }
+
+  // ========================================================
+  // FROM = pasangan Alishka
+  // TO   = Alwan
+  //
+  // pasangan Alishka → spouse → Alishka
+  // Alishka → extended niece/nephew → Alwan
+  // ========================================================
+
+  const spouses =
+    WhoSpouseReader.getSpouses(from.id);
+
+  if (!spouses?.length) {
+    return null;
+  }
+
+  for (const spouse of spouses) {
+
+    const spouseId =
+      String(spouse.id);
+
+    const genealogical =
+      GenealogyEngine
+        .GenealogySiblingDescendant
+        .get(
+          spouseId,
+          String(to.id)
+        );
+
+    if (!genealogical) {
+      continue;
+    }
+
+    // ======================================================
+    // GENERATION — IKUTI GENEALOGY UTAMA
+    // ======================================================
+
+    const ancestorGeneration =
+      genealogical.ancestorGeneration;
+
+    const generationDifference =
+      genealogical.generationDifference;
+
+    // Validasi menggunakan nilai dari genealogy utama.
+    if (
+      !Number.isFinite(Number(ancestorGeneration)) ||
+      Number(ancestorGeneration) < 1
+    ) {
+      continue;
+    }
+
+    // ======================================================
+    // AGE RELATION — IKUTI GENEALOGY UTAMA
+    // Jangan hitung ulang dari WhoSiblingReader.
+    // ======================================================
+
+    const ageRelation =
+      genealogical.ageRelation ?? "unknown";
+
+    // ======================================================
+    // RESULT
+    // ======================================================
+
+    return {
+
+      type:
+        WHO_RELATIONS.NIECE_NEPHEW,
+
+      relation:
+        "spouse_of_genealogy_sibling_descendant",
+
+      fromId:
+        String(from.id),
+
+      toId:
+        String(to.id),
+
+      via: {
+
+        type:
+          "spouse_of_genealogy_sibling_descendant",
+
+        spouseOfFrom:
+          spouseId,
+
+        nieceNephew:
+          spouseId,
+
+        auntUncle:
+          String(to.id),
+
+        genealogical: {
+
+          fromId:
+            String(genealogical.fromId),
+
+          toId:
+            String(genealogical.toId),
+
+          ancestorId:
+            String(genealogical.ancestorId),
+
+          ancestorGeneration:
+            ancestorGeneration,
+
+          generationDifference:
+            generationDifference,
+
+          siblingSubtype:
+            genealogical.siblingSubtype,
+
+          ageRelation:
+            ageRelation
+
+        }
+
+      }
+
+    };
+
+  }
+
+  return null;
+
+}, // <-- end getSpouseOfGenealogySiblingDescendant
+
+  // ========================================================
+  // SPOUSE OF GENEALOGY EXTENDED NIECE / NEPHEW OF SPOUSE
+  //
+  // FROM = pasangan dari extended niece/nephew
+  // TO   = pasangan dari extended aunt/uncle
+  //
+  // Contoh:
+  //
+  // coba16 ── Alishka
+  //              │
+  //              │ extended niece/nephew
+  //              ↓
+  //            Alwan ── Umar
+  //
+  // coba16 → Umar
+  //
+  // = pasangan keponakan generasi 2 dari adik pasangan
+  // ========================================================
+
+  getSpouseOfGenealogySiblingDescendantOfSpouse(
+    fromId,
+    toId
+  ) {
+
+    const from =
+      FamilyRepository.getPerson(fromId);
+
+    const to =
+      FamilyRepository.getPerson(toId);
+
+    if (!from || !to) {
+      return null;
+    }
+
+
+    // ========================================================
+    // FROM = pasangan dari niece/nephew
+    //
+    // coba16 → Alishka
+    // ========================================================
+
+    const spousesOfFrom =
+      WhoSpouseReader.getSpouses(
+        String(from.id)
+      );
+
+    if (!spousesOfFrom?.length) {
+      return null;
+    }
+
+
+    // ========================================================
+    // TO = pasangan dari aunt/uncle
+    //
+    // Umar → Alwan
+    // ========================================================
+
+    const spousesOfTo =
+      WhoSpouseReader.getSpouses(
+        String(to.id)
+      );
+
+    if (!spousesOfTo?.length) {
+      return null;
+    }
+
+
+    // ========================================================
+    // Cari:
+    //
+    // pasangan FROM
+    //        ↓
+    // extended niece/nephew
+    //        ↓
+    // pasangan TO
+    //
+    // coba16
+    //    ↓ spouse
+    // Alishka
+    //    ↓ extended niece/nephew
+    // Alwan
+    //    ↑ spouse
+    // Umar
+    // ========================================================
+
+    for (const spouseOfFrom of spousesOfFrom) {
+
+      const nieceNephewId =
+        String(spouseOfFrom.id);
+
+
+      for (const spouseOfTo of spousesOfTo) {
+
+        const auntUncleId =
+          String(spouseOfTo.id);
+
+
+        // ====================================================
+        // HUBUNGAN UTAMA
+        //
+        // Alishka → Alwan
+        // ====================================================
+
+        const genealogical =
+          GenealogyEngine
+            .GenealogySiblingDescendant
+            .get(
+              nieceNephewId,
+              auntUncleId
+            );
+
+
+        if (!genealogical) {
+          continue;
+        }
+
+
+        // ====================================================
+        // GENERASI
+        // ====================================================
+
+        const generation =
+          Number(
+            genealogical.ancestorGeneration
+          );
+
+        if (
+          !Number.isFinite(generation) ||
+          generation < 1
+        ) {
+          continue;
+        }
+
+
+        // ====================================================
+        // RESULT
+        // ====================================================
+
+        return {
+
+          type:
+            WHO_RELATIONS.NIECE_NEPHEW,
+
+          relation:
+            "spouse_of_genealogy_sibling_descendant_of_spouse",
+
+          fromId:
+            String(from.id),
+
+          toId:
+            String(to.id),
+
+          via: {
+
+            type:
+              "spouse_of_genealogy_sibling_descendant_of_spouse",
+
+            spouseOfFrom:
+              nieceNephewId,
+
+            spouseOfTo:
+              auntUncleId,
+
+            genealogical: {
+
+              ...genealogical
+
+            }
+
+          }
+
+        };
+
+      }
+
+    }
+
+
+    return null;
+
+  } // <-- end getSpouseOfGenealogySiblingDescendantOfSpouse
+
+}; // <-- end WhoSiblingDescendantRelation
+//-----------------------------------------------------------------------
 
 
 // ============================================================
@@ -37727,186 +38307,6 @@ GenealogyAuntUncle: {
 
 }, // <-- end GenealogyAuntUncle
 
-// ==========================================================
-// GENEALOGY EXTENDED AUNT / UNCLE
-// Pure genealogical calculation
-//
-// Contoh:
-// Alwan → Alishka
-//
-// Karmeni
-// ├── Alwan
-// └── Ainun
-//     └── Rofiq
-//         └── Alishka
-//
-// Alwan adalah sibling dari ancestor Alishka
-// pada generasi ke-2.
-//
-// TIDAK menentukan older / younger.
-// Older / younger tetap:
-// WhoSiblingReader.getSiblingAge()
-// ==========================================================
-
-GenealogyExtendedAuntUncle: {
-
-  get(fromId, toId) {
-
-    const from =
-      FamilyRepository.getPerson(fromId);
-
-    const to =
-      FamilyRepository.getPerson(toId);
-
-    if (!from || !to) {
-      return null;
-    }
-
-
-    // ========================================================
-    // CARI SEMUA ANCESTOR TO
-    // ========================================================
-
-    const ancestorDistances =
-      GenealogyEngine.GenealogyAuntUncle
-        .getAncestorDistances(to.id);
-
-
-    // ========================================================
-    // CARI ANCESTOR YANG MERUPAKAN SIBLING DARI FROM
-    //
-    // Jangan menentukan older / younger di sini.
-    // Cukup pastikan hubungan sibling secara genealogis.
-    // ========================================================
-
-    let bestMatch = null;
-
-
-    for (
-      const [
-        ancestorId,
-        distance
-      ]
-      of ancestorDistances.entries()
-    ) {
-
-      // TO sendiri bukan ancestor
-      if (
-        String(ancestorId) ===
-        String(to.id)
-      ) {
-        continue;
-      }
-
-
-      // FROM tidak boleh menjadi ancestor TO
-      if (
-        String(ancestorId) ===
-        String(from.id)
-      ) {
-        continue;
-      }
-
-
-      const sibling =
-        WhoSiblingReader.getSiblingType(
-          from.id,
-          ancestorId
-        );
-
-
-      if (!sibling) {
-        continue;
-      }
-
-      const siblingAge =
-        WhoSiblingReader.getSiblingAge(
-          from.id,
-          ancestorId
-      );
-  
-
-      // ======================================================
-      // SIMPAN MATCH TERDEKAT
-      //
-      // distance:
-      // 1 = sibling dari parent
-      // 2 = sibling dari grandparent
-      // 3 = sibling dari great-grandparent
-      // dst.
-      // ======================================================
-
-      if (
-        !bestMatch ||
-        distance <
-        bestMatch.ancestorGeneration
-      ) {
-
-        bestMatch = {
-
-          ancestorId:
-            String(ancestorId),
-
-          ancestorGeneration:
-            distance,
-
-          siblingSubtype:
-            sibling.subtype,
-
-          ageRelation:
-            siblingAge?.ageRelation ?? "unknown"
-
-
-        };
-
-      }
-
-    }
-
-
-    // ========================================================
-    // TIDAK ADA EXTENDED AUNT / UNCLE
-    // ========================================================
-
-    if (!bestMatch) {
-      return null;
-    }
-
-
-    // ========================================================
-    // PURE GENEALOGICAL RESULT
-    // ========================================================
-
-    return {
-
-      fromId:
-        String(from.id),
-
-      toId:
-        String(to.id),
-
-      ancestorId:
-        bestMatch.ancestorId,
-
-      ancestorGeneration:
-        bestMatch.ancestorGeneration,
-
-      generationDifference:
-        bestMatch.ancestorGeneration - 1,
-
-      siblingSubtype:
-        bestMatch.siblingSubtype,
-
-      ageRelation:
-        bestMatch.ageRelation
-
-
-
-    };
-
-  }
-
-}, // <-- end GenealogyExtendedAuntUncle
 
 // ==========================================================
 // GENEALOGY NIECE / NEPHEW
@@ -38330,6 +38730,192 @@ GenealogyNieceNephew: {
 
 
 // ==========================================================
+// GENEALOGY EXTENDED AUNT / UNCLE
+// Pure genealogical calculation
+//
+// Contoh:
+// Alwan → Alishka
+//
+// Karmeni
+// ├── Alwan
+// └── Ainun
+//     └── Rofiq
+//         └── Alishka
+//
+// Alwan adalah sibling dari ancestor Alishka
+// pada generasi ke-2.
+//
+// TIDAK menentukan older / younger.
+// Older / younger tetap:
+// WhoSiblingReader.getSiblingAge()
+//
+// ganti GenealogyAncestorSibling
+// logika tetap sama
+// nama disesuaikan saudara dari leluhur
+// ==========================================================
+
+GenealogyAncestorSibling: {
+
+  get(fromId, toId) {
+
+    const from =
+      FamilyRepository.getPerson(fromId);
+
+    const to =
+      FamilyRepository.getPerson(toId);
+
+    if (!from || !to) {
+      return null;
+    }
+
+
+    // ========================================================
+    // CARI SEMUA ANCESTOR TO
+    // ========================================================
+
+    const ancestorDistances =
+      GenealogyEngine.GenealogyAuntUncle
+        .getAncestorDistances(to.id);
+
+
+    // ========================================================
+    // CARI ANCESTOR YANG MERUPAKAN SIBLING DARI FROM
+    //
+    // Jangan menentukan older / younger di sini.
+    // Cukup pastikan hubungan sibling secara genealogis.
+    // ========================================================
+
+    let bestMatch = null;
+
+
+    for (
+      const [
+        ancestorId,
+        distance
+      ]
+      of ancestorDistances.entries()
+    ) {
+
+      // TO sendiri bukan ancestor
+      if (
+        String(ancestorId) ===
+        String(to.id)
+      ) {
+        continue;
+      }
+
+
+      // FROM tidak boleh menjadi ancestor TO
+      if (
+        String(ancestorId) ===
+        String(from.id)
+      ) {
+        continue;
+      }
+
+
+      const sibling =
+        WhoSiblingReader.getSiblingType(
+          from.id,
+          ancestorId
+        );
+
+
+      if (!sibling) {
+        continue;
+      }
+
+      const siblingAge =
+        WhoSiblingReader.getSiblingAge(
+          from.id,
+          ancestorId
+      );
+  
+
+      // ======================================================
+      // SIMPAN MATCH TERDEKAT
+      //
+      // distance:
+      // 1 = sibling dari parent
+      // 2 = sibling dari grandparent
+      // 3 = sibling dari great-grandparent
+      // dst.
+      // ======================================================
+
+      if (
+        !bestMatch ||
+        distance <
+        bestMatch.ancestorGeneration
+      ) {
+
+        bestMatch = {
+
+          ancestorId:
+            String(ancestorId),
+
+          ancestorGeneration:
+            distance,
+
+          siblingSubtype:
+            sibling.subtype,
+
+          ageRelation:
+            siblingAge?.ageRelation ?? "unknown"
+
+
+        };
+
+      }
+
+    }
+
+
+    // ========================================================
+    // TIDAK ADA EXTENDED AUNT / UNCLE
+    // ========================================================
+
+    if (!bestMatch) {
+      return null;
+    }
+
+
+    // ========================================================
+    // PURE GENEALOGICAL RESULT
+    // ========================================================
+
+    return {
+
+      fromId:
+        String(from.id),
+
+      toId:
+        String(to.id),
+
+      ancestorId:
+        bestMatch.ancestorId,
+
+      ancestorGeneration:
+        bestMatch.ancestorGeneration,
+
+      generationDifference:
+        bestMatch.ancestorGeneration - 1,
+
+      siblingSubtype:
+        bestMatch.siblingSubtype,
+
+      ageRelation:
+        bestMatch.ageRelation
+
+
+
+    };
+
+  }
+
+}, // <-- end GenealogyAncestorSibling
+
+
+// ==========================================================
 // GENEALOGY EXTENDED NIECE / NEPHEW
 //
 // Pure genealogical calculation.
@@ -38354,9 +38940,13 @@ GenealogyNieceNephew: {
 // TIDAK menentukan older / younger.
 // Older / younger tetap:
 // WhoSiblingReader.getSiblingAge()
+//
+// ganti GenealogySiblingDescendant
+// logika tetap sama
+// nama disesuaikan keturunan dari saudara
 // ==========================================================
 
-GenealogyExtendedNieceNephew: {
+GenealogySiblingDescendant: {
 
   get(fromId, toId) {
 
@@ -38490,10 +39080,10 @@ GenealogyExtendedNieceNephew: {
 
   }
 
-} // <-- end GenealogyExtendedNieceNephew
+} // <-- end GenealogySiblingDescendant
 
 }; // <-- end GenealogyEngine  
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ============================================================
@@ -40158,7 +40748,7 @@ GenealogySideStepParent: {
 } // <-- end GenealogySideStepParent
 
 }; // <-- end getGenealogySide  
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ============================================================
@@ -40215,20 +40805,7 @@ const generation =
   );
 
 if (generation) {
-
-  const side =
-    window.getGenealogySide
-      ?.GenealogySideGeneration
-      ?.get(
-        fromKey,
-        generation
-      ) ?? "unknown";
-
-  return {
-    ...generation,
-    side
-  };
-
+  return generation;
 }
 
     // ========================================================
@@ -40244,6 +40821,7 @@ if (generation) {
     if (spouseGeneration) {
       return spouseGeneration;
     }
+
     // ========================================================
     // 4. SPOUSE
     // ========================================================
@@ -40389,17 +40967,45 @@ if (cousinRelation) {
 }
 
 // ========================================================
-// 12. PID ANCESTOR
+// 12. STEP ANCESTOR
 // ========================================================
 
-const pidAncestorRelation =
-  WhoPidAncestorRelation.get(
+const stepAncestorRelation =
+  WhoStepAncestorRelation.get(
     fromKey,
     toKey
   );
 
-if (pidAncestorRelation) {
-  return pidAncestorRelation;
+if (stepAncestorRelation) {
+  return stepAncestorRelation;
+}
+
+// ========================================================
+// 13. ANCESTOR SIBLING
+// ========================================================
+
+const ancestorSiblingRelation =
+  WhoAncestorSiblingRelation.get(
+    fromKey,
+    toKey
+  );
+
+if (ancestorSiblingRelation) {
+  return ancestorSiblingRelation;
+}
+
+// ========================================================
+// 14. SIBLING DESCENDANT
+// ========================================================
+
+const siblingDescendantRelation =
+  WhoSiblingDescendantRelation.get(
+    fromKey,
+    toKey
+  );
+
+if (siblingDescendantRelation) {
+  return siblingDescendantRelation;
 }
 
 // ========================================================
@@ -40411,7 +41017,7 @@ return null;
   }
 
 }; // <-- end WhoToWhom
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 //KHUSUS MATERNAL PATERNAL.
@@ -40442,6 +41048,10 @@ function applyWhoSideLabel(
     }
   );
 
+  console.trace(
+    "📍 applyWhoSideLabel caller"
+  );
+
 // ======================================================
 // TIDAK ADA SIDE
 // tidak mempunyai side, dia tetap perlu diproses.
@@ -40460,16 +41070,16 @@ if (
   result.relation !== "younger_half_sibling" &&
 
   result.type !==
-    "ancestor_pid_reverse" &&
+    "step_ancestor_reverse" &&
 
   result.relation !==
-    "ancestor_pid_reverse" &&
+    "step_ancestor_reverse" &&
 
   result.type !==
-    "ancestor_pid_reverse_of_spouse" &&
+    "step_ancestor_reverse_of_spouse" &&
 
   result.relation !==
-    "ancestor_pid_reverse_of_spouse"
+    "step_ancestor_reverse_of_spouse"
 ) {
 
   return label;
@@ -40823,8 +41433,8 @@ if (
 
 if (
   (
-    result.type === "ancestor_pid" ||
-    result.relation === "ancestor_pid"
+    result.type === "step_ancestor" ||
+    result.relation === "step_ancestor"
   ) &&
 
   // ====================================================
@@ -40836,7 +41446,7 @@ if (
 
   !(
     result.direction ===
-      "descendant_to_ancestor_pid" &&
+      "descendant_to_step_ancestor" &&
     result.reverse === true
   )
 ) {
@@ -40961,10 +41571,10 @@ if (
 
   if (
     result.type ===
-      "ancestor_pid_reverse" ||
+      "step_ancestor_reverse" ||
 
     result.relation ===
-      "ancestor_pid_reverse"
+      "step_ancestor_reverse"
   ) {
 
     const generation =
@@ -41044,9 +41654,9 @@ if (
 if (
   (
     result.type ===
-      "ancestor_pid_of_spouse" ||
+      "step_ancestor_of_spouse" ||
     result.relation ===
-      "ancestor_pid_of_spouse"
+      "step_ancestor_of_spouse"
   )
 ) {
 
@@ -41131,8 +41741,8 @@ if (
 // ======================================================
 
 if (
-  result.type === "ancestor_pid_reverse_of_spouse" ||
-  result.relation === "ancestor_pid_reverse_of_spouse"
+  result.type === "step_ancestor_reverse_of_spouse" ||
+  result.relation === "step_ancestor_reverse_of_spouse"
 ) {
   const generation = Number(result.generation);
 
@@ -41616,7 +42226,7 @@ if (
 // ======================================================
 
 if (
-  result.relation === "older_spouse_of_aunt_uncle"
+  result.relation === "spouse_of_older_aunt_uncle"
 ) {
 
   return (
@@ -41641,7 +42251,7 @@ if (
 // ======================================================
 
 if (
-  result.relation === "younger_spouse_of_aunt_uncle"
+  result.relation === "spouse_of_younger_aunt_uncle"
 ) {
 
   return (
@@ -41699,7 +42309,7 @@ if (
 
 if (
   result.relation ===
-    "older_spouse_of_aunt_uncle_of_spouse"
+    "spouse_of_older_aunt_uncle_of_spouse"
 ) {
 
   return (
@@ -41730,12 +42340,12 @@ if (
 // ======================================================
 
 if (
-  result.relation === "cousin_older" ||
-  result.relation === "cousin_younger"
+  result.relation === "older_cousin" ||
+  result.relation === "younger_cousin"
 ) {
 
   const isOlder =
-    result.relation === "cousin_older";
+    result.relation === "older_cousin";
 
   return (
     label.replace(
@@ -41768,12 +42378,12 @@ if (
   // ======================================================
 
 if (
-  result.relation === "older_spouse_of_cousin" ||
-  result.relation === "younger_spouse_of_cousin"
+  result.relation === "spouse_of_older_cousin" ||
+  result.relation === "spouse_of_younger_cousin"
 ) {
 
   const isOlder =
-    result.relation === "older_spouse_of_cousin";
+    result.relation === "spouse_of_older_cousin";
 
   return (
     label
@@ -42289,14 +42899,14 @@ if (
 
 if (
   result.relation ===
-    "older_spouse_of_aunt_uncle_of_spouse" ||
+    "spouse_of_older_aunt_uncle_of_spouse" ||
   result.relation ===
-    "younger_spouse_of_aunt_uncle_of_spouse"
+    "spouse_of_younger_aunt_uncle_of_spouse"
 ) {
 
   const isOlder =
     result.relation ===
-      "older_spouse_of_aunt_uncle_of_spouse";
+      "spouse_of_older_aunt_uncle_of_spouse";
 
   return (
     label
@@ -42513,7 +43123,7 @@ if (
   );
 
 } // <-- end applyWhoSideLabel
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ==========================================================
@@ -42587,7 +43197,8 @@ function renderWhoResult(
 label =
   applyWhoSideLabel(
     label,
-    result
+    result,
+    "renderWhoResult"
   );
 
 console.log(
@@ -42659,7 +43270,7 @@ console.log(
       "block";
 
 } // <-- end renderWhoResult
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 //Relationship knowledge dan graph connectivity adalah dua hal berbeda
 
 
@@ -42735,7 +43346,7 @@ if (document.readyState === "loading") {
   window.UI.createAskMeButton();
 
 } // ← TUTUP createAskMeButton
-//-----------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ============================================================
@@ -42997,7 +43608,7 @@ setupWhoModalClose();
 setupWhoShow();
 
 }; // ← end window.UI.openWhoModal
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // ============================================================
 // ASK ME — DATA
@@ -43064,7 +43675,7 @@ function findWhoPerson(value) {
   return partial || null;
 
 } // ← end findWhoPerson
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // ============================================================
 // ASK ME — AUTOCOMPLETE FROM / TO
@@ -43182,7 +43793,7 @@ function setupWhoAutocomplete(inputId, suggestionsId) {
   }); 
 
 } // ← end setupWhoAutocomplete
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
   // ============================================================
   // KEYBOARD ASKME
@@ -43341,7 +43952,7 @@ function setupWhoAutocompleteKeyboard(
   );
 
 }  // ← TUTUP setupWhoAutocompleteKeyboard
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // ============================================================
 // PILIH PERSON
@@ -43403,7 +44014,7 @@ function selectWhoPerson(
   }
 
 } // ← TUTUP selectWhoPerson
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // ============================================================
 // ASK ME — KEYBOARD PICKER
@@ -43420,7 +44031,7 @@ window.WHO_PICKER_STATE = {
     items: []
   }
 };
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // ============================================================
 // HIGHLIGHT KEYBOARD
@@ -43460,7 +44071,7 @@ function updateWhoHighlight(
   }
 
 }
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // ==========================================================
 // ASK ME — PERSON TERAKHIR
@@ -43483,7 +44094,7 @@ function setupWhoAsk() {
     );
 
 }
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // ==========================================================
 // HANDLE ASK
@@ -43626,7 +44237,7 @@ renderWhoResult(
 );
 
 } // ← end handleWhoAsk
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ==========================================================
@@ -43643,7 +44254,7 @@ function setupWhoShow() {
     );
 
 }
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ==========================================================
@@ -43768,7 +44379,7 @@ children.forEach(child => {
   return null;
 
 } // ← end findWhoRelationPath
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ==========================================================
@@ -44585,7 +45196,7 @@ function reorderWhoCoSpouse(
 
 } // ← end reorderWhoCoSpouse
 
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ========================================================
@@ -45599,7 +46210,7 @@ function reorderWhoStepChild(
   );
 
 } // ← end reorderWhoStepChild
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 
@@ -45737,7 +46348,7 @@ setupWhoShowClose();
     );
 
 } // ← end handleWhoShow
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // ========================================================
 // CLOSE SHOW
@@ -45757,7 +46368,7 @@ function closeWhoRelationPath() {
   window.whoRelationTree = null;
 
 }
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // ========================================================
 // SETUP CLOSE SHOW
@@ -45773,7 +46384,7 @@ function setupWhoShowClose() {
     );
 
 }
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // ========================================================
 // CLOSE ASK ME MODAL
@@ -45800,13 +46411,1214 @@ function setupWhoModalClose() {
     );
 
 }
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // ==================================================================================================== 
-    //DRAG RELATIONSHIP GAME
-   // e.target.closest("g.node")
-   //e.target.closest("g.node")?.getAttribute("data-n-id")
+    // MAHRAM
+//==================================================================================================== 
 
+// Secara arsitektur mesin
+// MAHRAM
+// │
+// ├── 1. NASAB
+// │
+// ├── 2. RADHA'AH
+// │       (tidak pakai)
+// │
+// └── 3. MUSAHAHARAH
+
+// ============================================================
+// MAHRAM ENGINE
+// ------------------------------------------------------------
+// MahramEngine TIDAK menghitung silsilah.
+//
+// SINGLE SOURCE OF TRUTH:
+//     WhoToWhom.get(fromId, toId)
+//
+// Tugas MahramEngine hanya:
+//     "Hubungan ini termasuk mahram atau bukan?"
+// ============================================================
+
+window.MahramEngine = {
+
+  // ==========================================================
+  // PUBLIC
+  // ==========================================================
+
+  get(fromId, toId) {
+
+    const fromKey = String(fromId);
+    const toKey   = String(toId);
+
+    // --------------------------------------------------------
+    // INVALID
+    // --------------------------------------------------------
+
+    if (!fromId || !toId) {
+      return this._unknown(
+        fromKey,
+        toKey,
+        "INVALID_ID"
+      );
+    }
+
+
+    // --------------------------------------------------------
+    // SELF
+    // --------------------------------------------------------
+
+    if (fromKey === toKey) {
+
+      return {
+        status: "self",
+        isMahram: false,
+
+        category: null,
+
+        relationType: "self",
+        relation: "self",
+
+        reasonCode: "SELF",
+
+        fromId: fromKey,
+        toId: toKey,
+
+        source: {
+          engine: "WhoToWhom",
+          relation: {
+            type: "self",
+            fromId: fromKey,
+            toId: toKey
+          }
+        }
+      };
+
+    }
+
+
+    // --------------------------------------------------------
+    // PERSON EXISTENCE
+    // --------------------------------------------------------
+
+    const fromPerson =
+      window.FamilyRepository?.getPerson(fromKey);
+
+    const toPerson =
+      window.FamilyRepository?.getPerson(toKey);
+
+    if (!fromPerson || !toPerson) {
+
+      return this._unknown(
+        fromKey,
+        toKey,
+        "PERSON_NOT_FOUND"
+      );
+
+    }
+
+
+    // ========================================================
+    // SINGLE TRUTH SOURCE
+    // ========================================================
+
+    const relation =
+      window.WhoToWhom?.get?.(
+        fromKey,
+        toKey
+      );
+
+
+    // --------------------------------------------------------
+    // NO RELATION
+    // --------------------------------------------------------
+
+    if (!relation) {
+
+      return this._unknown(
+        fromKey,
+        toKey,
+        "RELATION_NOT_FOUND"
+      );
+
+    }
+
+
+    // ========================================================
+    // EVALUATE
+    // ========================================================
+
+    return this._evaluate(
+      fromKey,
+      toKey,
+      relation
+    );
+
+  },
+
+
+  // ==========================================================
+  // EVALUATOR
+  // ==========================================================
+
+  _evaluate(fromId, toId, relation) {
+
+    const context = {
+      fromId,
+      toId,
+      relation
+    };
+
+
+    // ========================================================
+    // 1. NASAB
+    // ========================================================
+
+    const nasab =
+      this._evaluateNasab(context);
+
+    if (nasab) {
+      return this._buildResult(
+        context,
+        nasab
+      );
+    }
+
+
+    // ========================================================
+    // 2. MUSHĀHARAH
+    // QS An-Nisa 4:23
+    // DISABLED
+    //
+    // Dataset hanya:
+    //   id, fid, mid, pid
+    //
+    // MahramEngine ini hanya menghitung MAHRAM NASAB.
+    // Jangan menginfer mushaharah dari pid.
+    // ========================================================
+
+    const mushaharah =
+      this._evaluateMushaharah(context);
+
+    if (mushaharah) {
+      return this._buildResult(
+        context,
+        mushaharah
+      );
+    }
+
+
+    // ========================================================
+    // 3. RADHA'AH
+    // RADHAAH / MILK KINSHIP DISABLED
+    // Dataset hanya memiliki id, fid, mid, pid.
+    // Jangan pernah menginfer hubungan persusuan dari data nasab.
+    // ========================================================
+
+    const radhaah =
+      this._evaluateRadhaah(context);
+
+    if (radhaah) {
+      return this._buildResult(
+        context,
+        radhaah
+      );
+    }
+
+
+    // ========================================================
+    // 4. BELUM BISA DIKLASIFIKASIKAN
+    // ========================================================
+
+    return this._unknown(
+      fromId,
+      toId,
+      "RELATION_NOT_CLASSIFIED",
+      relation
+    );
+
+  },
+
+
+  // ==========================================================
+  // NASAB
+  // ==========================================================
+
+  _evaluateNasab({ relation }) {
+
+    const type =
+      relation?.type;
+
+    const rel =
+      relation?.relation;
+
+
+    // --------------------------------------------------------
+    // PARENT
+    // --------------------------------------------------------
+
+    if (
+      type === "parent" ||
+      rel === "father" ||
+      rel === "mother"
+    ) {
+
+      return {
+        status: "mahram",
+        isMahram: true,
+
+        category: "nasab",
+
+        reasonCode: "PARENT"
+      };
+
+    }
+
+
+    // --------------------------------------------------------
+    // CHILD
+    // --------------------------------------------------------
+
+    if (
+      type === "child"
+    ) {
+
+      return {
+        status: "mahram",
+        isMahram: true,
+
+        category: "nasab",
+
+        reasonCode: "CHILD"
+      };
+
+    }
+
+
+    // --------------------------------------------------------
+    // SIBLING
+    // --------------------------------------------------------
+
+    if (
+        type === "sibling" ||
+        type === "sibling_same_father" ||
+        type === "sibling_same_mother"
+    ) {
+
+      return {
+        status: "mahram",
+        isMahram: true,
+
+        category: "nasab",
+
+        reasonCode: "SIBLING"
+      };
+
+    }
+
+
+    // --------------------------------------------------------
+    // AUNT / UNCLE
+    // --------------------------------------------------------
+    // 
+    // hanya aunt_uncle sebagai mahram
+    // Hanya tante/om kandung atau seayah/seibu.
+    //
+    // PASANGAN tante/om TIDAK masuk.
+    // --------------------------------------------------------
+
+    // AUNT / UNCLE
+    if (
+      type === "aunt_uncle" &&
+      (
+        rel === "aunt_uncle" ||
+        rel === "older_aunt_uncle" ||
+        rel === "younger_aunt_uncle"
+      )
+    ) {
+
+      return {
+        status: "mahram",
+        isMahram: true,
+
+        category: "nasab",
+
+        reasonCode: "AUNT_UNCLE"
+      };
+
+    }
+
+    // EXTENDED AUNT / UNCLE
+    if (
+      type === "aunt_uncle" &&
+      rel === "genealogy_ancestor_sibling"
+    ) {
+
+      return {
+        status: "mahram",
+        isMahram: true,
+        category: "nasab",
+        reasonCode: "EXTENDED_AUNT_UNCLE"
+      };
+
+    }
+
+
+    // --------------------------------------------------------
+    // NIECE / NEPHEW
+    // --------------------------------------------------------
+    // 
+    // hanya niece_nephew sebagai mahram karena NASAB.
+    //
+    // spouse_of_niece_nephew dan
+    // niece_nephew_of_spouse TIDAK masuk.
+    // --------------------------------------------------------
+
+    // NIECE / NEPHEW
+    if (
+      type === "niece_nephew" &&
+      rel === "niece_nephew"
+    ) {
+
+      return {
+        status: "mahram",
+        isMahram: true,
+
+        category: "nasab",
+
+        reasonCode: "NIECE_NEPHEW"
+      };
+
+    }
+
+    // EXTENDED NIECE / NEPHEW
+    if (
+      type === "niece_nephew" &&
+      rel === "genealogy_sibling_descendant"
+    ) {
+
+      return {
+        status: "mahram",
+        isMahram: true,
+        category: "nasab",
+        reasonCode: "EXTENDED_NIECE_NEPHEW"
+      };
+
+    }
+
+
+    // --------------------------------------------------------
+    // COUSIN
+    // --------------------------------------------------------
+    //
+    // Cousin adalah NASAB tetapi BUKAN MAHRAM.
+    //
+    // Dataset:
+    // type     = "genealogy"
+    // relation = "genealogy_cousin"
+    // --------------------------------------------------------
+
+    // COUSIN RELATION
+    if (
+      type === "cousin" &&
+      (
+        rel === "cousin" ||
+        rel === "older_cousin" ||
+        rel === "younger_cousin"
+      )
+    ) {
+
+      return {
+        status: "non_mahram",
+        isMahram: false,
+
+        category: "nasab",
+
+        reasonCode: "COUSIN"
+      };
+
+    }
+
+    // GENEALOGY COUSIN
+    if (
+      type === "genealogy" &&
+      rel === "genealogy_cousin"
+    ) {
+
+      return {
+        status: "non_mahram",
+        isMahram: false,
+
+        category: "nasab",
+
+        reasonCode: "GENEALOGY_COUSIN"
+      };
+
+    }
+
+    // --------------------------------------------------------
+    // ANCESTOR GENERATION
+    // --------------------------------------------------------
+
+    if (
+      type === "ancestor_generation" &&
+      rel === "ancestor_generation"
+    ) {
+
+      return {
+        status: "mahram",
+        isMahram: true,
+
+        category: "nasab",
+
+        reasonCode: "ANCESTOR"
+      };
+
+    }
+
+
+    // --------------------------------------------------------
+    // DESCENDANT GENERATION
+    // --------------------------------------------------------
+
+    if (
+      type === "descendant_generation" &&
+      rel === "descendant_generation"
+    ) {
+
+      return {
+        status: "mahram",
+        isMahram: true,
+
+        category: "nasab",
+
+        reasonCode: "DESCENDANT"
+      };
+
+    }
+
+    return null;
+
+}, // ← TUTUP _evaluateNasab()
+
+  // ==========================================================
+  // MUSHĀHARAH DISABLED
+  // ========================================================
+  //
+  // Fungsi tetap disediakan.
+  // Untuk sementara TIDAK memberikan hasil mahram.
+  //
+  // Jangan menginfer dari:
+  // - pid, - spouse, - in-law, - co-spouse, - besan
+  // ==========================================================
+
+  _evaluateMushaharah({ relation }) {
+
+    return null;
+
+  },
+
+
+  // ==========================================================
+  // RADHA'AH DISABLED
+  // ========================================================
+  //
+  // Fungsi tetap disediakan.
+  // Dataset saat ini belum memiliki data persusuan.
+  //
+  // Jangan menginfer radha'ah dari data nasab.
+  // ==========================================================
+
+  _evaluateRadhaah({ relation }) {
+
+    return null;
+
+  },
+
+
+  // ==========================================================
+  // BUILD RESULT
+  // ==========================================================
+
+  _buildResult(context, evaluation) {
+
+    const relation =
+      context.relation;
+
+    return {
+
+      status:
+        evaluation.status,
+
+      isMahram:
+        evaluation.isMahram,
+
+      category:
+        evaluation.category,
+
+      reasonCode:
+        evaluation.reasonCode,
+
+      relationType:
+        relation?.type ?? null,
+
+      relation:
+        relation?.relation ?? null,
+
+      fromId:
+        context.fromId,
+
+      toId:
+        context.toId,
+
+      source: {
+
+        engine: "WhoToWhom",
+
+        relation
+
+      }
+
+    };
+
+  },
+
+
+  // ==========================================================
+  // UNKNOWN
+  // ==========================================================
+
+  _unknown(
+    fromId,
+    toId,
+    reasonCode,
+    relation = null
+  ) {
+
+    return {
+
+      status: "unknown",
+
+      isMahram: null,
+
+      category: null,
+
+      reasonCode,
+
+      relationType:
+        relation?.type ?? null,
+
+      relation:
+        relation?.relation ?? null,
+
+      fromId,
+      toId,
+
+      source: {
+
+        engine: "WhoToWhom",
+
+        relation
+
+      }
+
+    };
+
+  }
+
+}; // ← end MahramEngine
+//-------------------------------------------------------------------
+// MahramEngine.get("35", "1")
+// fromId = "35" toId   = "1"
+// = hubungan 35 → 1
+// Artinya: Bagaimana hubungan orang 35 terhadap orang 1?
+// 35 adalah keturunan dari 1 atau  1 adalah ancestor dari 35
+
+// ini copy-paste di devconsole
+function testMahram(fromId, toId) {
+
+  const who = WhoToWhom.get(fromId, toId);
+  const result = MahramEngine.get(fromId, toId);
+
+  console.log("================================");
+  console.log("FROM:", fromId);
+  console.log("TO:", toId);
+
+  console.log("WHO:");
+  console.log(who);
+
+  console.log("MAHRAM:");
+  console.log(result);
+
+  console.log("SUMMARY:");
+
+  console.table({
+    relationType: result.relationType,
+    relation: result.relation,
+    status: result.status,
+    isMahram: result.isMahram,
+    category: result.category,
+    reasonCode: result.reasonCode
+  });
+
+  return result;
+}
+//-------------------------------------------------------------------
+// testMahram("16", "35");
+
+// ==========================================================
+// BUILD NODE KHUSUS MAHRAM TREE
+//
+// Tugas:
+// - mengambil snapshot dari buildTreeNodes()
+// - mempertahankan struktur fid / mid / pids
+// - memberi metadata hasil MahramEngine
+// ==========================================================
+
+// ==========================================================
+// BUILD NODE KHUSUS MAHRAM TREE
+//
+// PUBLIC:
+//     window.buildMahramTreeNodes(rootId)
+//
+// SSOT hubungan:
+//     MahramEngine.get(rootId, nodeId)
+//
+// SSOT struktur:
+//     buildTreeNodes()
+//
+// Fungsi ini TIDAK menghitung silsilah.
+// Fungsi ini TIDAK menentukan mahram.
+// ==========================================================
+
+window.buildMahramTreeNodes = function(rootId) {
+
+  const allNodes =
+    buildTreeNodes();
+
+  if (
+    !Array.isArray(allNodes) ||
+    !allNodes.length
+  ) {
+
+    console.warn(
+      "MAHRAM TREE: No family tree nodes found"
+    );
+
+    return [];
+
+  }
+
+
+  const rootKey =
+    String(rootId);
+
+
+  // ========================================================
+  // ROOT CHECK
+  // ========================================================
+
+  const map =
+    new Map();
+
+  allNodes.forEach(node => {
+
+    map.set(
+      String(node.id),
+      node
+    );
+
+  });
+
+
+  if (!map.has(rootKey)) {
+
+    console.warn(
+      "MAHRAM TREE: ROOT NOT FOUND:",
+      rootKey
+    );
+
+    return [];
+
+  }
+
+
+  // ========================================================
+  // VISIBLE IDS
+  //
+  // Semua node dari buildTreeNodes() untuk sementara
+  // menjadi node yang boleh direferensikan oleh:
+  //
+  // fid
+  // mid
+  // pids
+  // ========================================================
+
+  const visibleIds =
+    new Set(
+      allNodes.map(node =>
+        String(node.id)
+      )
+    );
+
+
+  // ========================================================
+  // BUILD
+  // ========================================================
+
+  const result =
+    allNodes.map(node => {
+
+      const nodeId =
+        String(node.id);
+
+
+      // ====================================================
+      // MAHRAM ENGINE
+      //
+      // SINGLE SOURCE OF TRUTH
+      // ====================================================
+
+      const mahram =
+        window.MahramEngine?.get?.(
+          rootKey,
+          nodeId
+        );
+
+
+      // ====================================================
+      // FAMILY STRUCTURE
+      // ====================================================
+
+      const fid =
+        node.fid &&
+        visibleIds.has(
+          String(node.fid)
+        )
+          ? String(node.fid)
+          : null;
+
+
+      const mid =
+        node.mid &&
+        visibleIds.has(
+          String(node.mid)
+        )
+          ? String(node.mid)
+          : null;
+
+
+      const pids =
+        Array.isArray(node.pids)
+
+          ? node.pids
+              .map(String)
+              .filter(pid =>
+                visibleIds.has(pid)
+              )
+
+          : [];
+
+
+      // ====================================================
+      // RESULT NODE
+      // ====================================================
+
+      return {
+
+        // --------------------------------------------------
+        // BALKAN
+        // --------------------------------------------------
+
+        id:
+          nodeId,
+
+        name:
+          node.name ||
+          node.id,
+
+        fid,
+
+        mid,
+
+        pids,
+
+
+        // --------------------------------------------------
+        // EXISTING TREE METADATA
+        // --------------------------------------------------
+
+        wifeOrder:
+          Number(
+            node.wifeOrder ?? 9999
+          ),
+
+        childOrder:
+          Number(
+            node.childOrder ?? 9999
+          ),
+
+
+        // --------------------------------------------------
+        // MAHRAM METADATA
+        // --------------------------------------------------
+
+        mahramStatus:
+          mahram?.status ??
+          "unknown",
+
+        mahramIsMahram:
+          mahram?.isMahram ??
+          null,
+
+        mahramCategory:
+          mahram?.category ??
+          null,
+
+        mahramReasonCode:
+          mahram?.reasonCode ??
+          null,
+
+        mahramRelationType:
+          mahram?.relationType ??
+          null,
+
+        mahramRelation:
+          mahram?.relation ??
+          null
+
+      };
+
+    });
+
+
+  // ========================================================
+  // DEBUG
+  // ========================================================
+
+  console.log(
+    "================================"
+  );
+
+  console.log(
+    "MAHRAM TREE ROOT:",
+    rootKey
+  );
+
+  console.log(
+    "MAHRAM TREE NODE COUNT:",
+    result.length
+  );
+
+  console.log(
+    "MAHRAM TREE NODES:",
+    result
+  );
+
+  console.log(
+    "================================"
+  );
+
+
+  console.table(
+
+    result.map(node => ({
+
+      id:
+        node.id,
+
+      name:
+        node.name,
+
+      fid:
+        node.fid,
+
+      mid:
+        node.mid,
+
+      status:
+        node.mahramStatus,
+
+      isMahram:
+        node.mahramIsMahram,
+
+      category:
+        node.mahramCategory,
+
+      reason:
+        node.mahramReasonCode,
+
+      relationType:
+        node.mahramRelationType,
+
+      relation:
+        node.mahramRelation
+
+    }))
+
+  );
+
+
+  return result;
+
+}; // ← end buildMahramTreeNodes
+//-------------------------------------------------------------------
+// cek devconsole buildMahramTreeNodes("16")
+
+// ==========================================================
+// MAHRAM TREE VIEW
+// ==========================================================
+
+window.UI.openMahramTree = function(rootId) {
+
+  const nodes =
+    buildMahramTreeNodes(rootId);
+
+  if (!nodes.length) {
+    console.warn(
+      "MAHRAM TREE: NO NODES"
+    );
+
+    return;
+  }
+
+  const modal =
+    document.getElementById("mobileModal");
+
+  if (!modal) {
+    console.error(
+      "mobileModal tidak ditemukan"
+    );
+
+    return;
+  }
+
+  window.UI.showModalLayer(modal);
+
+  modal.style.display = "flex";
+  modal.style.flexDirection = "column";
+
+
+  modal.innerHTML = `
+
+    <div
+      id="mahramTreeContainer"
+      style="
+        display:flex;
+        flex-direction:column;
+        width:100%;
+        height:100%;
+        overflow:hidden;
+        background:var(--bg);
+      "
+    >
+
+      <button
+        class="ui-router-back-btn"
+        onclick="window.UI.openMobilePopup('${rootId}')"
+      >
+        ← BACK
+      </button>
+
+      <div
+        id="mahramTree"
+        style="
+          flex:1;
+          min-height:0;
+          width:100%;
+          overflow:hidden;
+        "
+      ></div>
+
+    </div>
+
+  `;
+
+
+  const el =
+    document.getElementById(
+      "mahramTree"
+    );
+
+  if (!el) {
+    return;
+  }
+
+
+  // ========================================================
+  // THEME
+  // ========================================================
+
+  applyBalkanMahramTheme();
+
+
+  // ========================================================
+  // BALKAN
+  // ========================================================
+
+  window.mahramTreeInstance =
+    new FamilyTree(
+      el,
+      {
+
+        template:
+          "mahramTommy",
+
+        nodes,
+
+        rootId,
+
+        enableComplexHierarchy:
+          false,
+
+        nodeBinding: {
+          field_0: "name"
+        },
+
+        mouseScrool:
+          FamilyTree.action.zoom,
+
+        scaleInitial: 0.7,
+
+        layout:
+          FamilyTree.layout.tree.normal,
+
+        enableSearch: false,
+
+        enableEditForm: false,
+
+        showXScroll: true,
+
+        enableDragDrop: false,
+
+        nodeMouseClick: null,
+
+        nodeMouseDbClick: null,
+
+        animate: false,
+
+        lazyLoading: false
+
+      }
+    );
+
+}; // ← end openMahramTree
+//-------------------------------------------------------------------
+
+function applyBalkanMahramTheme() {
+
+  const css =
+    getComputedStyle(
+      document.documentElement
+    );
+
+  const node =
+    css.getPropertyValue(
+      "--balkan-node"
+    ).trim();
+
+  const border =
+    css.getPropertyValue(
+      "--balkan-border"
+    ).trim();
+
+  const text =
+    css.getPropertyValue(
+      "--text"
+    ).trim();
+
+
+  // --------------------------------------------------------
+  // COPY TOMMY
+  // --------------------------------------------------------
+
+  FamilyTree.templates.mahramTommy =
+    JSON.parse(
+      JSON.stringify(
+        FamilyTree.templates.subtreeTommy
+      )
+    );
+
+
+  // --------------------------------------------------------
+  // NODE
+  // --------------------------------------------------------
+
+  FamilyTree.templates.mahramTommy.node = `
+
+    <rect
+      x="0"
+      y="0"
+      width="{w}"
+      height="{h}"
+      rx="7"
+      ry="7"
+
+      fill="${node}"
+
+      stroke="${border}"
+
+      stroke-width="2"
+    >
+    </rect>
+
+  `;
+
+
+  // --------------------------------------------------------
+  // TEXT
+  // --------------------------------------------------------
+
+  FamilyTree.templates.mahramTommy.field_0 = `
+
+    <foreignObject
+      x="10"
+      y="65"
+      width="230"
+      height="55"
+      style="pointer-events:none;">
+
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="
+          width:230px;
+          height:55px;
+
+          display:flex;
+          align-items:center;
+          justify-content:flex-start;
+
+          overflow:hidden;
+
+          color:${text};
+
+          font-size:18px;
+          font-weight:bold;
+
+          line-height:20px;
+
+          white-space:normal;
+          overflow-wrap:anywhere;
+          word-break:break-word;
+
+          text-align:left;
+
+          pointer-events:none;
+        "
+      >
+        {val}
+      </div>
+
+    </foreignObject>
+
+  `;
+
+} // ← end applyBalkanMahramTheme()
+//-------------------------------------------------------------------
+
+// ==================================================================================================== 
+   // DRAG RELATIONSHIP GAME
+   // e.target.closest("g.node")
+   // e.target.closest("g.node")?.getAttribute("data-n-id")
 //==================================================================================================== 
 
 // ============================================================
@@ -45893,7 +47705,7 @@ window.DragRelationshipGame.resolveDragGame = function(
   return data;
 
 }; // ← end resolveDragGame
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ============================================================
@@ -46075,7 +47887,7 @@ window.DragRelationshipGame.getDragGameLabel = function(
   return label;
 
 }; // ← end getDragGameLabel
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ============================================================
@@ -46109,7 +47921,7 @@ window.DragRelationshipGame.getDragGameAllPeople =
     return people;
 
   };
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ============================================================
@@ -46141,7 +47953,7 @@ window.DragRelationshipGame.findDragGamePerson =
     return person || null;
 
   };
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ============================================================
@@ -46260,7 +48072,7 @@ window.DragRelationshipGame.getDragGameResult =
     return gameResult;
 
   }; // ← end getDragGameResult
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ============================================================
@@ -46365,7 +48177,7 @@ window.DragRelationshipGame.showDragGameResult =
       );
 
   }; // ← end showDragGameResult
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ============================================================
@@ -46507,7 +48319,7 @@ window.DragRelationshipGame.createDragGameQuestion =
     return question;
 
   }; // ← end createDragGameQuestion
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ============================================================
@@ -46648,7 +48460,8 @@ window.DragRelationshipGame.getDragGameAnswerOptions =
         finalLabel =
           applyWhoSideLabel(
             baseLabel,
-            result
+            result,
+            "DragRelationshipGame.getDragGameAnswerOptions"
           ) ||
           baseLabel;
 
@@ -46702,7 +48515,7 @@ window.DragRelationshipGame.getDragGameAnswerOptions =
     return options;
 
   }; // ← end getDragGameAnswerOptions
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 
 // ============================================================
@@ -46839,7 +48652,7 @@ if (finalLabel) {
     return selected;
 
   }; // ← end pickDragGameAnswerOptions
-//--------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 // ============================================================
 // 12. CREATE GAME QUESTION
@@ -51540,7 +53353,7 @@ window.DragRelationshipGame.initMobileQuizKeyboard =
 
 
 // ==================================================================================================== 
-    //🎮 GLOBAL RELATION QUIZ BUTTON
+    // 🎮 GLOBAL RELATION QUIZ BUTTON
 //==================================================================================================== 
 
 // ============================================================
@@ -51697,7 +53510,6 @@ document.addEventListener(
   }
 
 ); // ← TUTUP createGlobalRelationshipQuizButton
-
 //---------------------------------------------------------------------
 
 
@@ -55472,13 +57284,50 @@ window.DragRelationshipGame
 
           adalah
 
-          <strong>
-            ${escapeHtml(
-              gameQuestion.label
+<strong>
+  ${escapeHtml(
+    (() => {
+
+      const toName =
+        String(
+          gameQuestion.toName || ""
+        ).trim();
+
+      let relationText =
+        String(
+          gameQuestion.label || ""
+        )
         .replace(/^Siapa\s+/i, "")
-        .replace(/\s+[^\s?]+\?$/, "")
-            )}
-          </strong>
+        .replace(/\?+$/, "")
+        .trim();
+
+      // Hapus nama tujuan yang ikut masuk ke label
+      if (toName) {
+
+        const escapedToName =
+          toName.replace(
+            /[.*+?^${}()|[\]\\]/g,
+            "\\$&"
+          );
+
+        relationText =
+          relationText
+            .replace(
+              new RegExp(
+                `\\s+${escapedToName}$`,
+                "i"
+              ),
+              ""
+            )
+            .trim();
+
+      }
+
+      return relationText;
+
+    })()
+  )}
+</strong>
 
           dari
 
@@ -57153,7 +59002,6 @@ window.closeGlobalRelationshipQuiz =
     );
 
   }; // ← TUTUP closeGlobalRelationshipQuiz
-
 //---------------------------------------------------------------------
 
 
@@ -57254,7 +59102,7 @@ window.UI.toggleRadialMenu = function () {
 
     menuButton.textContent = "+";
   }
-};
+}; 
 //---------------------------------------------------------------------
 
 
@@ -57326,7 +59174,7 @@ window.UI.resetRadialMenu = function () {
 
   console.log("RADIAL RESET → +");
 
-};
+}; // ← end resetRadialMenu
 
 
 
@@ -57520,7 +59368,7 @@ window.UI.debugRadialPosition = function () {
     "✅ RADIAL DEBUG SELESAI"
   );
 
-};
+}; // ← end debugRadialPosition
 //---------------------------------------------------------------------
 // HARUS DIPANGGIL KLIK window.UI.debugRadialPosition(); di DEV CONSOLE
 
@@ -58062,7 +59910,7 @@ window.updateSearchPickerHighlight();
 window.APP_STATE.uiMode = "search picker";
 
 
-}; // <-- tutup function
+}; // <-- end openSearchPicker
 //-------------------------------------------------------
 
 //untuk pilih dari search picker
@@ -58091,7 +59939,7 @@ window.selectSearchResult = function(id){
 //-------------------------------------------------------
 
 // ==================================================================================================== 
-    //KEYBOARD EVENT HANDLER 
+    // KEYBOARD EVENT HANDLER 
 //==================================================================================================== 
 
 //APP_STATE = truth source data UI
@@ -58219,7 +60067,7 @@ if(e.key==="Escape"){
     return;
 }
 
-};
+}; // <-- end keyboardSearchPicker
 //-------------------------------------------------------------------
 
 //agar box keyboard searchpicker scroll kebawah
@@ -58290,7 +60138,7 @@ window.updateSearchPickerHighlight = function(){
         return;
     }
 
-};
+}; // <-- end updateSearchPickerHighlight
 //----------------------------------------------------------
 //"enter bukan global, kalau di bagian search picker ya dia work, 
 //kalau pindah ui lain ikuti aturan ui itu"
@@ -58462,7 +60310,7 @@ function handleAdminKeyboard(e) {
     return;
   }
 
-}
+} // <-- end handleAdminKeyboard(e)
 //-----------------------------------------------------------------------
 
 
@@ -58575,12 +60423,10 @@ function clearLoginForm() {
   console.log(
     "✅ CLEAR LOGIN FORM: selesai."
   );
-}
-
-
+} // <-- end clearLoginForm()
+//--------------------------------------------------------------------
 window.clearLoginForm =
   clearLoginForm;
-//--------------------------------------------------------------------
 
 // ============================================================
 // CLEAR LOGIN LINK STATE
@@ -58660,12 +60506,11 @@ function clearLoginLinkState() {
   console.log(
     "✅ CLEAR LOGIN LINK STATE: semua state Login with Link sudah dibersihkan."
   );
-}
-
+} // <-- end clearLoginLinkState()
+//--------------------------------------------------------------------
 // Bisa dipanggil dari fungsi lain jika diperlukan.
 window.clearLoginLinkState =
   clearLoginLinkState;
-//--------------------------------------------------------------------
 
 //(start)LOGOUT ADMIN 
 window.logout = async function () {
@@ -58688,8 +60533,7 @@ window.logout = async function () {
     sessionStorage.removeItem("admin_notification_understood");
 
     // tombol balik jadi login
-    document.getElementById("loginadminbtn").innerText = "Login Admin";
-    document.getElementById("loginadminbtn").onclick = showLogin;
+    resetLoginAdminButton();
 
     // sembunyikan admin panel
     document.getElementById("adminPanel").style.display = "none";
@@ -58710,7 +60554,7 @@ window.logout = async function () {
   } catch (e) {
     alert(e.message);
   }
-};
+}; // <-- end window.logout
 //--------------------------------------------------------------------------
 
 // ==================================================================================================== 
@@ -58917,8 +60761,12 @@ rules firebase diubah agar login link bisa kirim request add update delete
 
 //kalau di github
 git add .
-git commit -m "Update website"
+git commit -m "Update indext.html"
 git push
+
+//kalua batalin dan hapus dari history
+git reset --hard 3041d51
+git push --force-with-lease origin main
 
 //kalau di firebase
 cd "C:\Users\USER\DN_project\sukardi_famtree"
@@ -58952,6 +60800,20 @@ CEK BALKAN DAN TRIAL PERIOD NOTIFICATION
 [...document.scripts]
   .filter(s => s.src.includes("FamilyTree"))
   .map(s => s.src)
+--------------------------------------------
+CEK MAHRAM NODE
+const nodes = buildMahramTreeNodes("16");
+
+console.table(
+  nodes.map(n => ({
+    id: n.id,
+    name: n.name,
+    status: n.mahramStatus,
+    isMahram: n.mahramIsMahram,
+    reason: n.mahramReasonCode
+  }))
+);
+-----------------------------------------------
 
 You’re good. ❤️ Seriously.
 
