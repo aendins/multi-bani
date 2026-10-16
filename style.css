@@ -1,0 +1,7422 @@
+body{
+  margin:0;
+  font-family:Arial;
+  background:#f4f4f4;
+  overflow-x:hidden; /* penting */
+  overscroll-behavior-y: auto; /* pull refresh, tree tetap tidak geser aneh */
+}
+
+/* =========================
+   Catatan 🎨css.
+1. Kalau udah ada jangan buat double biar nggak nimpa yang lama
+2. Data yang paling bawah yang dibaca sama css
+3. Cek versi global dan @media / mobile karena hasil bisa beda dengan vesi laptop
+4. SEMUA MODAL HARUS IKUTI window.UI.showModalLayer. dan UI atur sesuai kebutuhan
+========================= */
+
+:root{
+
+  /* #475569; #334155; -- #94A3B8; #7F8FA3; -- #B7C4D6; #A5B5CA; --  #C3CEDC; #B2C0D2; -- #CBD5E1; #B8C5D6; #5F6F86; #60758F; #52677F;*/
+
+  --primary:#475569;
+  --primary-hover:#334155; /* #64748B; #6675E0; */
+
+  --dark:#0F172A;
+
+/* Area luar / halaman/ modal */
+  --bg:#F8FAFC;
+
+/* Kotak informasi / panel / card */
+  --card:#FFFFFF;
+
+/* Tulisan */
+  --text:#0F172A;
+
+/* Tulisan kecil */
+  --text-soft:#64748B;
+
+/* Garis */
+  --border:#E2E8F0;
+
+  --success:#10B981;
+  --danger:#EF4444;
+
+  /* Shadow */
+
+  --shadow-sm:
+      0 6px 18px rgba(15,23,42,.05);
+
+  --shadow:
+      0 10px 30px rgba(15,23,42,.08);
+
+  --shadow-lg:
+      0 18px 40px rgba(37,99,235,.15);
+
+  /* Warna teks clickable */
+  --clickable-blue: #8B9AEF;
+  --clickable-pink: #E98BA8;
+
+  /* Radius */
+
+  --radius-card:20px;
+  --radius-button:16px;
+
+  /* pengaturan tombol back bani agar pas di bawah mobile card/search */
+ /* kalau nanti tinggi mobileCard berubah, cukup ubah:--mobile-header-height:72px; */
+  --mobile-header-height:68px; /* 60px tinggi header + 8px jarak */
+  
+  --footer-height:70px;
+
+/* untuk balkan tree harus dibawah ini */
+  --bani-back-height:50px;
+
+/* untuk balkan node */
+  --balkan-bg:#F8FAFC;
+  --balkan-node:#ffffff;
+  --balkan-border:#aeaeae;
+ 
+/* untuk notifikasi */
+  --notice-bg:#fff8db;
+  --notice-border:#f59e0b;
+  --notice-text:#000; /* coklat tua: #78350f*/
+
+/* suggestion keyboard was #DBEAFE;*/
+ --suggestion-key-hover:#C5D3E3;
+
+/* suggestion askme, searchpicker */
+ --suggestion-hover:#F5F5F5;
+
+/* warna legend, recursive tree */
+
+  --gen-0:#ffffff;
+
+  /* cycle 1 - tone normal */
+  --gen-1:#ffd6d6;
+  --gen-2:#fff3a0;
+  --gen-3:#cce5ff;
+  --gen-4:#e0d6ff;
+  --gen-5:#d6ffe0;
+  --gen-6:#ffe4c4;
+  --gen-7:#ffdff2;
+  --gen-8:#d9f7f5;
+  --gen-9:#e8e8e8;
+  --gen-10:#f0e6d6;
+
+
+  /* cycle 2 */
+  --gen-11:#efb8b8;
+  --gen-12:#eadb82;
+  --gen-13:#aacff5;
+  --gen-14:#c3b6ed;
+  --gen-15:#b8e8c2;
+  --gen-16:#ebc69b;
+  --gen-17:#edb9d5;
+  --gen-18:#afe4df;
+  --gen-19:#cccccc;
+  --gen-20:#ddc7a6;
+
+
+  /* cycle 3 */
+  --gen-21:#dfa0a0;
+  --gen-22:#d6c764;
+  --gen-23:#88b9eb;
+  --gen-24:#a18bd8;
+  --gen-25:#91d1a0;
+  --gen-26:#d5aa78;
+  --gen-27:#d995bc;
+  --gen-28:#86cbc4;
+  --gen-29:#adadad;
+  --gen-30:#c4aa86;
+
+
+  /* cycle 4 */
+  --gen-31:#c98282;
+  --gen-32:#bbaa45;
+  --gen-33:#659bd4;
+  --gen-34:#8064bd;
+  --gen-35:#6ab57d;
+  --gen-36:#bd8b55;
+  --gen-37:#bf719e;
+  --gen-38:#5ca9a1;
+  --gen-39:#8d8d8d;
+  --gen-40:#a98b63;
+
+
+  /* cycle 5 */
+  --gen-41:#a85f5f;
+  --gen-42:#93852d;
+  --gen-43:#467dbb;
+  --gen-44:#62459c;
+  --gen-45:#438d59;
+  --gen-46:#966738;
+  --gen-47:#9d507e;
+  --gen-48:#397f78;
+  --gen-49:#707070;
+  --gen-50:#80633f;
+
+ /* z-indext */
+
+  --z-loading:50;
+
+  --z-footer:100;
+  --z-brand:200;
+
+  --z-floating:300;
+
+  --z-login:500;
+
+  --z-notice:1000;
+
+  --z-modal:5000;
+
+  --z-admin:8000;
+
+  --z-delete:9000;
+
+
+/* =========================
+ 🎮 DRAG RELATIONSHIP GAME
+========================= */
+
+  --drag-game-bg: var(--card);
+  --drag-game-text: var(--text);
+  --drag-game-text-soft: var(--text-soft);
+  --drag-game-border: var(--border);
+
+  --drag-game-success: var(--success);
+
+  --drag-game-shadow: var(--shadow-lg);
+
+  --drag-game-radius: var(--radius-card);
+
+  --drag-game-z: var(--z-floating);
+
+}
+
+/* =========================
+warna umum
+├── --bg
+├── --card
+├── --text
+
+warna status khusus
+├── --success
+├── --danger
+├── --notice-bg
+├── --notice-border
+├── --notice-text
+========================= */
+
+/* =========================
+taruh semua @media mobile di bagian paling bawah CSS
+hindari margin-top negatif untuk merapikan posisi elemen flex
+gunakan padding-bottom pada area scroll, bukan menambah tinggi container
+kalau ada footer fixed, selalu jadikan tinggi footer sebagai acuan bottom
+
+- `:hover` → cursor **menyentuh/berada di atas** elemen 👆
+- `:active` → elemen **sedang diklik/ditahan** 🖱️
+- `:focus` → elemen **sedang mendapat fokus** (sering dipakai input/button)
+- `cursor: pointer` → cursor jadi **tangan** ☝️
+
+========================= */
+
+/* =========================
+Layer / Z-index
+
+GLOBAL LAYOUT:
+    boleh punya z-index
+
+MODAL TURUNAN:
+    jangan punya z-index sendiri
+
+POPUP KHUSUS:
+    hanya kalau memang menutupi modal lain
+
+Jangan menaikkan semua z-index.
+Kalau semua 9999999, nanti tidak jelas siapa berada di atas siapa.
+
+LEVEL 0
+├── Tree / konten biasa
+LEVEL 100
+├── Footer
+LEVEL 200
+├── Landing brand
+├── Mobile header
+LEVEL 300
+├── Floating button
+│   └── baniList-back-btn
+LEVEL 500
+├── Login popup
+LEVEL 1000
+├── Notice / overlay informasi
+LEVEL 5000
+├── Modal system
+│   └── window.UI.showModalLayer()
+LEVEL 8000
+├── Admin panel
+LEVEL 9000
+├── Delete confirmation
+
+========================= */
+/* =========================
+NOTE!
+HTML ID  → huruf kecil semua
+CSS      → ikut HTML ID (#loginadminbtn)
+JS var   → camelCase (loginAdminBtn)
+Function → camelCase juga (showAdminLogin, hideAdminLogin)
+========================= */
+
+/* =========================
+PILIHAN FONT TEKS
+Inter ⭐ (paling modern & bersih)
+font-family: "Inter", sans-serif;
+Plus Jakarta Sans ❤️
+font-family: "Plus Jakarta Sans", sans-serif;
+Manrope (elegan)
+font-family: "Manrope", sans-serif;
+Nunito Sans (hangat & ramah)
+font-family: "Nunito Sans", sans-serif;
+========================= */
+
+
+/* ============================
+   RADIAL MENU
+   Tombol utama = titik pusat
+   ============================ */
+
+#radial-menu-button {
+
+  position: fixed;
+
+  right: 20px;
+  bottom: calc(var(--footer-height) + 20px);
+
+  width: 42px;
+  height: 40px;
+
+  border: 1px solid transparent;
+  border-radius: 50%;
+
+  background: var(--card);
+  color: var(--text);
+
+  font-size: 20px;
+  font-weight: 400;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow:
+    0 2px 8px rgba(0,0,0,.25);
+
+  cursor: pointer;
+
+  z-index: 10;/*agar dibawah zindext loading */
+
+  transition:
+    transform .25s ease,
+    box-shadow .15s ease;
+}
+
+#radial-menu-button:hover{
+    /*transform:translateY(-5px); biar nggak loncat ketika dibuka dari radial*/
+
+    box-shadow:
+        0 18px 40px rgba(37,99,235,.15);
+
+    border-color:#BFDBFE;
+}
+
+#radial-menu-button:active {
+  transform: scale(.94);
+}
+
+/* RADIAL MENU DISABLED
+   untuk matikan fungsi askme dan global quiz */
+
+body.radial-menu-disabled #radial-menu-button,
+body.radial-menu-disabled #create-askme-button,
+body.radial-menu-disabled #create-global-quiz-button {
+
+  display: none;
+
+}
+
+
+/* RADIAL HIDDEN
+   untuk bikin askme dan global quiz hide */
+
+#create-askme-button.radial-item-hidden,
+#create-global-quiz-button.radial-item-hidden {
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transform:
+        translate(-50%, -50%)
+        scale(0.2);
+}
+
+
+/* RADIAL CLOSED
+   Saat radial belum dibuka, tombol radial disembunyikan */
+
+body.radial-menu-btn-closed #create-askme-button,
+body.radial-menu-btn-closed #create-global-quiz-button {
+
+  transform: translate(0, 0) scale(0);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+}
+
+/* RADIAL MENU */
+
+.radial-item {
+    position: fixed;
+    width: 42px;
+    height: 40px;
+
+    /* posisi ditentukan oleh JavaScript */
+
+    transform-origin: center center;
+
+    z-index: var(--z-floating);
+}
+
+
+
+/* ====================
+   SEMUA TOMBOL RADIAL
+   ==================== */
+
+
+/* RADIAL ITEMS
+   Posisi final ditentukan JavaScript */
+
+#create-askme-button,
+#create-global-quiz-button {
+
+    position: fixed;
+
+    width: 42px;
+    height: 40px;
+
+    box-sizing: border-box;
+
+    /*
+     * Posisi ditentukan oleh JavaScript
+     */
+
+    /*
+     * Posisi awal animasi
+     */
+
+    /*
+     * Posisi awal:
+     * tepat di pusat RADIAL
+     */
+    transform:
+        translate(-50%, -50%)
+        scale(0.2);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    /*
+     * INI YANG MEMBUAT GERAKANNYA
+     */
+    transition:
+        left 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        top 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.25s ease;
+
+    z-index: var(--z-floating);
+}
+
+
+/* RADIAL OPEN */
+
+#create-askme-button.radial-item-open,
+#create-global-quiz-button.radial-item-open {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+
+    transform:
+        translate(-50%, -50%)
+        scale(1);
+}
+
+
+
+/* =========================
+   DARK MODE VARIABLES
+========================= */
+
+html.dark{
+
+  --primary:#334155;
+  --primary-hover:#475569;
+
+  --dark:#020617;
+
+  --bg:#020617;
+  --card:#1E293B;
+
+  --text:#F8FAFC;
+  --text-soft:#94A3B8;
+
+  --border:#334155;
+
+  --success:#34D399;
+  --danger:#F87171;
+ 
+  /* background layar / canvas */
+  --balkan-bg:#020617;
+  /* kotak node — dibuat lebih terang */
+  --balkan-node:#334155;
+  /* garis node */
+  --balkan-border:#64748B;
+
+  /* khusus garis animasi kotak node Balkan utama */
+  --balkan-active-line:#CBD5E1;  /* biru terang: #93C5FD; */
+
+  --suggestion-hover:#334155;
+
+  --notice-bg:#3b2f12;
+  --notice-border:#f59e0b;
+  --notice-text:#fde68a;
+
+  --gen-0:var(--card);
+
+  /* cycle 1 - dark soft */
+  --gen-1:#5a3030; /* dark red */
+  --gen-2:#5a5120; /* dark yellow */
+  --gen-3:#234563; /* dark blue */
+  --gen-4:#433568; /* dark purple */
+  --gen-5:#28513a; /* dark green */
+  --gen-6:#5a4225; /* dark orange */
+  --gen-7:#59324a; /* dark pink */
+  --gen-8:#23504f; /* dark cyan */
+  --gen-9:#3b4148; /* dark grey */
+  --gen-10:#514536; /* dark beige */
+
+/* cycle 2 - deeper */
+  --gen-11:#4a2626;
+  --gen-12:#494017;
+  --gen-13:#1d3952;
+  --gen-14:#362954;
+  --gen-15:#203f2e;
+  --gen-16:#49351d;
+  --gen-17:#47283a;
+  --gen-18:#1b3d3c;
+  --gen-19:#30353b;
+  --gen-20:#403528;
+
+  /* cycle 3 - medium dark */
+  --gen-21:#3b2020;
+  --gen-22:#393211;
+  --gen-23:#172f45;
+  --gen-24:#2b2145;
+  --gen-25:#183124;
+  --gen-26:#382817;
+  --gen-27:#38202d;
+  --gen-28:#163332;
+  --gen-29:#292d32;
+  --gen-30:#30281f;
+
+  /* cycle 4 - strong dark */
+  --gen-31:#301919;
+  --gen-32:#2d270c;
+  --gen-33:#12263a;
+  --gen-34:#211932;
+  --gen-35:#112519;
+  --gen-36:#2b1f12;
+  --gen-37:#291823;
+  --gen-38:#102726;
+  --gen-39:#22262a;
+  --gen-40:#241d16;
+
+  /* cycle 5 - deepest */
+  --gen-41:#251313;
+  --gen-42:#211d08;
+  --gen-43:#0e1d2c;
+  --gen-44:#181225;
+  --gen-45:#0d1a12;
+  --gen-46:#21170d;
+  --gen-47:#1f121b;
+  --gen-48:#0c1c1b;
+  --gen-49:#191c20;
+  --gen-50:#1b160f;
+
+
+}
+
+
+/* =========================
+  DARK MODE BACKGROUND
+========================= */
+
+/* Background utama */
+html.dark,
+html.dark body,
+html.dark .webApp-brand,
+html.dark #app,
+html.dark #landingPageModal,
+html.dark #landingCover,
+html.dark #mobileCard{
+
+    background:var(--bg);
+
+    color:var(--text);
+
+}
+
+html.dark #tree svg{
+    background: var(--bg);
+}
+
+/* =========================
+   DARK MODE COMPONENTS
+========================= */
+
+/* Komponen yang berbentuk card/panel */
+html.dark .footer,
+html.dark #adminPanel,
+html.dark #idHelper button,
+html.dark .login-admin-popup,
+html.dark .baniList-back-btn{
+
+    background:var(--card);
+
+    color:var(--text);
+
+}
+
+/* =========================
+   DARK MODE BORDER
+========================= */
+
+/* Border */
+html.dark .footer,
+html.dark #mobileCard,
+html.dark .right-panel-header,
+html.dark .run-search-box,
+html.dark .run-search-box input{
+
+    border-color:var(--border);
+
+}
+
+
+html.dark #firestoreBox thead th{
+
+    background:#334155;
+    color:#F8FAFC;
+
+}
+
+/* =========================
+   DARK MODE FORM
+========================= */
+
+/* Input/search */
+html.dark .run-search-box,
+html.dark .run-search-box input,
+html.dark .run-search-box button{
+
+    background:var(--card);
+
+    color:var(--text);
+
+    border-color:var(--border);
+
+}
+
+
+/* =========================
+   THEME MODE SWITCH BUTTON
+========================= */
+
+#themeModeBtn{
+
+    position:fixed;
+
+    right:20px;
+    bottom:calc(var(--footer-height) + 20px);
+
+    width:42px;
+    height:40px;
+
+    padding:0;
+
+    display:none; /*agar muncul saat banilist muncul*/
+    align-items:center;
+    justify-content:center;
+
+    border: 1px solid transparent; /*agar efek hover kelihatan*/
+
+    border-radius:50%;
+
+    background:var(--card);
+
+    color:var(--text);
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.25);
+      
+    z-index:var(--z-floating);
+
+    cursor:pointer;
+
+    font-size:20px;
+
+    transition:
+        transform .25s ease,
+        background .25s ease;
+
+}
+
+
+/*#themeModeBtn:active{
+
+    transform:scale(.92);
+
+}*/
+
+#themeModeBtn:hover{
+    /*transform:translateY(-5px);*/
+
+    box-shadow:
+        0 18px 40px rgba(37,99,235,.15);
+
+    border-color:#BFDBFE;
+}
+
+/* ==================================
+   🎮 GLOBAL RELATION QUIZ
+   PICKER ORANG PERTAMA
+   POSISI SAMA DENGAN MOBILE QUIZ
+   HEADER → AREA AKTIF → FOOTER
+   ================================== */
+
+/* ==================================
+   🎮 GLOBAL RELATION QUIZ
+   PICKER ORANG PERTAMA
+   POSISI SAMA DENGAN MOBILE QUIZ
+   ================================== */
+
+#globalRelationQuizModal {
+
+  position: fixed;
+
+  inset: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  z-index: var(--drag-game-z);
+
+  pointer-events: auto;
+
+}
+
+
+/* OVERLAY */
+
+#globalRelationQuizModal
+.mobile-quiz-overlay {
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    rgba(0, 0, 0, 0.45);
+
+}
+
+
+/* POPUP
+   HEADER → FOOTER */
+
+#globalRelationQuizModal
+.mobile-quiz-popup {
+
+  position: absolute;
+
+  top:
+    calc(
+      var(--mobile-header-height)
+      +
+      (
+        100vh
+        -
+        var(--mobile-header-height)
+        -
+        var(--footer-height)
+      ) / 2
+    );
+
+  left: 50%;
+
+  transform:
+    translate(-50%, -50%);
+
+  width: 360px;
+
+  max-width:
+    calc(100vw - 32px);
+
+  max-height:
+    calc(
+      100vh
+      -
+      var(--mobile-header-height)
+      -
+      var(--footer-height)
+      -
+      32px
+    );
+
+  overflow-y: auto;
+
+  box-sizing: border-box;
+
+  padding: 24px;
+
+  background:
+    var(--bg);
+
+  color:
+    var(--text);
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    var(--radius-card);
+
+  box-shadow:
+    var(--shadow-lg);
+
+  font-family:
+    inherit;
+
+}
+
+
+/* CLOSE */
+
+#globalRelationQuizModal
+.mobile-quiz-close {
+
+  position: absolute;
+
+  top: 10px;
+  right: 10px;
+
+  width: 32px;
+  height: 32px;
+
+  border: 0;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: var(--text-soft);
+
+  font-size: 24px;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+}
+
+
+/* TITLE */
+
+#globalRelationQuizModal
+.mobile-quiz-picker-title {
+
+  padding-right: 30px;
+
+  font-size: 20px;
+
+  font-weight: 800;
+
+  margin-bottom: 6px;
+
+}
+
+
+/* SUBTITLE */
+
+#globalRelationQuizModal
+.mobile-quiz-picker-from {
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  color: var(--text-soft);
+
+  margin-bottom: 18px;
+
+}
+
+
+/* SEARCH */
+
+#globalRelationQuizModal
+.mobile-quiz-search-wrap {
+
+  margin-bottom: 12px;
+
+}
+
+
+#globalRelationQuizModal
+.mobile-quiz-search {
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 13px 14px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 12px;
+
+  background:
+    var(--bg);
+
+  color:
+    var(--text);
+
+  font-family:
+    inherit;
+
+  font-size: 15px;
+
+  outline: none;
+
+}
+
+
+#globalRelationQuizModal
+.mobile-quiz-search:focus {
+
+  border-color:
+    var(--primary);
+
+}
+
+
+/* LIST */
+
+#globalRelationQuizModal
+.mobile-quiz-picker-list {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+
+}
+
+
+/* PERSON */
+
+#globalRelationQuizModal
+.global-quiz-person {
+
+  width: 100%;
+
+  padding: 11px 14px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 10px;
+
+  background:
+    var(--bg);
+
+  color:
+    var(--text);
+
+  font-family:
+    inherit;
+
+  font-size: 15px;
+
+  text-align: left;
+
+  cursor: pointer;
+
+}
+
+
+#globalRelationQuizModal
+.global-quiz-person:hover {
+
+  background:
+    var(--suggestion-hover);
+
+  border-color:
+    var(--primary);
+
+}
+
+
+#globalRelationQuizModal
+.global-quiz-person:active {
+
+  background:
+    var(--primary);
+
+  color:
+    #FFFFFF;
+
+}
+
+
+/* NO RESULT */
+
+#globalRelationQuizModal
+.mobile-quiz-no-result {
+
+  padding: 14px;
+
+  text-align: center;
+
+  color:
+    var(--text-soft);
+
+  font-size: 14px;
+
+}
+
+/* ====================================
+   🎮 RELATION QUIZ BUTTON
+   Tombol bulat di sebelah kiri Ask Me
+   ==================================== */
+
+#create-global-quiz-button {
+
+  position: fixed;
+
+  right: 70px;
+
+  bottom: calc(var(--footer-height) + 22px);
+
+  width: 42px;
+  height: 40px;
+
+  padding: 0;
+
+  border: 1px solid transparent; /*agar efek hover kelihatan*/
+
+  border-radius: 50%;
+
+  background: var(--drag-game-bg);
+
+  color: #FFFFFF;
+
+  font-size: 18px;
+
+  /*agar hide saat diawal display: none;*/
+
+  align-items: center;
+
+  justify-content: center;
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, .25);
+
+  cursor: pointer;
+
+  z-index: var(--drag-game-z);
+
+  /*transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;*/
+}
+
+#create-global-quiz-button:hover{
+
+    /*transform:translateY(-5px); biar nggak loncat ketika dibuka dari radial*/
+
+    box-shadow:
+        0 18px 40px rgba(37,99,235,.15);
+
+    border-color:#BFDBFE;
+}
+
+/* ================================
+biar nggak loncat ketika dibuka dari radial
+#create-global-quiz-button:active {
+
+  transform: scale(0.92);
+
+}
+==================================== */
+
+/* ===================================
+   🎮 MOBILE QUIZ KEYBOARD SELECTION
+   =================================== */
+
+.mobile-quiz-person.keyboard-mobile-quiz-selected {
+  background: #2e7d32;
+  color: #ffffff;
+  border-color: #2e7d32;
+
+  outline: 3px solid rgba(46, 125, 50, 0.25);
+  outline-offset: 2px;
+
+  transform: scale(1.01);
+}
+
+
+/* 🎮 KEYBOARD SELECTED */
+
+.drag-answer.keyboard-drag-game-selected,
+.drag-answer-continue.keyboard-drag-game-selected,
+.drag-answer-finish.keyboard-drag-game-selected,
+.drag-answer-ok.keyboard-drag-game-selected {
+  outline: 3px solid #ffd54f;
+  outline-offset: 3px;
+  transform: scale(1.02);
+  box-shadow: 0 0 0 4px rgba(255, 213, 79, 0.25);
+}
+
+
+/* ==================================
+   🌙 DARK MODE — KEYBOARD SELECTED
+   ================================== */
+
+html.dark .mobile-quiz-person.keyboard-mobile-quiz-selected {
+  background: #276749; /* 🟢 HIJAU */
+  color: #F0FDF4;
+  border-color: #34D399; /* 🟢 HIJAU TERANG */
+
+  outline: 3px solid rgba(52, 211, 153, 0.28);
+  outline-offset: 2px;
+
+  transform: scale(1.01);
+
+  box-shadow:
+    0 0 0 1px rgba(52, 211, 153, 0.12),
+    0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+
+/* 🎮 DARK MODE — KEYBOARD SELECTED ANSWER */
+
+html.dark .drag-answer.keyboard-drag-game-selected,
+html.dark .drag-answer-continue.keyboard-drag-game-selected,
+html.dark .drag-answer-finish.keyboard-drag-game-selected,
+html.dark .drag-answer-ok.keyboard-drag-game-selected {
+
+  outline: 3px solid #FBBF24; /* 🟠 ORANGE */
+  outline-offset: 3px;
+
+  transform: scale(1.02);
+
+  box-shadow:
+    0 0 0 4px rgba(251, 191, 36, 0.20),
+    0 6px 18px rgba(0, 0, 0, 0.30);
+}
+
+
+/* ===========================================
+   🕵️ SIAPA AKU?
+   STRUKTUR SCROLL SAMA DENGAN RELATION QUIZ
+   =========================================== */
+
+#dragRelationshipQuestion
+.drag-answer-result {
+
+  display: flex;
+
+  flex-direction: column;
+
+  flex: 1;
+
+  min-height: 0;
+
+  overflow: hidden;
+
+}
+
+
+/* --------------------------
+   HEADER / PERTANYAAN TETAP
+   -------------------------- */
+
+#dragRelationshipQuestion
+.drag-answer-result
+.drag-question-title {
+
+  flex-shrink: 0;
+
+}
+
+
+#dragRelationshipQuestion
+.drag-answer-result
+.drag-question-text {
+
+  flex-shrink: 0;
+
+}
+
+
+/* ------------------------------------
+   PILIHAN → SATU-SATUNYA AREA SCROLL
+   ------------------------------------ */
+
+#dragRelationshipQuestion
+.drag-answer-result
+.drag-question-options {
+
+  flex: 1;
+
+  min-height: 0;
+
+  overflow-y: auto;
+
+  overflow-x: hidden;
+
+}
+
+
+/* --------------------------
+   JAWAB → TETAP DI BAWAH
+   -------------------------- */
+
+#dragRelationshipQuestion
+.drag-answer-result
+.drag-question-submit {
+
+  flex-shrink: 0;
+
+}
+
+
+
+/* =========================
+   🎮 MOBILE RELATION QUIZ
+   POPUP DI AREA AKTIF
+   HEADER → FOOTER
+   ========================= */
+
+#mobileQuizModal {
+
+  position: fixed;
+
+  inset: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  z-index: var(--z-modal);
+
+  pointer-events: auto;
+
+}
+
+
+/* OVERLAY */
+
+#mobileQuizModal
+.mobile-quiz-overlay {
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    rgba(0, 0, 0, 0.45);
+
+}
+
+
+/* POPUP
+   PUSAT AREA:
+   HEADER → ATAS FOOTER */
+
+#mobileQuizModal
+.mobile-quiz-popup {
+
+  position: absolute;
+
+  top:
+    calc(
+      var(--mobile-header-height)
+      +
+      (
+        100vh
+        -
+        var(--mobile-header-height)
+        -
+        var(--footer-height)
+      ) / 2
+    );
+
+  left: 50%;
+
+  transform:
+    translate(-50%, -50%);
+
+  width: 360px;
+
+  max-width:
+    calc(100vw - 32px);
+
+  max-height:
+    calc(
+      100vh
+      -
+      var(--mobile-header-height)
+      -
+      var(--footer-height)
+      -
+      32px
+    );
+
+  overflow-y: auto;
+
+  box-sizing: border-box;
+
+  padding: 24px;
+
+  background:
+    var(--bg);
+
+  color:
+    var(--text);
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    var(--radius-card);
+
+  box-shadow:
+    var(--shadow-lg);
+
+  font-family:
+    inherit;
+
+}
+
+
+/* CLOSE */
+
+#mobileQuizModal
+.mobile-quiz-close {
+
+  position: absolute;
+
+  top: 10px;
+  right: 10px;
+
+  width: 32px;
+  height: 32px;
+
+  border: 0;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: var(--text-soft);
+
+  font-size: 24px;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+}
+
+
+/* TITLE */
+
+#mobileQuizModal
+.mobile-quiz-picker-title {
+
+  padding-right: 30px;
+
+  font-size: 20px;
+
+  font-weight: 800;
+
+  margin-bottom: 6px;
+
+}
+
+
+/* FROM PERSON */
+
+#mobileQuizModal
+.mobile-quiz-picker-from {
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  color: var(--text-soft);
+
+  margin-bottom: 18px;
+
+}
+
+
+/* SEARCH */
+
+#mobileQuizModal
+.mobile-quiz-search-wrap {
+
+  margin-bottom: 12px;
+
+}
+
+
+#mobileQuizModal
+.mobile-quiz-search {
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 13px 14px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 12px;
+
+  background:
+    var(--bg);
+
+  color:
+    var(--text);
+
+  font-family:
+    inherit;
+
+  font-size: 15px;
+
+  outline: none;
+
+}
+
+
+#mobileQuizModal
+.mobile-quiz-search:focus {
+
+  border-color:
+    var(--primary);
+
+}
+
+
+/* SUGGESTION LIST */
+
+#mobileQuizModal
+.mobile-quiz-picker-list {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+
+}
+
+
+/* SUGGESTION BUTTON */
+
+#mobileQuizModal
+.mobile-quiz-person {
+
+  width: 100%;
+
+  padding: 11px 14px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 10px;
+
+  background:
+    var(--bg);
+
+  color:
+    var(--text);
+
+  font-family:
+    inherit;
+
+  font-size: 15px;
+
+  text-align: left;
+
+  cursor: pointer;
+
+}
+
+
+#mobileQuizModal
+.mobile-quiz-person:hover {
+
+  background:
+    var(--suggestion-hover);
+
+  border-color:
+    var(--primary);
+
+}
+
+
+#mobileQuizModal
+.mobile-quiz-person:active {
+
+  background:
+    var(--primary);
+
+  color:
+    #FFFFFF;
+
+}
+
+
+/* TIDAK ADA HASIL */
+
+#mobileQuizModal
+.mobile-quiz-no-result {
+
+  padding: 14px;
+
+  text-align: center;
+
+  color:
+    var(--text-soft);
+
+  font-size: 14px;
+
+}
+
+
+/* ==========================
+   🎮 DRAG RELATIONSHIP GAME
+   POPUP PERTANYAAN
+   ========================== */
+
+#dragRelationshipQuestion {
+
+  position: fixed;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  z-index: var(--drag-game-z);
+
+  width: 360px;
+
+  padding: 24px;
+
+  box-sizing: border-box;
+
+  background: var(--drag-game-bg);
+
+  color: var(--drag-game-text);
+
+  border: 1px solid var(--drag-game-border);
+
+  border-radius: var(--drag-game-radius);
+
+  box-shadow: var(--drag-game-shadow);
+
+  text-align: center;
+
+  font-family: inherit;
+
+}
+
+
+/* CLOSE */
+
+#dragRelationshipQuestion
+.drag-question-close {
+
+  position: absolute;
+
+  top: 10px;
+  right: 10px;
+
+  width: 32px;
+  height: 32px;
+
+  border: 0;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: var(--drag-game-text-soft);
+
+  font-size: 24px;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+}
+
+
+#dragRelationshipQuestion
+.drag-question-close:hover {
+
+  background: var(--suggestion-hover);
+
+  color: var(--drag-game-text);
+
+}
+
+
+/* JUDUL */
+
+#dragRelationshipQuestion
+.drag-question-title {
+
+  color: var(--drag-game-text);
+
+  font-size: 20px;
+
+  font-weight: 700;
+
+  margin-bottom: 18px;
+
+}
+
+
+/* PASANGAN NAMA */
+
+#dragRelationshipQuestion
+.drag-question-pair {
+
+  color: var(--drag-game-text);
+
+  font-size: 18px;
+
+  font-weight: 700;
+
+  margin-bottom: 16px;
+
+}
+
+
+/* PERTANYAAN */
+
+#dragRelationshipQuestion
+.drag-question-text {
+
+  color: var(--drag-game-text-soft);
+
+  font-size: 15px;
+
+  line-height: 1.5;
+
+  margin-bottom: 18px;
+
+}
+
+
+/* PILIHAN */
+
+#dragRelationshipQuestion
+.drag-question-options {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+
+}
+
+
+/* TOMBOL PILIHAN */
+
+#dragRelationshipQuestion
+.drag-answer {
+
+  width: 100%;
+
+  padding: 10px 12px;
+
+  border: 1px solid var(--drag-game-border);
+
+  border-radius: var(--radius-button);
+
+  background: var(--bg);
+
+  color: var(--drag-game-text);
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  line-height: 1.4;
+
+  cursor: pointer;
+
+}
+
+
+/* PILIHAN TERPILIH */
+
+#dragRelationshipQuestion
+.drag-answer.selected {
+
+  background: #EFF6FF;
+
+  border-color: var(--primary);
+
+  color: var(--primary);
+
+}
+
+
+/* HOVER PILIHAN */
+
+#dragRelationshipQuestion
+.drag-answer:hover {
+
+  background: var(--suggestion-hover);
+
+  border-color: var(--primary);
+
+}
+
+
+/* TOMBOL JAWAB */
+
+#dragRelationshipQuestion
+.drag-question-submit {
+
+  margin-top: 18px;
+
+  padding: 10px 24px;
+
+  border: 0;
+
+  border-radius: var(--radius-button);
+
+  background: var(--primary);
+
+  color: #FFFFFF;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+}
+
+
+#dragRelationshipQuestion
+.drag-question-submit:hover {
+
+  background: var(--primary-hover);
+
+}
+
+
+/* ============================================================
+   🎮 DRAG RELATIONSHIP GAME
+   UI HASIL DRAG
+   TERPISAH DARI CUSTOM RIGHT PANEL
+   ============================================================ */
+
+#dragGameResult {
+
+  position: fixed;
+
+  left: 50%;
+  bottom: 24px;
+
+  transform: translateX(-50%);
+
+  z-index: var(--drag-game-z);
+
+  width: min(420px, calc(100vw - 32px));
+
+  box-sizing: border-box;
+
+  padding: 18px;
+
+  background: var(--drag-game-bg);
+
+  color: var(--drag-game-text);
+
+  border: 1px solid var(--drag-game-border);
+
+  border-radius: var(--drag-game-radius);
+
+  box-shadow: var(--drag-game-shadow);
+
+  text-align: center;
+
+  display: none;
+}
+
+
+/* JUDUL */
+
+#dragGameResult .drag-game-result-title {
+
+  color: var(--drag-game-text);
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  margin-bottom: 14px;
+}
+
+
+/* NAMA ORANG */
+
+#dragGameResult .drag-game-result-from,
+#dragGameResult .drag-game-result-to {
+
+  color: var(--drag-game-text);
+
+  font-size: 17px;
+
+  font-weight: 700;
+
+  line-height: 1.4;
+
+  overflow-wrap: anywhere;
+}
+
+
+/* PANAH */
+
+#dragGameResult .drag-game-result-arrow {
+
+  color: var(--drag-game-text-soft);
+
+  margin: 5px 0;
+
+  font-size: 18px;
+
+  line-height: 1;
+}
+
+
+/* LABEL RELASI */
+
+#dragGameResult .drag-game-result-label {
+
+  margin-top: 14px;
+
+  padding: 10px 14px;
+
+  background: var(--drag-game-bg);
+
+  color: var(--drag-game-text);
+
+  border: 1px solid var(--drag-game-border);
+
+  border-radius: var(--radius-button);
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  line-height: 1.4;
+
+  overflow-wrap: anywhere;
+}
+
+
+/* ==================================
+   🎮 DRAG RELATIONSHIP GAME RESULT
+   ================================== */
+
+#dragRelationshipResult {
+
+  position: fixed;
+
+  bottom:
+    calc(
+      var(--footer-height) + 16px
+    );
+
+  left: 50%;
+
+  transform:
+    translateX(-50%);
+
+  width:
+    min(
+      calc(100vw - 32px),
+      380px
+    );
+
+  box-sizing: border-box;
+
+  padding:
+    20px 22px;
+
+  background:
+    var(--card);
+
+  color:
+    var(--text);
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    var(--radius-card);
+
+  box-shadow:
+    var(--shadow-lg);
+
+  z-index:
+    var(--z-floating);
+
+  text-align:
+    center;
+
+}
+
+
+/* TITLE */
+
+#dragRelationshipResult
+.drag-result-title {
+
+  font-size:
+    16px;
+
+  font-weight:
+    700;
+
+  margin-bottom:
+    14px;
+
+}
+
+
+/* PERSON */
+
+#dragRelationshipResult
+.drag-result-person {
+
+  font-size:
+    17px;
+
+  font-weight:
+    700;
+
+  color:
+    var(--text);
+
+}
+
+
+#dragRelationshipResult
+.drag-result-arrow {
+
+  margin:
+    5px 0;
+
+  color:
+    var(--text-soft);
+
+  font-size:
+    18px;
+
+}
+
+
+/* LABEL HUBUNGAN */
+
+#dragRelationshipResult
+.drag-result-label {
+
+  margin-top:
+    14px;
+
+  padding:
+    10px 12px;
+
+  background:
+    var(--bg);
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    var(--radius-button);
+
+  color:
+    var(--text);
+
+  font-size:
+    14px;
+
+  line-height:
+    1.4;
+
+}
+
+
+/* CLOSE */
+
+#dragRelationshipResult
+.drag-result-close {
+
+  position:
+    absolute;
+
+  top:
+    8px;
+
+  right:
+    10px;
+
+  width:
+    32px;
+
+  height:
+    32px;
+
+  border:
+    0;
+
+  border-radius:
+    50%;
+
+  background:
+    transparent;
+
+  color:
+    var(--text-soft);
+
+  font-size:
+    24px;
+
+  line-height:
+    1;
+
+  cursor:
+    pointer;
+
+}
+
+
+#dragRelationshipResult
+.drag-result-close:hover {
+
+  background:
+    var(--suggestion-hover);
+
+  color:
+    var(--text);
+
+}
+
+
+/* =======================
+   🎮 HASIL JAWABAN
+   ======================= */
+
+#dragRelationshipQuestion
+.drag-answer-result {
+
+  text-align: center;
+
+}
+
+
+/* ---------
+   ICON
+   --------- */
+
+#dragRelationshipQuestion
+.drag-answer-result-icon {
+
+  font-size: 48px;
+
+  line-height: 1;
+
+  margin-bottom: 12px;
+
+}
+
+
+/* ---------
+   TITLE
+   --------- */
+
+#dragRelationshipQuestion
+.drag-answer-result-title {
+
+  font-size: 24px;
+
+  font-weight: 800;
+
+  margin-bottom: 18px;
+
+}
+
+
+/* ---------
+   TEXT
+   --------- */
+
+#dragRelationshipQuestion
+.drag-answer-result-text {
+
+  color:
+    var(--drag-game-text-soft);
+
+  font-size: 16px;
+
+  line-height: 1.6;
+
+}
+
+
+/* --------------
+   NAMA / RELASI
+   -------------- */
+
+#dragRelationshipQuestion
+.drag-answer-result-text strong {
+
+  color:
+    var(--drag-game-text);
+
+  font-weight: 700;
+
+}
+
+
+/* ---------
+   ACTIONS
+   --------- */
+
+#dragRelationshipQuestion
+.drag-answer-result-actions {
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  margin-top: 24px;
+
+}
+
+
+/* -------------------
+   SEMUA BUTTON HASIL
+   ------------------- */
+
+#dragRelationshipQuestion
+.drag-answer-result-actions button {
+
+  min-width: 100px;
+
+  padding: 10px 18px;
+
+  border: 0;
+
+  border-radius:
+    var(--radius-button);
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+}
+
+
+/* ---------
+   LANJUT
+   --------- */
+
+#dragRelationshipQuestion
+.drag-answer-continue {
+
+  background:
+    var(--primary);
+
+  color:
+    #FFFFFF;
+
+}
+
+
+/* ---------
+   SELESAI
+   --------- */
+
+#dragRelationshipQuestion
+.drag-answer-finish {
+
+  background:
+    var(--bg);
+
+  color:
+    var(--text);
+
+  border:
+    1px solid var(--border) !important;
+
+}
+
+
+/* ---------
+   OK
+   --------- */
+
+#dragRelationshipQuestion
+.drag-answer-ok {
+
+  background:
+    var(--primary);
+
+  color:
+    #FFFFFF;
+
+}
+
+
+/* ---------
+   SALAH
+   --------- */
+
+#dragRelationshipQuestion
+.drag-answer-result.wrong
+.drag-answer-result-title {
+
+  color:
+    var(--danger, #DC2626);
+
+}
+
+
+/* ---------
+   BENAR
+   --------- */
+
+#dragRelationshipQuestion
+.drag-answer-result.correct
+.drag-answer-result-title {
+
+  color:
+    var(--success, #16A34A);
+
+}
+
+
+/* ===========================================
+   🎮 DRAG RELATIONSHIP GAME
+   MODAL OVERLAY + QUESTION
+   MENGIKUTI SISTEM Z-INDEX UTAMA
+   MOBILE MODAL
+   KHUSUS UI INI — BASE LAYOUT TIDAK DISENTUH
+   =========================================== */
+
+
+/* ------------------------------------------
+   MODAL
+   Area modal berhenti tepat di atas footer.
+   ------------------------------------------ */
+
+#dragRelationshipModal {
+
+  position: fixed;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  bottom:
+    var(--footer-height);
+
+  width: 100%;
+  height: auto;
+
+  z-index: var(--z-modal);
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+}
+
+
+/* ---------------
+   OVERLAY
+   --------------- */
+
+#dragRelationshipModal
+.drag-relationship-overlay {
+
+  position: absolute;
+
+  inset: 0;
+  /* ⚠️ TITIK CRUCIAL — overlay memenuhi area dan
+     menutup interaksi UI di belakang */
+
+  background:
+    rgba(0, 0, 0, 0.45);
+
+}
+
+
+/* ---------------
+   QUESTION
+   --------------- */
+
+#dragRelationshipModal
+#dragRelationshipQuestion {
+
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  transform:
+    translate(-50%, -50%);
+
+  width:
+    min(420px, calc(100vw - 24px));
+
+  max-height:
+    calc(100% - 24px);
+
+  box-sizing: border-box;
+
+  padding: 24px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  overflow: hidden;
+
+  background:
+    var(--drag-game-bg);
+
+  color:
+    var(--drag-game-text);
+
+  border:
+    1px solid var(--drag-game-border);
+
+  border-radius:
+    var(--drag-game-radius);
+
+  box-shadow:
+    var(--drag-game-shadow);
+
+  text-align: center;
+
+  font-family:
+    inherit;
+
+  z-index: 1;
+
+  pointer-events: auto;
+
+}
+
+
+/* HEADER SOAL */
+
+#dragRelationshipQuestion
+.drag-question-title {
+
+  flex-shrink: 0;
+
+  margin-bottom: 14px;
+
+}
+
+
+#dragRelationshipQuestion
+.drag-question-pair {
+
+  flex-shrink: 0;
+
+  margin-bottom: 12px;
+
+}
+
+
+#dragRelationshipQuestion
+.drag-question-text {
+
+  flex-shrink: 0;
+
+  margin-bottom: 16px;
+
+}
+
+
+/* BATAS CONTENT / PILIHAN
+   HANYA BAGIAN INI YANG SCROLL */
+
+#dragRelationshipQuestion
+.drag-question-options {
+
+  flex: 1;
+
+  min-height: 0;
+
+  overflow-y: auto;
+
+  overflow-x: hidden;
+
+  padding:
+
+    4px 2px
+    8px 2px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+
+}
+
+
+/* ---------------
+   BUTTON PILIHAN
+   --------------- */
+
+#dragRelationshipQuestion
+.drag-answer {
+
+  flex-shrink: 0;
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 11px 12px;
+
+  border:
+    1px solid var(--drag-game-border);
+
+  border-radius:
+    var(--radius-button);
+
+  background:
+    var(--bg);
+
+  color:
+    var(--drag-game-text);
+
+  font-family:
+    inherit;
+
+  font-size:
+    14px;
+
+  line-height:
+    1.4;
+
+  text-align:
+    left;
+
+  cursor:
+    pointer;
+
+}
+
+
+/* JAWAB
+   TETAP DI BAWAH CONTENT */
+
+#dragRelationshipQuestion
+.drag-question-submit {
+
+  flex-shrink: 0;
+
+  margin-top: 10px;
+
+  padding: 11px 24px;
+
+  border: 0;
+
+  border-radius:
+    var(--radius-button);
+
+  background:
+    var(--primary);
+
+  color:
+    #FFFFFF;
+
+  font-family:
+    inherit;
+
+  font-size:
+    14px;
+
+  font-weight:
+    700;
+
+  cursor:
+    pointer;
+
+}
+
+
+/* CLOSE */
+
+#dragRelationshipQuestion
+.drag-question-close {
+
+  flex-shrink: 0;
+
+}
+
+
+/* =======================================
+   🎮 RELATION QUIZ BUTTON - RIGHT PANEL
+   ======================================= */
+
+.relation-quiz-btn {
+
+  width: 100%;
+
+  margin-top: 0;
+  margin-bottom: 8px;
+
+  padding: 13px 18px;
+
+  border: 0;
+
+  border-radius: 12px;
+
+  background: var(--primary);
+
+  color: #FFFFFF;
+
+  font-family: inherit;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
+
+}
+
+
+.relation-quiz-btn:active {
+
+  transform: scale(0.98);
+
+}
+
+
+/* =========================
+ASK ME BUTTON
+window.UI.createAskMeButton
+========================= */
+
+#create-askme-button {
+
+  position: fixed;
+
+  right: 20px;
+
+  bottom: calc(var(--footer-height) + 22px);
+
+  width: 42px;
+  height: 40px;
+
+  border: 1px solid transparent; /*agar efek hover kelihatan*/
+  border-radius: 20px;
+
+  background: var(--card); /* #222;*/
+  color: var(--text); /*white; var(--text-soft);*/
+
+  font-size: 16px; /*besarin huruf di dalam was 12px;*/
+  font-weight: 600;
+
+  box-shadow:
+    0 2px 8px rgba(0,0,0,.25);
+
+  cursor: pointer;
+
+  /* ini biar askme ditengah */
+  line-height: 12px;
+
+  z-index: var(--z-floating);
+
+  /*transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;*/
+}
+
+#create-askme-button:hover{
+    /*transform:translateY(-5px); biar nggak loncat ketika dibuka dari radial*/
+
+    box-shadow:
+        0 18px 40px rgba(37,99,235,.15);
+
+    border-color:#BFDBFE;
+}
+
+/* =========================
+biar nggak loncat ketika dibuka dari radial
+#create-askme-button:active {
+  transform: scale(0.96);
+}
+========================= */
+
+/* =========================
+   ASK ME MODAL
+window.UI.openWhoModal untuk :
+who-modal-content dan who-show-area
+========================= */
+
+#who-modal {
+  box-sizing: border-box;
+
+  /*biar tidak berjarak dengan footer */
+  padding: 0;
+
+  overflow: hidden; /*area scroll di content*/
+  -webkit-overflow-scrolling: touch;
+}
+
+/* =========================
+   ASK ME BOX
+========================= */
+
+#who-modal-box {
+  position: relative;
+
+  width: 100%;
+  margin: 0; /*pemakaian max nggak cut ruang modal */
+
+  box-sizing: border-box;
+
+  border-radius: 16px;
+
+  background: var(--card);
+  color: var(--text);
+
+  box-shadow: var(--shadow);
+
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+
+  overflow: hidden;
+}
+
+/* =========================
+   HEADER
+   TIDAK SCROLL
+========================= */
+
+.who-modal-header {
+  flex-shrink: 0;
+
+  position: sticky;
+  top: 0;
+
+  background: var(--card);
+
+  padding: 20px;
+  padding-bottom: 4px;
+  z-index: 1; /*menutup hasil di content ketika cari nama to*/
+}
+
+
+/* =========================
+   CONTENT
+   HANYA INI SCROLL
+========================= */
+
+.who-modal-content {
+  flex: 1;
+  min-height: 0;
+
+  overflow-y: auto;
+
+  padding: 0 20px 20px;
+
+  box-sizing: border-box;
+
+  -webkit-overflow-scrolling: touch;
+}
+
+/* =========================
+   ASK ME CONTENT
+========================= */
+
+#who-modal-title {
+  margin: 0 0 22px;
+
+  text-align: center;
+
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.who-field {
+  margin-bottom: 16px;
+}
+
+.who-field label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+
+
+.who-field select {
+  width: 100%;
+  height: 44px;
+
+  box-sizing: border-box;
+
+  padding: 0 12px;
+
+  border: 1px solid #d0d0d0;
+  border-radius: 9px;
+  border-color: var(--border);
+
+
+  background: var(--card);
+  color: var(--text);
+
+  font-family: inherit;
+  font-size: 15px;
+}
+
+#who-ask-button {
+  display: block;
+
+  width: 120px;
+  height: 42px;
+
+  margin: 22px auto 12px; /*12 jarak sama garis result */
+
+  border: 0;
+  border-radius: 21px;
+
+  background: var(--primary);
+  color: #fff;
+
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+/* ========
+   RESULT
+=========== */
+
+#who-result {
+  /*jarak #whoresult dan tombol ask*/
+  margin-top: 0;
+
+  /*jarak garis dan hasil teks*/
+  padding-top: 16px;
+
+  border-top: 1px solid var(--border);
+
+  text-align: center;
+
+  min-height: 50px;
+}
+
+#who-result-to {
+  margin-top: 8px;
+
+  font-size: 14px;
+  color: var(--text-soft);
+}
+
+#who-result-name {
+  font-size: 14px;
+  color: var(--text-soft);
+}
+
+#who-result-relation {
+  margin-top: 5px;
+
+  font-size: 20px;
+  font-weight: 700;
+
+  color: var(--text);
+}
+
+#who-close-button {
+  position: absolute;
+
+  top: 10px;
+  right: 12px;
+
+  width: 34px;
+  height: 34px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: transparent;
+  color: var(--text-soft);
+
+  font-size: 27px;
+  line-height: 34px;
+
+  cursor: pointer;
+}
+
+#who-close-button:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* =========================
+   WHO RESULT — ENGLISH RELATION
+   English dibuat lebih lembut
+========================= */
+
+#who-result-relation .who-relation-english {
+  margin-left: 5px;
+
+  font-size: 20px;
+  font-weight: 400;
+  font-style: italic;
+
+  color: var(--text-soft);
+  opacity: 0.85;
+}
+
+
+/* =========================
+   ASK ME — INPUT
+window.UI.openWhoModal
+========================= */
+
+.who-input {
+  width: 100%;
+  height: 44px;
+
+  box-sizing: border-box;
+
+  padding: 0 12px;
+
+  border: 1px solid #d0d0d0;
+  border-radius: 9px;
+  border-color: var(--border);
+
+  background: var(--card);
+  color: var(--text);
+
+  font-family: inherit;
+  font-size: 15px;
+}
+
+.who-input:focus {
+  outline: none;
+
+  border-color: #777;
+
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06);
+}
+
+/* =========================
+   ASK ME — SUGGESTION
+window.UI.openWhoModal
+========================= */
+
+.who-autocomplete {
+  position: relative;
+}
+
+
+.who-suggestions {
+  display: none;
+
+  position: absolute;
+
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+
+  background: var(--card);
+
+  border: 1px solid #d0d0d0;
+  border-radius: 9px;
+  border-color: var(--border);
+
+  box-shadow:
+    0 4px 12px rgba(0,0,0,.12);
+
+  overflow: hidden;
+
+  z-index: 10;
+}
+
+
+.who-suggestion-item {
+
+  padding: 11px 12px;
+
+  font-size: 14px;
+
+  color: var(--text);
+
+  background: var(--card);
+
+  cursor: pointer;
+
+  border-bottom-color: var(--border);   /* ganti warna aja */
+  border-bottom: 1px solid var(--border); /* ganti ketebalan+style+warna */
+}
+
+.who-suggestion-item.keyboard-who-selected {
+  background: var(--suggestion-key-hover);
+}
+
+.who-suggestion-item:last-child {
+  border-bottom: none;
+}
+
+
+.who-suggestion-item:hover {
+  background: var(--suggestion-hover);
+  color: var(--text);
+}
+
+/* DARK MODE — suggestion */
+html.dark .who-suggestion-item:hover {
+  background: #000000;
+  color: #F8FAFC;
+}
+
+html.dark .who-suggestion-item.keyboard-who-selected {
+  background: #000000;
+  color: #F8FAFC;
+}
+
+/* =========================
+   WHO SHOW 
+ukuran dibuat = #who-ask-button
+========================= */
+
+#who-show-button {
+  display: none;
+
+  width: 120px;
+  height: 42px;
+
+  margin: 22px auto 12px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 21px;
+
+  background: var(--primary);
+  color: #fff;
+
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+/* =========================
+   ASK ME — SHOW RELATION PATH POPUP
+    OVERLAY DI DALAM BOX
+========================= */
+
+#who-show-area {
+  display: none;
+
+  position: absolute;
+  inset: 0;
+
+  box-sizing: border-box;
+
+  background: var(--card);
+  color: var(--text);
+
+  border-radius: 16px;
+
+  z-index: 10;
+
+  overflow: hidden;
+
+  padding: 24px 20px 0;
+}
+
+
+/* judul */
+
+/* ============
+   SHOW TITLE
+=============== */
+
+.who-show-title {
+  flex-shrink: 0;
+
+  text-align: center;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  color: var(--text);
+
+  margin-bottom: 20px;
+}
+
+/* area tree */
+
+.who-show-tree{
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:flex-start;
+
+  width:100%;
+
+}
+
+
+/* nama */
+
+.who-path-person{
+
+  text-align:center;
+
+  font-weight:600;
+
+  color:var(--text);
+
+}
+
+
+/* garis vertikal */
+
+.who-path-line{
+
+  text-align:center;
+
+  line-height:25px;
+
+  color:var(--text-soft);
+
+}
+
+
+/* pasangan */
+
+.who-spouse-row{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:8px;
+
+  width:100%;
+
+}
+
+
+/* garis pasangan */
+
+.who-spouse-line{
+
+  white-space:nowrap;
+
+  color:var(--text-soft);
+
+}
+
+
+
+/* ============
+   SHOW PANEL
+=============== */
+
+.who-show-panel {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* × pojok kanan atas show */
+
+.who-show-close-top {
+  position: absolute;
+
+  top: -4px;
+  right: -2px;
+
+  width: 28px;
+  height: 28px;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+  color: var(--text-soft);
+
+  font-size: 24px;
+  line-height: 28px;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 10;
+}
+
+.who-show-close-top:hover {
+  color: var(--text);
+
+  background: rgba(0, 0, 0, 0.06);
+
+  border-radius: 50%;
+}
+
+/* =========================
+   WHO SHOW — BALKAN TREE BACKGROUND
+   SCROLL SENDIRI
+   function handleWhoShow() {
+========================= */
+
+#who-relation-tree {
+  flex: 1;
+
+  min-height: 0;
+
+  width: 100%;
+
+  margin-bottom: 8px;
+
+  background: var(--card);
+  color: var(--text);
+
+  overflow: auto;
+
+  -webkit-overflow-scrolling: touch;
+}
+
+
+/* SVG Balkan */
+#who-relation-tree svg {
+  background: var(--card);
+}
+
+.who-show-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin: 12px 0 16px;
+  font-size: 12px;
+}
+
+.who-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.who-legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.who-legend-start {
+  background: #86b99a;
+}
+
+.who-legend-target {
+  background: #d99a9a;
+}
+
+.who-legend-middle {
+  background: #94a3b8;
+}
+
+/* =========================
+   HEADER
+========================= */
+h1{
+  text-align:center;
+  padding:20px;
+  margin:0;
+  background:var(--bg);
+  transition: all 0.2s ease;
+}
+
+/* saat masuk app */
+body.app-mode h1{
+  display:none; /* ini paling clean */
+}
+
+/* LANDING HILANG SAAT APP MODE */
+
+body.app-mode #landingPage{
+  display:none;
+}
+
+
+/* =========================
+   GLOBAL INPUT
+aturan dasar semua halaman
+landing page
+login box
+input admin panel
+tombol admin panel
+KALAU DIHAPUS ITU SEMUA KENA
+========================= */
+input,button{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  box-sizing:border-box;
+}
+
+button{
+  background:#3498db;
+  color:white;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+}
+
+/* =========================
+CATATAN TREE LAYOUT
+
+Balkan FamilyTree memakai canvas internal.
+
+Canvas menghitung ukuran berdasarkan
+tinggi parent.
+
+Karena itu:
+
+JANGAN memberi padding-top / padding-bottom
+langsung pada #tree.
+
+Padding pada #tree bisa membuat:
+- ukuran visual berubah
+- tetapi koordinat internal Balkan tetap menghitung
+  area canvas penuh
+
+Akibat:
+- zoom normal terlihat aman
+- drag cepat dapat masuk ke area fixed footer/header
+- node terlihat "hilang" padahal masih ada
+
+
+STRUKTUR YANG BENAR:
+
+viewport
+│
+├── mobileCard (fixed)
+│
+├── baniList-back-btn (fixed floating)
+│
+├── tree-wrapper
+│       │
+│       └── #tree
+│              │
+│              └── Balkan canvas/svg
+│
+└── footer (fixed)
+
+
+Yang menentukan batas tree adalah parent:
+
+tree-wrapper:
+height = viewport - header - back button - footer
+
+tree:
+height:100%
+
+Jangan membuat:
+#tree padding-top
+#tree padding-bottom
+height tambahan
+
+
+Konsep sama seperti selected subtree:
+
+selected:
+modal
+ |
+ tombol
+ |
+ tree flex:1
+
+
+main tree:
+app
+ |
+ header/floating space
+ |
+ tree-wrapper
+ |
+ tree
+ |
+ footer
+
+
+┌─────────────────────┐
+│ mobileCard 68px     │  ← --mobile-header-height
+├─────────────────────┤
+│ BACK BANI           │  ← fixed, tinggi ± tombol
+├─────────────────────┤
+│                     │
+│                     │
+│   #tree Balkan      │  ← area ini saja
+│   gen 1 - 25        │
+│                     │
+├─────────────────────┤
+│ footer 70px         │  ← --footer-height
+└─────────────────────┘
+
+========================= */
+
+/* =========================
+   bagian TREE,
+FORCE BALKAN TREE TIDAK BOLEH MELEBAR,
+ini karena layar balkan tree terbagi 2 bagian atas- bawah
+atas isi family tree
+bawah halaman kosong dengan ukuran sama
+========================= */
+
+/* =========================
+   TREE
+
+Balkan Main Tree
+#tree
+#tree-wrapper (pengaturan space)
+
+dipakai oleh tree utama.
+
+Balkan Selected Subtree
+#subTreeContainer
+#subTree
+
+dipakai oleh:
+window.UI.openSelectedSubTree
+========================= */
+
+/* =========================
+Prinsip:
+
+Hanya satu bagian yang boleh mengontrol tinggi layar.
+Jangan biarkan tree, app, dan modal semuanya meminta 100vh/dvh bersamaan.
+
+Jangan membuat tree mengikuti halaman
+Salah:#tree{   min-height:100vh;}
+
+Karena Balkan Tree punya canvas/svg sendiri.
+Akibat:
+layar terbagi
+muncul area kosong
+tree terlihat seperti halaman kedua
+Prinsip:
+Browser mengatur halaman. Balkan mengatur pohon.
+
+#tree
+│
+└── Balkan Tree utama aplikasi
+container menentukan ruang aman
+        ↓
+#tree mendapat ruang bersih
+        ↓
+Balkan bebas menghitung canvas
+#tree-wrapper = penjaga area
+#tree = milik Balkan
+========================= */
+
+/* =========================
+ingat! Balkan menghitung area canvas dari height:100%.
+Padding CSS bukan selalu dipahami sebagai "safe area" oleh engine canvas.
+========================= */
+
+/* =========================
+JANGAN UBAH FORMAT #tree dan #tree-wrapper
+INI VERSI AMAN ke generasi 3 sampai generasi 25 +
+height = viewport - header - back button - footer
+
+Untuk layout, tetap pertahankan prinsip ini:
+
+#tree-wrapper {
+  overflow:hidden;
+}
+
+#tree {
+  flex:1;
+  min-height:0;
+}
+
+atau jika tidak memakai flex:
+
+#tree {
+  width:100%;
+  height:100%;
+}
+
+Yang jangan dilakukan:
+
+#tree{
+ min-height:100vh;
+}
+
+#tree-wrapper{
+ padding-top:100px;
+}
+
+karena itu yang biasanya membuat gen besar mulai "lari" ke area footer/header
+========================= */
+
+
+/* FORCE TREE INTERNAL TIDAK EXPAND PAGE */
+#tree{
+
+  width:100%;
+  height:100%;
+
+  overflow:hidden;
+
+  background:var(--bg);
+
+}
+
+/* ISOLATE TREE WRAPPER */
+/* pengaturan ruang balkan tree di #tree-wrapper*/
+/* ruang aman dari mobile header + tombol back bani*/
+#tree-wrapper{
+
+  position:relative;
+
+  width:100%;
+
+  height:calc(
+    100%
+    - var(--mobile-header-height)
+    - var(--bani-back-height)
+    - var(--footer-height)
+  );
+
+
+ margin-top:calc(
+    var(--mobile-header-height)
+    + var(--bani-back-height)
+ );
+
+  box-sizing:border-box;
+
+  overflow:hidden;
+
+  display:flex;
+  flex-direction:column;
+
+}
+
+/* =========================
+ #tree-wrapper
+→ penjaga batas layar
+
+#tree
+→ biarkan library tree mengatur canvas/interaksi
+========================= */
+
+#tree svg,
+#tree canvas,
+#tree .bft-canvas{
+  max-width:100% !important;
+}
+
+html, body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+}
+
+/* BUAT TREE AREA SENDIRI SCROLLABLE (bukan body) */
+
+#app{
+  height:100%;
+  overflow:hidden;
+  position:relative;
+  background:var(--bg);
+}
+
+/* =========================
+   BALKAN TREE UTAMA
+   NODE HOVER
+  function applyBalkanTheme(){
+========================= */
+.balkan-node-bg {
+  cursor: pointer;
+  transition: fill 0.15s ease;
+}
+
+.balkan-node-bg:hover {
+  fill: var(--suggestion-hover);
+}
+
+html.dark .balkan-node-bg:hover {
+  fill:#64748B;
+}
+
+/* =========================
+   BALKAN TREE UTAMA
+   PENANDA NODE INTERAKTIF
+   GARIS PUTUS-PUTUS BERGERAK
+========================= */
+
+@keyframes balkanMainNodeDash {
+  to {
+    stroke-dashoffset: -26;
+  }
+}
+
+/* =========================
+   SUBTREE OVERRIDE
+Ini bukan hanya layout.
+Ini adalah styling langsung ke hasil render Balkan:
+#subTree
+   |
+   └── svg
+        |
+        ├── rect  (node box)
+        └── text  (nama)
+
+#subTree svg rect{
+  fill:#fff !important;
+  stroke:#000 !important;
+  opacity:1 !important;
+}
+
+#subTree svg text{
+  fill:#000 !important;
+  opacity:1 !important;
+}
+TIDAK LAGI PAKAI KARENA UDAH ADA 
+applyBalkanSubTreeTheme()
+========================= */
+
+/* =========================
+   BALKAN SELECTED SUBTREE
+
+   UI:
+   window.UI.openSelectedSubTree()
+
+   #subTreeContainer
+   → pembatas layout tombol + area tree
+   → JANAGN #subTreeContainer{min-height:100vh;}
+
+   #subTree
+   → area milik Balkan FamilyTree
+   → JANAGN #subTree{height:100vh;}
+
+   Jangan gunakan height:100vh
+   karena modal sudah menentukan tinggi.
+
+#subTree
+│
+└── Balkan Tree cabang dalam popup
+
+Untuk bagian #subTreeContainer dan #subTree
+termasuk layout internal khusus untuk Balkan Tree, bukan styling umum.
+jangan dipindahkan ke CSS
+
+aturan kontrak antara modal dan library Balkan:
+
+display:flex → membagi area tombol + tree
+flex-direction:column → tombol di atas, tree di bawah
+height:100% → mengikuti tinggi modal
+overflow:hidden → mencegah body/modal ikut scroll
+semua query selector lain
+
+ Jangan rename!!
+   Dipakai sebagai mount point FamilyTree().
+
+========================= */
+
+#subTreeContainer{
+  height:100%;
+  overflow:hidden;
+  background:var(--balkan-bg);
+}
+
+
+#subTree{
+  flex:1;
+  min-height:0;
+  overflow:hidden;
+  background:var(--balkan-bg) !important;
+}
+
+
+/* =========================
+NOTIFIKASI BALKAN TREE LIMIT TRIAL PERIOD
+function setBalkanTreeNoticeTrial(show) {
+========================= */
+
+#balkantree-notice {
+  display: none;
+
+  position: fixed;
+  z-index: var(--z-loading);
+
+  width: min(500px, calc(100vw - 30px));
+
+  /* Tinggi awal */
+  min-height: 103px;
+  height: auto;
+
+  padding: 28px 40px;
+  box-sizing: border-box;
+
+  /* POSISI ATAS TETAP */
+  /*top: calc(50% - 50px); sebelum ada pilihan nama pakai ini biar pas*/
+  top: 40%;
+  left: 50%;
+
+  /* Hanya geser horizontal */
+  transform: translateX(-50%);
+
+  background: var(--card);
+  color: var(--text);
+
+  border: 1px solid #ddd;
+  border-radius: 14px;
+
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+
+
+/* ===============================
+   TITLE
+   =============================== */
+
+#balkantree-notice .balkantree-notice-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+
+/* ===============================
+   TEXT
+   =============================== */
+
+#balkantree-notice .balkantree-notice-text {
+  font-size: 14px;
+  opacity: 0.85;
+  color: var(--text-soft);
+  margin-bottom: 16px;
+}
+
+
+/* ===============================
+   SEARCH WRAPPER
+   =============================== */
+
+#balkantree-notice .person-search-wrapper {
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+}
+
+
+/* ===============================
+   INPUT
+window.UI.initPersonSearchBalkanTreeNotice = function () {
+   =============================== */
+
+#balkantree-notice #person-search-input-balkantree-notice {
+  width: 100%;
+  height: 44px;
+
+  box-sizing: border-box;
+
+  padding: 0 14px;
+
+  border: 1px solid #ccc;
+  border-radius: 10px;
+
+  background: var(--card);
+  color: var(--text);
+
+  font-size: 15px;
+  font-family: inherit;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+#balkantree-notice #person-search-input-balkantree-notice::placeholder {
+  color: var(--text-soft);
+  opacity: 0.7;
+}
+
+
+#balkantree-notice #person-search-input-balkantree-notice:focus {
+  border-color: #4a90e2;
+
+  box-shadow:
+    0 0 0 3px rgba(74, 144, 226, 0.15);
+}
+
+
+/* ===============================
+   SEARCH RESULTS
+   =============================== */
+
+#balkantree-notice #person-search-results-balkantree-notice {
+  width: 100%;
+
+  margin-top: 8px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+
+  text-align: left;
+}
+
+
+/* ===============================
+   HASIL NAMA
+   =============================== */
+
+#balkantree-notice .person-search-result {
+  width: 100%;
+
+  min-height: 42px;
+
+  padding: 10px 14px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #ddd;
+  border-radius: 8px;
+
+  background: var(--card);
+  color: var(--text);
+
+  text-align: left;
+
+  font-size: 14px;
+  font-family: inherit;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+
+#balkantree-notice .person-search-result:hover {
+  background: rgba(74, 144, 226, 0.08);
+  border-color: #4a90e2;
+}
+
+
+#balkantree-notice .person-search-result:active {
+  background: rgba(74, 144, 226, 0.15);
+}
+
+
+/* ===============================
+   TIDAK DITEMUKAN
+   =============================== */
+
+#balkantree-notice .person-search-empty {
+  padding: 10px;
+
+  color: var(--text-soft);
+
+  font-size: 14px;
+
+  text-align: center;
+}
+
+
+
+/* =========================
+ ORIGIN FAMILY
+🏠 Bani Karmeni
+ window.UI.openOriginFamily
+========================= */
+/* penting jangan dihapus agar tidak double scroll*/
+#mobileModal:has(.origin-family-modal){
+  overflow:hidden; 
+  padding-bottom:0;
+}
+
+/* origin family modal, origin family back dan origin family content 1 kesatuan agar ketika scroll data hilang saat mencapai back*/
+
+.origin-family-modal{
+  display:flex;
+  flex-direction:column;
+  height:100%;
+  width:100%;
+  
+  overflow:hidden;
+  background:var(--bg);
+}
+
+.origin-family-back{
+  position:sticky;
+  top:0;
+  z-index:10;
+
+  background:var(--bg);
+  padding:12px;
+  border-bottom:1px solid #ddd;
+}
+
+.origin-family-content{
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+  padding:12px;
+}
+
+.origin-family-header{
+  text-align:center;
+  margin-bottom:0;
+  line-height:1;
+}
+
+
+.origin-family-modal .origin-family-header{
+    margin-top:20px;
+}
+
+
+.origin-family-title{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+}
+
+.origin-family-title h3{
+  margin:0;
+  line-height:1.2;
+}
+
+.origin-family-icon{
+  font-size:24px;
+}
+
+.origin-family-divider{
+  margin:16px 0;
+  border:none;
+  border-top:1px solid #ddd;
+}
+
+.origin-family-root{
+  font-weight:600;
+  text-align:center;
+  margin-top:0;
+  margin-bottom:2px; /*biar  garis │ tidak terlalu panjang */
+}
+
+.origin-family-tree-line-main{
+  margin-left:12px;
+  color:#999;
+}
+
+.origin-family-child-row{
+  padding-left:12px;
+  margin:4px 0;
+}
+
+.origin-family-child-header {
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+}
+
+.origin-family-person {
+  min-width: 0;
+  display: inline;
+}
+
+.origin-family-child-name {
+  display: inline;
+}
+
+.origin-family-spouse {
+  display: inline;
+  color: #666;
+  margin-left: 0; /*jarak tulisan spouse dengan nama utama*/
+}
+
+.origin-family-marriage-group{
+  margin-bottom:12px;
+}
+
+.origin-family-card{
+  margin-top:5px;
+  padding-top:0;
+  text-align:center;
+}
+
+.origin-family-tree-center{
+  display:inline-block;
+  text-align:left;
+
+  padding-bottom:20px;     /*biar ada jarak content dengan bawah */
+
+  margin-bottom:0px;       /* biar tidak ada jarak dengan footer */
+}
+
+.origin-family-child-body{
+  display:none;
+  padding-left:16px;
+}
+
+
+
+/* =========================
+   TOGGLE OPEN MOBILE RECURSIVE TREE LEGEND
+   🏷️ Keterangan Generasi
+window.toggleOpenRecursiveTreeLegend(this)
+========================= */
+
+.recursive-tree-legend-toggle{
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+    margin:12px 0;
+
+    padding:8px 10px;
+
+    border-radius:6px;
+
+    border:1px solid var(--border);
+
+    background:var(--bg);
+
+}
+
+
+.recursive-tree-legend-body{
+
+    display:none;
+
+}
+
+/* =========================
+   TOGGLE OPEN MOBILE RECURSIVE TREE TEXT 
+   🧬  Detail Generasi
+window.toggleOpenRecursiveTreeText(this)
+========================= */
+
+.recursive-tree-text-toggle{
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+    margin:12px 0;
+
+    padding:8px 10px;
+
+    border-radius:6px;
+
+    border:1px solid var(--border);
+
+    background:var(--bg);
+
+}
+
+
+.recursive-tree-text-body{
+
+    display:none;
+
+}
+
+/* =========================
+   OPEN MOBILE TREE SECTION TITLE
+   🧬 Detail Generasi
+  pemisah antara legend dan recursive list
+  window.UI.openRecursiveTree
+UNUSED! karena udah pakai
+.recursive-tree-text-toggle
+========================= */
+
+.recursive-tree-section-title{
+
+  margin-top:20px;
+
+  padding:10px;
+
+  font-weight:700;
+
+  font-size:14px;
+
+  border-top:1px solid #ddd;
+
+  background:#fff;
+
+}
+
+/* ==========================
+   OPEN MOBILE TREE LEGEND
+🏷️ Keterangan Generasi
+🏷️ Anak
+🏷️ Putu
+🏷️ Buyut
+function renderLegend(usedLevels = null) {
+========================== */
+
+.recursive-tree-legend {
+
+  padding:10px;
+
+  border-bottom:1px solid #ddd;
+
+  font-size:13px;
+
+  background:var(--bg);
+
+}
+
+
+.recursive-tree-legend-list {
+
+  margin-top:10px;
+
+}
+
+.recursive-tree-legend-row {
+
+  padding:6px 10px;
+
+  margin:4px 0;
+
+  border-radius:6px;
+
+  font-weight:500;
+
+  width:max-content;
+
+  min-width:100%;
+
+  box-sizing:border-box;
+
+}
+
+/* =======================
+LEGEND ROW
+.recursive-tree-legend-row
+Setiap baris legend mengikuti lebar recursive tree.
+width:max-content
+→ mengikuti konten terpanjang.
+min-width:100%
+→ minimal selebar area recursive, agar blok warna
+tidak terpotong ketika tree lebih lebar dari layar.
+=========================== */
+
+/* =========================
+OPEN MOBILE TREE (RECURSIVE)
+🔍DETAIL🔍
+🏷️ Keterangan Generasi
+🏷️ Anak
+🏷️ Putu
+🏷️ Buyut
+🏷️ Canggah
+🧬 Detail Generasi
+👤 Karmeni (Djuwariyah)
+👤 Alwan Nuri (Umar Has)
+ window.UI.openRecursiveTree
+========================= */
+#mobileModal:has(.recursive-tree-back){
+  overflow:hidden;
+}
+
+.recursive-tree-modal{
+  display:flex;
+  flex-direction:column;
+
+  height:100%;
+  width:100%;
+
+  overflow:hidden;
+  background:var(--bg);
+}
+
+.recursive-tree-back{
+  position:sticky;
+  top:0;
+  z-index:10;
+
+  background:var(--bg);
+  padding:12px;
+  border-bottom:1px solid #ddd;
+}
+
+
+.recursive-tree-content{
+  flex:1;
+  min-height:0;
+  min-width:0; 
+
+  overflow-x:auto;
+  overflow-y:auto;
+
+  padding:12px;
+  padding-bottom:20px;
+}
+
+.recursive-tree-list {
+    display:inline-block;
+    width:max-content;
+}
+
+.recursive-tree-node.level-0,
+.recursive-tree-node.level-1,
+.recursive-tree-node.level-2,
+.recursive-tree-node.level-3 {
+    width:calc(100vw - var(--indent));
+}
+
+.recursive-tree-node{
+  position:relative;
+  padding:4px 8px;
+  margin-left:8px;
+  border-radius:6px;
+  border-left:2px solid #ddd;
+}
+
+/* wrapper tree */
+/*panjang bukan tanggung jawab wrapper, tapi node masing-masing*/
+.recursive-tree-content .recursive-tree-list{
+  width:max-content;
+  min-width:100%;
+}
+
+/* node warna generasi */
+.recursive-tree-content .recursive-tree-node {
+
+  display:block;
+
+  width:max-content;
+
+  min-width:calc(100vw - var(--level-indent));
+
+  margin-left:var(--level-indent);
+
+  box-sizing:border-box;
+
+}
+
+/* ==========================
+NODE GENERASI
+.recursive-tree-content .recursive-tree-node {
+Lebar background ditentukan oleh node, BUKAN wrapper.
+Tujuan:
+- setiap level tetap memiliki background penuh
+- background level atas mengikuti panjang level terdalam
+- menghindari area kosong di sisi kanan saat tree semakin menjorok
+⚠️ Jangan ubah width/min-width/margin-left hanya untuk
+merapikan CSS, karena dapat memunculkan area kosong
+di sebelah kanan pada tree yang dalam.
+Background setiap node harus memanjang mengikuti node
+terdalam. Jangan pindahkan logika width ke wrapper.
+============================ */
+
+/* =========================
+   TOGGLE POPUP DESCENDANT SUMMARY
+Keturunan
+👶 Anak: 11
+👶 Putu: 31
+👶 Buyut: 0
+   ▶ Keturunan
+   ▼ 
+[▶] / [▼]
+      │
+      └── show/hide summary
+   window.UI.openMobilePopup
+   window.toggleDescendantSummary
+========================= */
+
+
+.descendant-summary-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin-bottom:8px;
+
+}
+
+
+/* tombol panah ▶ ▼ */
+
+.descendant-summary-toggle{
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    width:20px;
+
+    display:inline-flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    user-select:none;
+    
+    padding-left:2px;
+  
+}
+
+/* Yang berputar hanya panah */
+.descendant-summary-arrow {
+    display: inline-block;
+    width: 16px;
+    text-align: center;
+
+    animation: arrow-wiggle 1.8s ease-in-out infinite;
+    transform-origin: center;
+}
+
+/* Saat dibuka, berhenti */
+.descendant-summary-toggle.paused
+.descendant-summary-arrow {
+    animation-play-state: paused;
+}
+
+@keyframes arrow-wiggle {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(90deg);
+    }
+}
+
+/* teks Keturunan
+   tetap pakai fungsi descendant tree
+*/
+
+.descendant-summary-link{
+
+    color:#5B6EF5;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+}
+
+
+/* isi jumlah:
+👶 Anak: 11
+👶 Putu:31
+*/
+
+.descendant-summary-body{
+
+    padding-left:28px;
+
+    line-height:1.7;
+
+}
+
+/* =========================
+
+[-]  Keturunan
+ ^     ^
+ |     |
+ |     └── tetap clickable → openDescendantTree()
+ |
+ └──────── toggle summary
+
+========================= */
+
+/* =========================
+toggle 📝 Garis Keturunan
+[+] Anak
+[+] Putu
+[+] / [-]
+      │
+      └── show/hide list nama
+window.toggleGen
+========================= */
+
+.toggle-gen-descendant-block{
+  margin-bottom:10px;
+}
+
+
+
+.toggle-gen-descendant-body{
+  padding-left:15px;
+}
+
+
+
+.toggle-gen-descendant-person{
+  padding:5px 0;
+}
+
+/* =========================
+ DESCENDANT TREE MODAL
+📝 Garis Keturunan
+[+] Anak
+[+] Putu
+[+] Buyut
+[+] Canggah
+ window.UI.openDescendantTree
+========================= */
+#mobileModal:has(.descendant-tree-modal){
+  overflow:hidden; 
+  padding-bottom:0;
+}
+
+.descendant-tree-toggle{
+  cursor:pointer;
+  font-weight:bold;
+  margin:6px 0;
+}
+
+.descendant-tree-modal{
+  display:flex;
+  flex-direction:column;
+
+  height:100%;
+  width:100%;
+  
+  overflow:hidden;
+  background:var(--bg);
+}
+
+.descendant-tree-back{
+  position:sticky;
+  top:0;
+  z-index:10;
+
+  background:var(--bg);
+  padding:12px;
+  border-bottom:1px solid #ddd;
+}
+
+.descendant-tree-content{
+  flex:1;
+  overflow-y:auto;
+  padding:20px 24px;
+  box-sizing:border-box;
+}
+
+
+/* =========================
+   RIGHT PANEL OVERLAY
+Karmeni
+Ayah: -
+Ibu: -
+Saudara:
+-
+Pasangan: Djuwariyah
+Anak:
+• Alwan Nuri (Umar Has)
+Putu:
+• Endah Rahmawati
+window.UI.renderRightPanel
+========================= */
+#rightPanel{
+
+  position:fixed;
+
+  top:var(--mobile-header-height);
+  bottom:var(--footer-height);
+
+  right:0;
+  width:100%;
+
+  background:var(--bg);
+
+  border-left:1px solid #ddd;
+
+  border-radius:20px;
+
+  box-shadow:0 6px 18px rgba(0,0,0,.18);
+
+  padding:0;
+  overflow:hidden;
+
+  display:none;
+
+  flex-direction:column;
+  box-sizing:border-box;
+
+  clip-path: inset(0 round 20px);
+}
+
+.right-panel-header{
+  padding:12px;
+
+  background:var(--bg);
+
+  border-bottom:1px solid #ddd;
+
+  flex-shrink:0;
+}
+
+
+.right-panel-content{
+  flex:1;
+  min-height:0;
+
+  overflow-y:auto;
+
+  padding:20px 24px 20px 24px;
+
+  font-size:16px;
+  line-height:1.6;
+  color:var(--text);
+}
+
+
+.right-panel-content br:last-child{
+  display:none;
+}
+
+/* =========================
+locksearch notice right panel
+ 🔒 Pencarian Terkunci
+window.UI.hideLockSearchNoticeRightPanel
+========================= */
+
+.lock-search-notice-right-panel{
+  position:fixed;
+  inset:0;
+
+  width:100vw;
+  height:100vh;
+
+  display:none;
+  align-items:center;
+  justify-content:center;
+
+  z-index:var(--z-notice);
+
+  /* PENTING:
+     overlay menerima semua klik/touch
+     sehingga UI di belakang tidak bisa diklik */
+  pointer-events:auto;
+
+  /* UI belakang tetap terlihat */
+  background:transparent;
+
+  /* cegah isi overlay ikut scroll */
+  overflow:hidden;
+}
+
+.lock-search-notice-box{
+
+  width:320px;
+  max-width:90%;
+
+  background:var(--bg);
+
+  border-radius:12px;
+
+  padding:20px;
+
+  text-align:center;
+
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+
+  /* kotaknya tetap bisa diklik */
+  pointer-events:auto;
+}
+
+
+.lock-search-notice-title{
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:12px;
+}
+
+
+.lock-search-notice-text{
+  font-size:15px;
+  line-height:1.5;
+  margin-bottom:18px;
+}
+
+
+.lock-search-notice-box button{
+  width:100%;
+  padding:10px;
+
+  border:none;
+  border-radius:8px;
+
+  background:#2563eb;
+  color:white;
+
+  cursor:pointer;
+}
+
+/* =========================
+   untuk verifikasi login link
+========================= */
+
+.familyVerify-suggestion-box {
+  position: relative;
+  width: 100%;
+  max-height: 240px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+  z-index: 10;
+}
+
+
+.familyVerify-suggestion-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.familyVerify-suggestion-item:hover {
+  background: #f2f2f2;
+}
+
+#verifyLoginInteractionBlocker {
+  display: none;
+
+  position: fixed;
+  inset: 0;
+
+  z-index: var(--z-login);
+
+  /* Tetap terlihat, tapi dibuat sedikit gelap */
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* =========================
+   FAMILY VERIFICATION
+   Who are you in this family?
+async function openFamilyVerification() {
+========================= */
+
+#familyVerifyBox {
+  color: var(--text);
+}
+
+/* Label */
+#familyVerifyBox label {
+  display: block;
+
+  margin: 10px 0 5px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  color: var(--text);
+}
+
+/* Input nama & ayah */
+#familyVerifyBox input {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 10px 12px;
+
+  border: 1px solid var(--border);
+  border-radius: 8px;
+
+  background: var(--card);
+  color: var(--text);
+
+  font-size: 14px;
+
+  outline: none;
+}
+
+/* Fokus input */
+#familyVerifyBox input:focus {
+  border-color: var(--primary);
+
+  box-shadow:
+    0 0 0 2px rgba(37, 99, 235, 0.12);
+}
+
+/* Placeholder */
+#familyVerifyBox input::placeholder {
+  color: var(--text-soft);
+}
+
+
+/* =========================
+   SUGGESTION FAMILY
+========================= */
+
+#familyVerifyPersonSuggestions,
+#familyVerifyFatherSuggestions {
+  background: var(--card);
+
+  border: 1px solid var(--border);
+  border-radius: 9px;
+
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, .12);
+
+  overflow: hidden;
+
+  color: var(--text);
+}
+
+
+/* Setiap pilihan */
+#familyVerifyPersonSuggestions .who-suggestion-item,
+#familyVerifyFatherSuggestions .who-suggestion-item {
+  padding: 11px 12px;
+
+  font-size: 14px;
+
+  color: var(--text);
+  background: var(--card);
+
+  cursor: pointer;
+
+  border-bottom:
+    1px solid var(--border);
+}
+
+
+/* Pilihan terakhir */
+#familyVerifyPersonSuggestions .who-suggestion-item:last-child,
+#familyVerifyFatherSuggestions .who-suggestion-item:last-child {
+  border-bottom: none;
+}
+
+
+/* Saat disentuh / hover */
+#familyVerifyPersonSuggestions .who-suggestion-item:hover,
+#familyVerifyFatherSuggestions .who-suggestion-item:hover {
+  background: var(--suggestion-hover);
+  color: var(--text);
+}
+
+
+/* =========================
+   CONTINUE
+========================= */
+
+#familyVerifyBox button {
+  width: 100%;
+  box-sizing: border-box;
+
+  margin-top: 15px;
+
+  padding: 10px 12px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: var(--primary);
+  color: white;
+
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#familyVerifyBox button:hover {
+  background: var(--primary-hover);
+}
+
+
+/* =========================
+   PESAN VERIFIKASI
+========================= */
+
+#familyVerifyMessage {
+  margin: 10px 0 0;
+
+  font-size: 13px;
+
+  color: var(--text-soft);
+}
+
+/* =========================
+   LOGIN ADMIN
+Login Admin
+[banisukardi@gmail.com]
+[•••••••••••]
+ [Login]
+window.login
+========================= */
+.login-admin-popup{
+  position:fixed;
+  top:var(--mobile-header-height);
+  right:10px;
+  width:250px;
+  padding:15px;
+  border-radius:10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.3);
+  z-index:var(--z-login);
+  background:var(--bg);
+}
+
+/* =========================
+   LOGIN ADMIN - FORM
+========================= */
+
+/* Judul */
+.login-admin-popup h3 {
+  margin: 0 0 15px;
+  color: var(--text);
+}
+
+/* Subjudul metode login */
+.login-admin-popup h4 {
+  margin: 0 0 12px;
+  color: var(--text);
+}
+
+/* Label Email & Password */
+.login-admin-popup label {
+  display: block;
+  margin: 10px 0 5px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Kotak Email & Password */
+.login-admin-popup input {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 10px 12px;
+
+  border: 1px solid var(--border);
+  border-radius: 8px;
+
+  background: var(--card);
+  color: var(--text);
+
+  font-size: 14px;
+  outline: none;
+}
+
+/* Saat input diklik */
+.login-admin-popup input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.12);
+}
+
+/* Placeholder */
+.login-admin-popup input::placeholder {
+  color: var(--text-soft);
+}
+
+/* Tombol */
+.login-admin-popup button {
+  width: 100%;
+  box-sizing: border-box;
+
+  margin-top: 10px;
+
+  padding: 10px 12px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: var(--primary);
+  color: white;
+
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Hover tombol */
+.login-admin-popup button:hover {
+  background: var(--primary-hover);
+}
+
+/* Pesan login */
+.login-admin-popup p {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+
+/* =========================
+window.toggleAdminPasswordVisibility
+========================= */
+
+/* FIX: Tombol toggle password di dalam input */
+.login-admin-popup .password-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.login-admin-popup .password-input-wrapper input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 48px;
+}
+
+.login-admin-popup .password-input-wrapper button.toggle-password-visibility {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+
+  margin: 0;
+  padding: 0;
+
+  border: none;
+  border-radius: 6px;
+
+  background: transparent;
+  color: var(--text-soft);
+
+  font-size: 14px;
+  line-height: 1;
+
+  cursor: pointer;
+  z-index: 2;
+}
+
+.login-admin-popup .password-input-wrapper button.toggle-password-visibility:hover {
+  background: transparent;
+  color: var(--primary);
+}
+
+.login-admin-popup .password-input-wrapper button.toggle-password-visibility svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.login-admin-popup .password-input-wrapper button.toggle-password-visibility:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+
+
+/* ==========================
+ ADMIN TOGGLE SUMMARY
+⚠️ Aturan Penting Sebelum Edit        ▼
+🚀 Panduan Cepat                       ▶
+📚 Aturan Detail                       ▶
+🛠️ Maintenance                        ▶
+📌 Catatan Sistem ID                   ▶
+==============================*/
+
+/* Toggle utama (setara h3) */
+.admin-toggle-main summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-size: 1.17em;
+  font-weight: bold;
+
+  padding: 10px 0;
+}
+
+
+/* Toggle detail (setara h4) */
+.admin-toggle-detail summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-size: 1em;
+  font-weight: bold;
+
+  padding: 6px 0;
+}
+
+
+/* Hilangkan panah bawaan browser */
+.admin-toggle-main summary::-webkit-details-marker,
+.admin-toggle-detail summary::-webkit-details-marker {
+  display: none;
+}
+
+
+/* =========================
+   PANAH TOGGLE
+   ========================= */
+
+/* Panah saat toggle TERTUTUP */
+.admin-toggle-main summary::after,
+.admin-toggle-detail summary::after {
+  content: "▶";
+  font-size: 14px;
+  display: inline-block;
+  animation: arrow-pulse 1.2s ease-in-out infinite;
+}
+
+/* Panah saat toggle TERBUKA */
+.admin-toggle-main[open] > summary::after,
+.admin-toggle-detail[open] > summary::after {
+  content: "▼";
+  animation: none;
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Light Theme */
+@keyframes arrow-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* Dark Theme */
+html.dark .admin-toggle-main summary::after,
+html.dark .admin-toggle-detail summary::after {
+  animation-name: arrow-pulse-dark;
+}
+
+@keyframes arrow-pulse-dark {
+  0%, 100% {
+    color: #F8FAFC;
+  }
+
+  50% {
+    color: #60A5FA; /*biru terang*/
+
+  }
+}
+
+
+/* =========================
+   NOTICE SEBELUM PANEL ADMIN
+   KHUSUS LOGIN ADMIN
+👋 Selamat Datang di Panel Admin ◉Multi Bani Family Tree
+[Mengerti]
+window.acceptAdminNotice
+========================= */
+
+.admin-welcome-notice{
+    display:none;
+    position:fixed;
+
+    top:0;
+    right:0;
+    left:0;
+    bottom:var(--footer-height);
+
+
+    width:100%;
+
+    background:var(--bg);
+
+    z-index:var(--z-notice);
+
+    overflow:auto;
+
+    padding:20px 20px 20px; /*Tidak ada properti yang dioverride lagi*/
+
+    box-sizing:border-box;
+
+    -webkit-overflow-scrolling:touch;
+}
+
+.admin-welcome-notice-box{
+
+  background:var(--notice-bg);
+
+  border-left:5px solid var(--notice-border);
+
+  color:var(--notice-text);
+
+  padding:12px;
+
+  margin:15px 0;
+
+  border-radius:6px;
+
+}
+
+/* =========================
+   HIDE EMPTY INSPECT
+[ID yang ingin dilihat]
+ 🔍 Lihat Data
+window.inspectPerson
+========================= */
+#inspectBox:empty{
+  display:none;
+}
+
+#inspectBox{
+    background:var(--card);
+    color:var(--text);
+    border:1px solid var(--border);
+    border-radius:10px;
+}
+
+.inspect-person-card{
+
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--text);
+
+}
+
+
+.inspect-person-card.active{
+
+    background:#d1ffd1;
+    border:2px solid green;
+
+}
+
+
+html.dark .inspect-person-card.active{
+
+    background:#14532d;
+    border:2px solid #22c55e;
+
+}
+
+/* ===================================
+   INSPECT PERSON — KEYBOARD HIGHLIGHT
+   window.initInspectPersonKeyboard
+   =================================== */
+
+.inspect-person-card.keyboard-inspect-person-selected {
+  outline: 3px solid #2196f3;
+  outline-offset: 2px;
+  background-color: rgba(33, 150, 243, 0.08);
+}
+
+/* ===================================
+   INSPECT PERSON — KEYBOARD HIGHLIGHT
+   DARK MODE
+   =================================== */
+
+html.dark .inspect-person-card.keyboard-inspect-person-selected {
+    background: #172554;
+    color: #dbeafe;
+    border: 2px solid #3b82f6;
+    outline: 2px solid #60a5fa;
+    outline-offset: 2px;
+}
+
+
+/* CONTAINER */
+
+html.dark #inspectBox {
+    background: var(--card);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+
+/* CARD NORMAL */
+
+html.dark .inspect-person-card {
+    background: var(--card);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+
+/* EDIT AKTIF */
+
+html.dark .inspect-person-card.active {
+    background: #14532d;
+    color: #dcfce7;
+    border: 2px solid #22c55e;
+}
+
+
+/* EDIT AKTIF */
+
+html.dark .inspect-person-card.active.keyboard-inspect-person-selected {
+    background: #14532d;
+    color: #dcfce7;
+    border: 2px solid #22c55e;
+    outline: 2px solid #60a5fa;
+    outline-offset: 2px;
+}
+
+/* =========================
+firestorebox
+📋 Data Firestore
+[Doc ID][ID][Nama][Father ID][Mother ID][Partner ID]
+async function loadFirestoreData() {
+========================= */
+#firestoreBox thead th{
+    position: sticky;
+    top: 0;
+    background:var(--card);
+    color:var(--text);
+    z-index: 2;
+}
+
+.firestore-table {
+  width:100%;
+  border-collapse:collapse;
+  background:var(--card);
+  color:var(--text);
+}
+
+.firestore-table th,
+.firestore-table td {
+  border:1px solid var(--border);
+  padding:5px;
+}
+
+/* =========================
+   DELETE REVIEW POPUP
+document.getElementById("deleteReviewPopup")
+========================= */
+
+#deleteReviewPopup{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100vw;
+  height:100vh;
+
+  background:rgba(15,23,42,.45);
+
+  z-index:var(--z-delete);
+
+  align-items:center;
+  justify-content:center;
+}
+
+.delete-review-box{
+
+  width:100%;
+  max-width:420px;
+
+  background:var(--bg);
+
+  border-radius:20px;
+
+  padding:20px;
+
+  box-shadow:
+    0 20px 40px rgba(0,0,0,.25);
+
+  max-height:80vh;
+  overflow-y:auto;
+}
+
+
+.delete-review-box h3{
+
+  margin-top:0;
+
+  color:#DC2626;
+
+}
+
+
+.delete-review-confirm{
+
+  width:100%;
+  margin-top:15px;
+
+  background:#DC2626;
+
+  color:white;
+
+  border:none;
+
+  border-radius:10px;
+
+  padding:12px;
+
+  cursor:pointer;
+}
+
+
+.delete-review-cancel{
+
+  width:100%;
+  margin-top:10px;
+
+  background:#64748B;
+
+  color:white;
+
+  border:none;
+
+  border-radius:10px;
+
+  padding:12px;
+
+  cursor:pointer;
+}
+/* =========================
+   ID HELPER
+📌 Informasi ID Terakhir
+
+Bani Soedaryo - Marsiti:
+ID terakhir: 435
+ID berikutnya: 436
+
+Bani Karmeni - Djuwariah:
+ID terakhir: 1071
+ID berikutnya: 1072
+
+function renderIdHelper(){ 
+========================= */
+
+#idHelper {
+    margin: 5px 0 10px;
+    padding: 8px;
+    background:var(--card);
+    color:var(--text);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+/* Garis pemisah */
+#idHelper hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 8px 0;
+}
+
+/* Tombol AUTOMATIC ID */
+#idHelper button {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    padding: 9px 12px;
+
+    background: var(--bg);
+    color: var(--text);
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.1s ease;
+}
+
+/* Efek saat mouse diarahkan ke tombol */
+#idHelper button:hover {
+    background: #E2E8F0;
+    border-color: #CBD5E1;
+}
+
+/* Efek saat tombol ditekan */
+#idHelper button:active {
+    transform: scale(0.98);
+}
+
+html.dark #idHelper button:hover{
+
+    background:var(--primary-hover);
+}
+
+/* =========================
+   BUTTON COLORS PANEL ADMIN
+➕ Tambah ✏️ Update 🗑️ Hapus 
+🔍 Lihat Data 🕒 Activity Log
+📋 Data Firestore 📥 Download Data🚪 Logout
+------------------------------------------
+   ADMIN CONTROL BUTTON
+🔄 Refresh Data
+⚙️ ID Control
+
+window.refreshFamilyData = async function(){
+window.toggleIdControlAdmin = async function(){
+========================= */
+
+/* ===========================
+   LUXURY ADMIN — LIGHT THEME
+   =========================== */
+
+.btn-add {
+  background: #2f855a;
+}
+
+.btn-update {
+  background: #356d9a;
+}
+
+.btn-delete {
+  background: #c05656;
+}
+
+.btn-view {
+  background: #b7791f;
+}
+
+.btn-auditlog {
+  background: #475569;
+}
+
+.btn-firestore {
+  background: #6b46c1;
+}
+
+.btn-firestore-export {
+  background: #287f7c;
+}
+
+.btn-logout-admin {
+  background: #9b2c2c;
+}
+
+#btnRefresh {
+  background: #356d9a;
+}
+
+#btnIdControl {
+  background: #64748b;
+}
+
+#idControlBtn {
+  white-space: normal;
+  line-height: 1.3;
+  text-align: center;
+}
+
+
+/* ===========================
+   COMMON BUTTON STYLE
+   =========================== */
+
+.btn-add,
+.btn-update,
+.btn-delete,
+.btn-view,
+.btn-auditlog,
+.btn-firestore,
+.btn-firestore-export,
+.btn-logout-admin,
+#btnRefresh,
+#btnIdControl,
+#idControlBtn {
+  color: #fff;
+  border: none;
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+/* ===========================
+   HOVER
+   =========================== */
+
+.btn-add:hover {
+  background: #276749;
+}
+
+.btn-update:hover,
+#btnRefresh:hover {
+  background: #2c5b80;
+}
+
+.btn-delete:hover {
+  background: #a94444;
+}
+
+.btn-view:hover {
+  background: #975a16;
+}
+
+.btn-auditlog:hover {
+  background: #334155;
+}
+
+.btn-firestore:hover {
+  background: #55359b;
+}
+
+.btn-firestore-export:hover {
+  background: #216664;
+}
+
+.btn-logout-admin:hover {
+  background: #7f1d1d;
+}
+
+#btnIdControl:hover {
+  background: #475569;
+}
+
+
+/* ===========================
+   HOVER EFFECT
+   =========================== */
+
+.btn-add:hover,
+.btn-update:hover,
+.btn-delete:hover,
+.btn-view:hover,
+.btn-auditlog:hover,
+.btn-firestore:hover,
+.btn-firestore-export:hover,
+.btn-logout-admin:hover,
+#btnRefresh:hover,
+#btnIdControl:hover,
+#idControlBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(15, 23, 42, 0.14);
+}
+
+
+/* ===========================
+   ACTIVE / CLICK
+   =========================== */
+
+.btn-add:active,
+.btn-update:active,
+.btn-delete:active,
+.btn-view:active,
+.btn-auditlog:active,
+.btn-firestore:active,
+.btn-firestore-export:active,
+.btn-logout-admin:active,
+#btnRefresh:active,
+#btnIdControl:active,
+#idControlBtn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+
+/* ===========================
+   ID CONTROL STATUS
+   =========================== */
+
+.id-control-status-on {
+  color: #2f855a;
+  font-weight: 600;
+}
+
+.id-control-status-off {
+  color: #c05656;
+  font-weight: 600;
+}
+
+/* ===========================
+   LUXURY ADMIN — DARK THEME
+   =========================== */
+
+html.dark .btn-add {
+  background: #238b5a;
+}
+
+html.dark .btn-update {
+  background: #3b82b8;
+}
+
+html.dark .btn-delete {
+  background: #c94f5b;
+}
+
+html.dark .btn-view {
+  background: #b88924;
+}
+
+html.dark .btn-auditlog {
+  background: #475569;
+}
+
+html.dark .btn-firestore {
+  background: #7956c7;
+}
+
+html.dark .btn-firestore-export {
+  background: #258f8b;
+}
+
+html.dark .btn-logout-admin {
+  background: #a63d45;
+}
+
+html.dark #btnRefresh {
+  background: #3478a8;
+}
+
+html.dark #btnIdControl {
+  background: #596579;
+}
+
+
+/* ===========================
+   HOVER
+   =========================== */
+
+html.dark .btn-add:hover {
+  background: #2ca66a;
+}
+
+html.dark .btn-update:hover,
+html.dark #btnRefresh:hover {
+  background: #4795cc;
+}
+
+html.dark .btn-delete:hover {
+  background: #dc5b67;
+}
+
+html.dark .btn-view:hover {
+  background: #d09b2c;
+}
+
+html.dark .btn-auditlog:hover {
+  background: #59677b;
+}
+
+html.dark .btn-firestore:hover {
+  background: #8b68dc;
+}
+
+html.dark .btn-firestore-export:hover {
+  background: #2eaaa5;
+}
+
+html.dark .btn-logout-admin:hover {
+  background: #c34b55;
+}
+
+html.dark #btnIdControl:hover {
+  background: #6b778c;
+}
+
+
+/* ===========================
+   DARK HOVER EFFECT
+   =========================== */
+
+html.dark .btn-add:hover,
+html.dark .btn-update:hover,
+html.dark .btn-delete:hover,
+html.dark .btn-view:hover,
+html.dark .btn-auditlog:hover,
+html.dark .btn-firestore:hover,
+html.dark .btn-firestore-export:hover,
+html.dark .btn-logout-admin:hover,
+html.dark #btnRefresh:hover,
+html.dark #btnIdControl:hover,
+html.dark #idControlBtn:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 5px 16px rgba(0, 0, 0, 0.35);
+}
+
+
+/* ===========================
+   ACTIVE / CLICK
+   =========================== */
+
+html.dark .btn-add:active,
+html.dark .btn-update:active,
+html.dark .btn-delete:active,
+html.dark .btn-view:active,
+html.dark .btn-auditlog:active,
+html.dark .btn-firestore:active,
+html.dark .btn-firestore-export:active,
+html.dark .btn-logout-admin:active,
+html.dark #btnRefresh:active,
+html.dark #btnIdControl:active,
+html.dark #idControlBtn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+
+/* ===========================
+   DARK STATUS
+   =========================== */
+
+html.dark .id-control-status-on {
+  color: #4ade80;
+  font-weight: 600;
+}
+
+html.dark .id-control-status-off {
+  color: #fb7185;
+  font-weight: 600;
+}
+
+/* ==========================
+abu gelap(#34495e) -> log/history
+ungu(#8e44ad) -> data/database
+hijau toska #16a085) -> download/export 
+==============================*/
+
+
+/* ================================
+   🔔 APPROVAL REQUESTS
+   MUNCUL HALUS TANPA DISPLAY NONE
+async function createAddApprovalRequest(newNode)
+function renderApprovalRequests(requests) {
+   ================================ */
+
+#approvalRequests {
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+  opacity: 0;
+
+  max-height: 0;
+
+  margin: 0;
+
+  transition:
+    opacity 0.25s ease,
+    max-height 0.35s ease,
+    margin 0.35s ease;
+
+}
+
+
+/* ADA APPROVAL */
+
+#approvalRequests.approval-visible {
+
+  opacity: 1;
+
+  max-height: 5000px;
+
+  margin-bottom: 20px;
+
+}
+
+
+/* =========================
+   ADMIN PANEL
+Panel Admin
+[ID]
+[Nama]
+[Father ID]
+[Mother ID]
+[Partner ID]
+No file chosen
+➕ Tambah ✏️ Update 🗑️ Hapus 
+[ID yang ingin dilihat]
+ 🔍 Lihat Data 
+🕒 Activity Log 📋 Data Firestore 📥 Download Data🚪 Logout
+========================= */
+#adminPanel{
+  display:none;
+  position:fixed;
+
+  top:var(--mobile-header-height);
+  left:0;
+  right:0;
+  bottom:var(--footer-height);      /* berhenti di atas footer */
+
+  padding:0;  /* pindahkan padding ke content */
+  background:var(--bg);
+
+  z-index:var(--z-admin);
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
+
+  /* membuat sudut melengkung */
+  border-radius:20px;
+
+  /* opsional: agar isi tidak keluar dari lengkungan */
+  overflow:hidden; /* penting */
+  clip-path: inset(0 round 20px);
+}
+
+.admin-panel-header{
+    height: auto;  /*kalau pakai 48px potensi terlalu pendek */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 16px;
+    background: var(--card);
+    border-bottom: 1px solid #ddd;
+}
+
+.admin-panel-header h3{
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.2;
+}
+
+#adminLoginInfo{
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--text-soft);
+    line-height: 1.3;
+}
+
+.admin-panel-content{
+    flex:1;
+    min-height:0;
+    overflow-y:auto;
+
+    padding:20px;
+    padding-bottom:40px;
+}
+
+.admin-panel-modal{
+    display: flex;
+    flex-direction: column;
+    height:100%;
+    overflow:hidden; 
+}
+
+.admin-panel-box-toggle {
+  display:none;
+  margin-top:15px;
+  background:var(--card);
+  color:var(--text);
+  border:1px solid var(--border);
+  padding:10px;
+  max-height:400px;
+  overflow:auto;
+}
+
+.admin-panel-content input {
+    color: var(--text);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.admin-panel-content input::placeholder {
+    color: var(--text-soft);
+    opacity: 1;
+}
+
+
+/* =========================
+   POPUP CLOSE BUTTON
+[✕ CLOSE]
+window.UI.closeMobilePopup 
+========================= */
+
+
+/* =========================
+bagian shared/common → satu tempat
+bagian perbedaan visual → dipisah
+========================= */
+
+/* =========================
+   TOMBOL BACK UI ROUTER
+    [← BACK]
+========================= */
+
+.openmobile-popup-close-btn,
+.ui-router-back-btn,
+.family-photo-back-btn {
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    height:52px;
+    min-height:52px;
+    box-sizing:border-box;
+
+    padding:0 16px;
+
+    border-radius:18px;
+
+    font-weight:600;
+    line-height:1;
+
+    cursor:pointer;
+}
+
+.ui-router-back-btn,
+.family-photo-back-btn,
+.openmobile-popup-close-btn{
+    background:var(--bg);
+    color:#64748B;
+    border:1px solid #E2E8F0;
+
+    box-shadow:
+        0 8px 24px rgba(15,23,42,.06);
+}
+
+.ui-router-back-btn:active,
+.family-photo-back-btn,
+.openmobile-popup-close-btn:active{
+    transform:scale(.98);
+}
+
+/* =========================
+   BUTTON DOWNLOAD PNG
+    [⬇ DOWNLOAD PNG]
+   window.exportSubTreePNG()
+   ========================= */
+
+.btn-download-png {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 52px;
+    min-height: 52px;
+    box-sizing: border-box;
+
+    padding: 0 16px;
+
+    background: var(--bg);
+    color: var(--text-soft);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-button);
+
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+
+    cursor: pointer;
+
+    box-shadow: var(--shadow-sm);
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.15s ease,
+        box-shadow 0.2s ease;
+}
+
+.btn-download-png:hover {
+    background: var(--card);
+    color: var(--text);
+
+    border-color: var(--border);
+
+    box-shadow: var(--shadow);
+
+    transform: translateY(-1px);
+}
+
+.btn-download-png:active {
+    transform: scale(.98);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-download-png:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.20);
+    outline-offset: 2px;
+}
+
+.btn-download-png:disabled {
+    background: var(--bg);
+    color: var(--text-soft);
+
+    border-color: var(--border);
+
+    cursor: not-allowed;
+    opacity: 0.6;
+
+    transform: none;
+    box-shadow: none;
+}
+
+/* =========================
+PENGATURAN PHOTO VIEW AGAR BISA ADA FOOTER
+🖼️FOTO🖼️
+window.UI.openPhotoView
+========================= */
+
+/* penting jangan dihapus agar tidak double scroll */
+#mobileModal:has(.open-photo-view-modal){
+  overflow:hidden;
+  padding-bottom:0;
+}
+
+
+/* photo view modal, back dan content satu kesatuan */
+
+.open-photo-view-modal{
+  display:flex;
+  flex-direction:column;
+  height:100%;
+  width:100%;
+
+  overflow:hidden;
+  background:var(--bg);
+}
+
+/* area foto */
+
+.open-photo-view-content{
+  flex:1;
+  min-height:0;
+
+  overflow-y:auto;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  padding:12px;
+}
+
+/* container header */
+/* tombol kembali tetap di atas */
+
+.open-photo-view-back{
+  position:sticky;
+  top:0;
+  z-index:10;
+
+  background:var(--bg);
+  padding:8px 12px; /* ini biar garis lebih dekat ke tombol back */
+
+  border-bottom:1px solid #ddd;
+}
+
+/* =========================
+   INTERACTIVE TEXT DI UI POP UP
+   Semua teks yang bisa diklik
+🏠 Bani Karmeni
+window.UI.openDescendantTree
+👶 Keturunan
+window.UI.openOriginFamily
+========================= */
+
+.clickable-text {
+    color: var(--clickable-blue);
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        color .2s ease,
+        opacity .2s ease;
+}
+
+.clickable-text:active{
+    opacity:.7;
+}
+
+.clickable-colorfulltext {
+    animation:
+        clickable-color 3.6s ease-in-out infinite;
+}
+
+/* Biru soft → pink soft → biru soft */
+@keyframes clickable-color {
+
+    0%, 100% {
+        color: var(--clickable-blue);
+    }
+
+    50% {
+        color: var(--clickable-pink);
+    }
+}
+
+/* =========================
+   HALUS PULSE EFFECT
+========================= */
+
+.pulse-text {
+    display: inline-block;
+    animation:
+        subtle-pulse-text 2.4s ease-in-out infinite;
+    transform-origin: center;
+}
+
+@keyframes subtle-pulse-text {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* rule gabungan khusus untuk 💓 subtle-pulse-text +🎨 clickable-color*/
+.clickable-colorfulltext.pulse-text {
+    animation:
+        subtle-pulse-text 2.4s ease-in-out infinite,
+        clickable-color 3.6s ease-in-out infinite;
+}
+
+.pulse-text.pulse-off,
+.clickable-text.pulse-off {
+    animation: none;
+}
+
+.clickable-pointer {
+    cursor: pointer;
+}
+
+/* =========================
+pilihan warna untuk tulisan clickable
+Warna	Kode	Nuansa
+🔵 Blue 500	#3B82F6	Biru cerah (sekarang kamu pakai)
+🔷 Blue 600	#2563EB	Biru lebih dalam, cocok dengan tema kamu (--primary)
+🟦 Indigo 500	#6366F1	Biru keunguan soft
+🟪 Indigo 400	#818CF8	Ungu kebiruan yang lebih lembut
+💜 Violet 500	#8B5CF6	Ungu modern, cukup mencolok
+🌸 Periwinkle	#7C83FD	Biru-ungu pastel, elegan
+🌊 Slate Blue	#5B6EF5	Biru keunguan yang kalem
+#2563EB → serasi dengan tombol dan tema.
+#6366F1 → modern, biru keunguan soft.
+#818CF8 → paling lembut dan enak dilihat untuk teks yang bisa diklik.
+========================= */
+
+/* =========================
+   WARNA MENU DI POP UP
+🌳LIHAT🌳 🔍DETAIL🔍 🖼️FOTO🖼️
+========================= */
+.openmobile-popup-menu-btn{
+
+    background:var(--card);
+    color:var(--text);
+
+    border:none;
+    border-radius:18px;
+    padding:20px;
+    margin-top:10px;
+    width:100%;
+    text-align:center;
+    font-weight:600;
+    box-shadow:
+    0 8px 24px rgba(15,23,42,.08);
+
+    transition:
+    transform .25s ease,
+    box-shadow .25s ease,
+    border-color .25s ease;
+
+    border:1px solid transparent;
+
+    cursor:pointer;
+    transform:none;
+}
+
+.openmobile-popup-menu-btn:active{
+
+    transform:scale(.98);
+
+}
+
+
+/* =================================
+   🌙 DARK MODE — OPEN MOBILE POPUP
+==================================== */
+
+html.dark .openmobile-popup-menu-btn {
+    background: #030712;
+    color: #F8FAFC;
+
+    border-color: #475569;
+
+    outline-offset: 2px;
+
+    box-shadow:
+        0 6px 16px rgba(0, 0, 0, 0.30);
+}
+
+html.dark .openmobile-popup-menu-btn:hover {
+    background: #1F2937;
+    color: #F8FAFC;
+
+    border-color: #475569;
+
+    outline: 2px solid rgba(148, 163, 184, 0.20);
+    outline-offset: 2px;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+
+/* =========================
+POP UP
+[✕ CLOSE]
+Ainun Khurriyah
+🏠 Bani Karmeni
+👩‍❤️‍👨 Pasangan: Sustono
+👶 Keturunan
+👶 Anak: 0
+🌳LIHAT🌳 🔍DETAIL🔍 🖼️FOTO🖼️
+window.UI.openMobilePopup
+========================= */
+
+#mobileModal:has(.openmobile-popup-modal){
+  overflow:hidden;
+}
+
+
+.openmobile-popup-modal{
+  display:flex;
+  flex-direction:column;
+
+  height:100%;
+  width:100%;
+
+  overflow:hidden;
+  background:var(--bg);
+}
+
+
+.openmobile-popup-header{
+  flex-shrink:0;
+
+  position:sticky;
+  top:0;
+
+  background:var(--bg);
+
+  padding-bottom:4px;
+  padding-left:20px;
+  padding-right:20px;
+}
+
+
+.openmobile-popup-content{
+  flex:1;
+  min-height:0;
+
+  overflow-y:auto;
+
+  padding:20px;
+  padding-bottom:20px;
+  padding-top:4px;
+  box-sizing:border-box;
+}
+
+.openmobile-popup-desc-summary-info{ 
+  padding-left:20px;
+  padding-right:20px;
+  box-sizing:border-box;
+  margin-top:-8px;
+  padding-top:0;
+}
+
+/*kalau ini dihapus menu pop up hilang*/
+.openmobile-popup-header-inner{
+    position:sticky;
+    top:0;
+    padding-bottom:10px;
+    padding-top:12px;    /*ini buat tinggi close popup = backuirouter*/
+}
+
+/* =========================
+ SEARCH PICKER
+Pilih Data
+
+Nur Baniyati
+ID : 24
+ 
+Achmad Aunur Rofiq
+ID : 35
+ 
+Alwan Nuri
+ID : 1002
+ window.UI.openSearchPicker
+========================= */
+
+#mobileModal:has(.search-picker-modal){
+    overflow:hidden;
+     padding-bottom:0;
+}
+
+.search-picker-modal{
+    display:flex;
+    flex-direction:column;
+
+    height:100%;
+    width:100%;
+
+    overflow:hidden;
+    color:var(--text);
+    background:var(--bg);
+}
+
+.search-picker-header{
+    position:sticky;
+    top:0;
+    z-index:10;
+
+    background:var(--bg);
+    padding:12px;
+
+    border-bottom:1px solid var(--border);
+}
+
+.search-picker-content{
+    flex:1;
+    min-height:0;
+    overflow-y:auto;
+
+    padding:12px;
+    padding-bottom:20px;
+}
+
+.search-picker-title{
+    margin:16px 0 8px;
+
+    text-align:center;
+
+    color:var(--text);
+
+    font-size:20px;
+    font-weight:700;
+}
+
+.search-picker-content > *:last-child{
+    margin-bottom:0;
+}
+
+.search-picker-item {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: .2px;
+    font-family: "Plus Jakarta Sans", sans-serif;
+
+    background: var(--card);
+    color: var(--text);
+
+    cursor: pointer;
+
+    /* ambil gaya tombol */
+    border: 1px solid transparent;
+    border-radius: 18px;
+    padding: 20px;
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+
+    box-shadow:
+        0 8px 24px rgba(15,23,42,.08);
+
+    /* TIDAK ADA transform */
+    transition:
+        background-color .18s ease,
+        border-color .18s ease,
+        box-shadow .18s ease;
+
+    transform: none;
+}
+
+
+/* ========================
+   SEARCH PICKER — HOVER
+=========================== */
+
+.search-picker-item:hover {
+    background: var(--suggestion-hover);
+    color: #0F172A;
+
+    border-color: #93C5FD;
+
+    outline: 2px solid rgba(59, 130, 246, 0.20);
+    outline-offset: 2px;
+
+    box-shadow:
+        0 4px 12px rgba(37, 99, 235, 0.10);
+}
+
+.search-picker-item:hover .search-picker-name {
+    color: #0F172A;
+}
+
+.search-picker-item:hover .search-picker-id {
+    color: #475569;
+}
+
+
+/* ====================================
+   SEARCH PICKER — KEYBOARD SELECTED
+window.updateSearchPickerHighlight
+======================================= */
+
+
+.search-picker-item.keyboard-search-picker-selected{
+    background: var(--suggestion-key-hover);
+    color: #0F172A;
+
+    border-color: #93C5FD;
+
+    outline: 2px solid rgba(59, 130, 246, 0.20);
+    outline-offset: 2px;
+
+    box-shadow:
+        0 4px 12px rgba(37, 99, 235, 0.10);
+}
+
+.search-picker-item.keyboard-search-picker-selected
+.search-picker-name{
+    color: #0F172A;
+}
+
+.search-picker-item.keyboard-search-picker-selected
+.search-picker-id{
+    color: #475569;
+}
+
+.search-picker-name{
+    font-size:18px;
+    font-weight:600;
+    color:var(--text);
+}
+
+.search-picker-id{
+    margin-top:4px;
+    font-size:14px;
+    font-weight:400;
+    color:var(--text-soft);
+}
+
+.search-picker-empty{
+    padding:20px;
+    text-align:center;
+    color:#888;
+    font-style:italic;
+}
+
+
+/* ============================================================
+   🌙 DARK MODE — SEARCH PICKER ITEM NORMAL
+   Style ini berlaku saat data ditampilkan like versi ini untuk picker
+   ============================================================ */
+
+html.dark .search-picker-item {
+    background: #0B1120; /*#000000;*/
+    color: #F8FAFC;
+
+    border-color: #475569;
+
+    outline-offset: 2px;
+
+    box-shadow:
+        0 6px 16px rgba(0, 0, 0, 0.30);
+}
+
+html.dark .search-picker-item .search-picker-name {
+    color: #F8FAFC;
+}
+
+html.dark .search-picker-item .search-picker-id {
+    color: #94A3B8;
+}
+
+
+/* ============================================
+   🌙 DARK — SEARCH PICKER KEYBOARD SELECTED
+=============================================== */
+
+html.dark .search-picker-item.keyboard-search-picker-selected {
+    background: #1E293B;
+    color: #F8FAFC;
+
+    border-color: #475569;
+
+    outline: 2px solid rgba(148, 163, 184, 0.20);
+    outline-offset: 2px;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+html.dark .search-picker-item.keyboard-search-picker-selected .search-picker-name {
+    color: #F8FAFC;
+}
+
+html.dark .search-picker-item.keyboard-search-picker-selected .search-picker-id {
+    color: #94A3B8;
+}
+
+/* ============================================
+   🌙 DARK MODE — SEARCH PICKER HOVER
+=============================================== */
+
+html.dark .search-picker-item:hover {
+    background: #1E293B;
+    color: #F8FAFC;
+
+    border-color: #475569;
+
+    outline: 2px solid rgba(148, 163, 184, 0.20);
+    outline-offset: 2px;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+html.dark .search-picker-item:hover .search-picker-name {
+    color: #F8FAFC;
+}
+
+html.dark .search-picker-item:hover .search-picker-id {
+    color: #94A3B8;
+}
+
+
+/* =========================
+MOBILE CARD TOP HEADER (IMMUTABLE!)
+JANGAN UBAH! BAGIAN LAYOUT HEADER FOOTER SAAT MASUK APP/LAYAR UTAMA
+◉ MULTI BANI
+[Cari anggota keluarga[🔍]][Login Admin]
+========================= */
+#mobileCard{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+
+  background:white;
+  padding:12px 20px;
+
+  border-bottom:1px solid #E2E8F0;
+  box-shadow:0 8px 20px rgba(15,23,42,.06);
+
+  display:none;
+}
+
+#mobilecardHeader{
+    font-size:15px;
+    font-weight:600;
+    color:var(--text-soft);
+    letter-spacing:2px;
+    text-transform:uppercase;
+}
+
+/* saat masuk app */
+body.app-mode #mobileCard{
+
+  display:block;
+
+}
+
+/* =========================
+1 KESATUAN DENGAN MOBILE CARD
+[Cari anggota keluarga[🔍]][Login Admin]
+function runSearch
+========================= */
+.header-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:100%;
+}
+
+
+.run-search-box{
+  display:flex;
+  align-items:center;
+  flex:1;
+
+  height:34px;
+
+  border:1px solid #E2E8F0;
+  border-radius:17px;
+
+  overflow:hidden;
+  background:#fff;
+}
+
+
+.run-search-box input{
+  flex:1;
+  height:100%;
+  padding:0 12px;
+  border:none;
+  outline:none;
+  font-size:14px;
+}
+
+.run-search-box button{
+  width:40px;
+  height:100%;
+
+  border:none;
+
+  background:var(--bg);
+  color:#2563EB;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+#loginadmintopbar{
+  display:block;  /* container login */
+  margin-top:0px;
+}
+
+#loginadminbtn{
+  height:34px;
+  padding:0 12px;
+
+  margin-top:0;
+
+  background:var(--card);
+  color:var(--text-soft);
+
+  border:none;
+  border-radius:18px;
+
+  font-weight:600;
+  white-space:nowrap;
+
+  box-shadow:0 2px 8px rgba(15,23,42,.06);
+}
+
+#loginadminbtn:active{
+  transform:scale(.98);
+}
+
+/* =========================
+mau tombolnya bergeser naik → transform: translateY(-3px)
+mau mengurangi jarak layout atas → margin-top:-3px
+Di CSS, nilai translateY:
+- = naik ke atas
++ = turun ke bawah
+transform biasanya dipakai untuk animasi/hover, bukan koreksi layout.
+========================= */
+
+/* =========================
+   FOOTER (IMMUTABLE!)
+© 2026 Multi Bani Family Tree
+Merawat silaturahmi lintas generasi.
+========================= */
+.footer{
+    position:fixed;
+    bottom:0;
+    left:0;
+
+    width:100%;
+    height:var(--footer-height);
+
+    padding:15px 20px;
+    box-sizing:border-box;
+
+    text-align:center;
+    color:#64748B;
+    background:var(--bg);
+
+    border-top:1px solid #E2E8F0;
+
+    z-index:var(--z-footer);
+}
+
+.footer hr{
+    display:none;
+}
+
+.footer p{
+    margin:0;
+    font-size:15px;
+    font-weight:600;
+}
+
+.footer small{
+    display:block;
+    margin-top:5px;
+    font-size:13px;
+    color:#94A3B8;
+}
+
+/* =========================
+   TOMBOL BACK BANI
+[⬅ KEMBALI KE HALAMAN DEPAN]
+window.backToLandingPage
+========================= */
+
+.baniList-back-btn{
+
+    position:fixed;
+    top:var(--mobile-header-height);
+    right:0;
+    z-index:var(--z-floating);
+
+    background:var(--card);
+    color:#64748B;
+    border:none;
+    border-radius:18px;
+
+    padding:16px;
+    width:100%;
+
+    font-weight:600;
+
+    box-shadow:0 8px 24px rgba(15,23,42,.06);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+
+    cursor:pointer;
+}
+
+.baniList-back-btn:active{
+    transform:scale(.98);
+}
+
+/* =========================
+   PILIH BANI BUTTON DI LANDING PAGE
+[🏠 Bani Soedaryo
+👥 17 anggota]
+[🏠 Bani Karmeni
+👥 45 anggota]
+window.addEventListener("DOMContentLoaded"
+window.selectBani
+========================= */
+
+#baniList button{
+    background:var(--card);
+    color:var(--text);
+    border:none;
+    border-radius:18px;
+    padding:16px 20px;
+    margin:0 auto 14px;
+    text-align:center;
+
+    box-shadow:0 8px 24px rgba(15,23,42,.08);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+
+    border:1px solid transparent;
+}
+
+
+#baniList button:active{
+    transform:scale(.98);
+}
+
+/* pengaturan tulisan di kolom select bani */
+
+.baniList-card{
+    text-align:center;
+    font-size:17px;
+    font-weight:500;
+    line-height:1.4;
+}
+
+.baniList-card small{
+    display:block;
+    margin-top:5px;
+
+    font-size:15px;
+    font-weight:400;
+    color:var(--text-soft);
+}
+
+.baniList-location{
+    display:block;
+    margin-top:4px;
+    font-size:12px;
+    color:var(--text-soft);
+    white-space:normal;  /* mengizinkan teks pindah baris*/
+    overflow-wrap:break-word; /* memecah kata panjang jika tidak ada spasi*/
+    word-break:break-word; /*membantu teks panjang tidak keluar dari kotak*/
+}
+
+/* =========================
+   APP LOADING
+◉muter
+Memuat Multi Bani...
+Menyiapkan data silsilah
+function hideAppLoading() {
+========================= */
+
+#appLoading {
+  position: fixed;
+  inset: 0;
+  z-index:var(--z-loading);
+  background:var(--card);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 1;
+  transition: opacity .25s ease;
+}
+
+.app-loading-box {
+  text-align: center;
+  padding: 24px;
+  transform: translateY(-40px); /*biar di tengah */
+}
+
+.app-loading-spinner {
+  width: 38px;
+  height: 38px;
+
+  margin: 0 auto 16px;
+
+  border: 4px solid #e5e7eb;
+  border-top-color: #2563eb;
+
+  border-radius: 50%;
+  animation: appSpin .8s linear infinite;
+}
+
+.app-loading-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.app-loading-text {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+@keyframes appSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================
+   LANDING MODAL
+◉ MULTI BANI
+Setiap nama memiliki silsilah.
+Setiap silsilah menyimpan sejarah.
+📖 Jelajahi Silsilah
+[🏠 Bani Soedaryo
+👥 17 anggota]
+[🏠 Bani Karmeni
+👥 49 anggota]
+© 2026 Multi Bani Family Tree
+Dibuat untuk menjaga silaturahmi keluarga.
+document.getElementById("landingPageModal")
+window.selectBani
+window.backToLandingPage
+========================= */
+
+#landingPageModal{
+
+  display:flex;
+  flex-direction:column;
+
+  width:100%;
+  height:100%;
+
+  overflow:hidden;
+  background:var(--bg);
+}
+
+
+.landingPage-header{
+
+  flex-shrink:0;
+
+  padding:20px;
+
+  background:var(--bg);
+
+  border-bottom:1px solid #ddd;
+
+}
+
+
+.landingPage-content{
+
+  flex:1;
+  min-height:0;
+
+  overflow-y:auto;
+
+  padding:20px;
+
+  padding-bottom:20px;
+
+}
+
+/* =====================================================
+sudah tidak pakai landingPage text title subtitle  
+
+.landingPage-text{
+    text-align:center;
+    padding-top:40px;
+}
+
+.landingPage-title{
+    margin:0;
+    font-size:21px;
+    font-weight:500;
+    line-height:1.3;
+    letter-spacing:0;
+    color:var(--text-soft);
+}
+
+.landingPage-subtitle{
+    margin:14px 0 0;
+    font-size:19px;
+    line-height:1.3;
+    font-weight:500;
+    color:#64748B;
+}
+===================================================== */
+
+
+/* =========================
+   MIDDLE LANDING — NEXT
+   KHUSUS BRIDGE
+function showMiddleLandingStep(index){ 
+========================= */
+
+#middleLanding{
+    position:relative;
+
+    width:100%;
+    height:calc(100vh - 60px);
+
+    overflow:hidden;
+
+    background:var(--bg);
+}
+
+
+.middleLanding-text{
+    position:relative;
+
+    width:100%;
+    height:100%;
+}
+
+
+.middleLanding-step{
+    position:absolute;
+    inset:0;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    padding:0 24px;
+    box-sizing:border-box;
+
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(10px);
+
+    transition:
+        opacity .45s ease,
+        transform .45s ease,
+        visibility .45s ease;
+}
+
+.middleLanding-step.active{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0);
+}
+
+/* khusus menggeser isi ke atas */
+.middleLanding-step > *{
+    position:relative;
+    top:-40px;
+}
+
+
+.middleLanding-title{
+    margin:0;
+
+    font-size:21px;
+    font-weight:500;
+    line-height:1.3;
+
+    color:var(--text-soft);
+}
+
+
+.middleLanding-subtitle{
+    margin:0;
+
+    font-size:19px;
+    line-height:1.3;
+    font-weight:500;
+
+    color:#64748B;
+}
+
+
+.middleLanding-next{
+    margin-top:36px;
+
+    padding:0;
+
+    background:transparent;
+    border:none;
+
+    color:var(--text-soft);
+
+    font-size:24px;
+    font-weight:300;
+
+    cursor:pointer;
+
+    line-height:1;
+
+    transition:transform .2s ease;
+}
+
+.middleLanding-next:hover{
+    transform:translateX(4px);
+}
+
+.middleLanding-next:active{
+    transform:scale(.9);
+}
+
+/* =========================
+WAJIB ADA DI TIAP HALAMAN! IMMUTABLE!
+ ◉ MULTI BANI
+webApp-brand
+========================= */
+.webApp-brand{
+  position:fixed;
+  top:12px;
+  left:20px;
+
+  font-size:15px;
+  font-weight:600;
+  color:var(--text-soft);
+
+  letter-spacing:2px;
+  text-transform:uppercase;
+
+  z-index:var(--z-brand);
+}
+
+/* =========================
+     LANDING COVER
+◉
+MULTI BANI
+Family Tree
+Merawat silsilah
+Mempererat silaturahmi
+Mewariskan cerita
+Lintas generasi
+[Mulai]
+document.getElementById("startLandingCoverBtn")
+========================= */
+#landingCover{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom:var(--footer-height);
+
+    background:var(--bg);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    z-index:var(--z-modal);
+}
+
+
+.landingCover-content{
+    width:100%;
+    text-align:center;
+    position:relative;
+    top:-20px;
+}
+
+
+.landingCover-logo{
+    font-size:42px;
+    margin-bottom:10px;
+    color:var(--text-soft);
+}
+
+
+.landingCover-content h1{
+    margin:0;
+
+    font-size:30px;
+    font-weight:700;
+
+    letter-spacing:4px;
+
+    color:#1E293B;
+}
+
+
+.landingCover-subtitle{
+    margin-top:12px;
+
+    font-size:18px;
+    font-weight:600;
+
+    color:#475569;
+}
+
+
+.landingCover-desc{
+    margin-top:24px;
+    font-size:16px;
+    line-height:1.8;
+    letter-spacing:.3px;
+
+    color:#64748B;
+}
+
+
+#startLandingCoverBtn{
+    width:90px;
+    height:40px;
+    padding:0;
+
+    background:transparent;
+    color:var(--text-soft);
+
+    border:2px solid var(--text-soft);
+    border-radius:20px;
+
+    font-size:15px;
+    font-weight:600;
+
+    box-shadow:none;
+
+    cursor:pointer;
+}
+
+#startLandingCoverBtn:active{
+    transform:scale(.98);
+}
+
+/* =========================
+   BLOCK BALKAN EDIT UI
+ ---------------------------
+   BALKAN FAMILY TREE
+   Disable built-in Edit UI
+
+   Sistem menggunakan UI custom,
+   Seluruh Edit UI bawaan Balkan WAJIB disembunyikan
+========================= */
+.bft-edit-form,
+.bft-edit-form *,
+.bft-edit-form-btn,
+.bft-btn-edit,
+.bft-btn-share,
+.bft-btn-pdf,
+.bft-btn-remove,
+.bft-canvas,
+.bft-scroller{
+  display:none !important;
+  pointer-events:none !important;
+  touch-action:none !important;
+}
+
+/* =========================
+   HOVER KHUSUS LAPTOP /DESKTOP UNTUK TOMBOL GERAK 
+========================= */
+
+@media (hover:hover) and (pointer:fine){
+
+  .openmobile-popup-menu-btn:hover{
+      transform:translateY(-5px);
+      box-shadow:
+          0 18px 40px rgba(37,99,235,.15);
+      border-color:#BFDBFE;
+  }
+
+  .openmobile-popup-close-btn:hover{
+      transform:translateY(-5px);
+      box-shadow:
+          0 18px 40px rgba(15,23,42,.12);
+  }
+
+  .baniList-back-btn:hover{
+      transform:translateY(-5px);
+      box-shadow:
+          0 18px 40px rgba(15,23,42,.12);
+  }
+
+
+  #baniList button:hover{
+      transform:translateY(-5px);
+      box-shadow:
+          0 18px 40px rgba(37,99,235,.15);
+      border-color:#BFDBFE;
+  }
+
+
+  .ui-router-back-btn:hover,
+  .family-photo-back-btn:hover{
+      transform:translateY(-5px);
+      box-shadow:
+          0 18px 40px rgba(15,23,42,.12);
+  }
+
+  #loginadminbtn:hover{
+      transform:translateY(-5px);
+      box-shadow:
+          0 18px 40px rgba(15,23,42,.12);
+  }
+
+  .clickable-text:hover{
+        color:var(--primary-hover);
+    }
+
+#startLandingCoverBtn:hover{
+ transform:translateY(-5px);
+      box-shadow:
+          0 18px 40px rgba(15,23,42,.12);
+  }
+
+
+}
+
+
+/* =========================
+   MOBILE 
+POSISI HARUS DI BAWAH!
+========================= */
+
+@media (max-width: 480px) {
+
+  #globalRelationQuizModal
+  .mobile-quiz-popup {
+
+    width:
+      calc(100vw - 24px);
+
+    max-width:
+      calc(100vw - 24px);
+
+    max-height:
+      calc(100vh - 24px);
+
+    padding:
+      20px;
+
+  }
+
+  #mobileQuizModal
+  .mobile-quiz-popup {
+
+    width:
+      calc(100vw - 24px);
+
+    max-width:
+      calc(100vw - 24px);
+
+    max-height:
+      calc(100vh - 24px);
+
+    padding:
+      20px;
+
+  }
+
+  #dragRelationshipQuestion
+  .drag-answer-result-actions {
+
+    flex-direction: column;
+
+  }
+
+
+  #dragRelationshipQuestion
+  .drag-answer-result-actions button {
+
+    width: 100%;
+
+  }
+
+  #dragRelationshipModal {
+
+    bottom:
+      var(--footer-height);
+
+  }
+
+
+  #dragRelationshipModal
+  #dragRelationshipQuestion {
+
+    width:
+      calc(100vw - 24px);
+
+    max-width:
+      calc(100vw - 24px);
+
+    max-height:
+      calc(100% - 16px);
+
+    padding:
+      20px;
+
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  #balkantree-notice {
+    width: calc(100vw - 24px);
+
+    /*agar Jarak dari kotak ketik nama dan kotak luar tidak jauh*/
+    min-height: 0; 
+
+    padding: 22px 18px;
+
+    border-radius: 12px;
+  }
+
+
+  #balkantree-notice .balkantree-notice-title {
+    font-size: 17px;
+  }
+
+
+  #balkantree-notice .balkantree-notice-text {
+    font-size: 13px;
+    margin-bottom: 14px;
+  }
+
+
+  #balkantree-notice #person-search-input-balkantree-notice {
+    height: 46px;
+
+    font-size: 16px;
+  }
+
+}
+
+@media (max-width:768px){
+
+ :root{
+    --footer-height:85px;
+  }
+
+  h1{
+    font-size:16px;
+    padding:10px;
+  }
+
+  #tree{
+    height:100vh;
+  }
+
+  .bft-node{
+    transform:scale(0.9);
+  }
+
+  #rightPanel{
+    border-radius:12px;
+  }
+
+.recursive-tree-node.level-0{
+  margin-left:0;
+  width:100%;
+}
+
+.recursive-tree-node.level-1{
+  margin-left:24px;
+  width:calc(100% - 24px);
+}
+
+.recursive-tree-node.level-2{
+  margin-left:48px;
+  width:calc(100% - 48px);
+}
+
+.recursive-tree-node.level-3{
+  margin-left:72px;
+  width:calc(100% - 72px);
+}
+
+}
+
+/* Kembalikan font utama website ke Arial */
+html,
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* =========================
+Catatan:
+
+<!-- --> hanya untuk HTML
+CSS harus pakai garing bintang bintang garing
+========================= */
+
+/* =========================
+CSS → mengurus style
+HTML → menyediakan wadah
+UI function → mengurus tampilan
+Router → menentukan arah
+========================= */
+
+/* =============
+   BATAS CSS
+================ */
